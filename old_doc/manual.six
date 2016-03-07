@@ -1,0 +1,74 @@
+C preface.tex 1. Preface
+C lpres.tex 2. An Introduction to L-presented groups
+S 2.1. Creating an L-presented group
+F 2.1. LPresentedGroup
+F 2.1. ExamplesOfLPresentations
+F 2.1. FreeEngelGroup
+F 2.1. FreeBurnsideGroup
+F 2.1. FreeNilpotentGroup
+F 2.1. GeneralizedFabrykowskiGuptaLpGroup
+F 2.1. LamplighterGroup
+F 2.1. LamplighterGroup
+S 2.2. The underlying free group
+F 2.2. FreeGroupOfLpGroup
+F 2.2. FreeGeneratorsOfLpGroup
+F 2.2. GeneratorsOfGroup
+F 2.2. UnderlyingElement
+F 2.2. ElementOfLpGroup
+S 2.3. Accessing an L-presentation
+F 2.3. FixedRelatorsOfLpGroup
+F 2.3. IteratedRelatorsOfLpGroup
+F 2.3. EndomorphismsOfLpGroup
+S 2.4. Attributes and properties of L-presented groups
+F 2.4. UnderlyingAscendingLPresentation
+F 2.4. UnderlyingInvariantLPresentation
+F 2.4. IsAscendingLPresentation
+F 2.4. IsInvariantLPresentation
+F 2.4. EmbeddingOfAscendingSubgroup
+S 2.5. Methods for L-presented groups
+F 2.5. MappedWord
+F 2.5. EpimorphismFromFpGroup
+F 2.5. SplitExtensionByAutomorphismsLpGroup
+F 2.5. = 
+F 2.5. AsLpGroup
+F 2.5. IsomorphismLpGroup
+F 2.5. Display
+C nq.tex 3. Nilpotent Quotients of L-presented groups
+S 3.1. New methods for L-presented groups
+F 3.1. NilpotentQuotient
+F 3.1. LargestNilpotentQuotient
+F 3.1. NqEpimorphismNilpotentQuotient
+F 3.1. NqEpimorphismNilpotentQuotient
+F 3.1. AbelianInvariants
+S 3.2. A brief description of the algorithm
+C func.tex 4. The underlying functions
+S 4.1. Nilpotent Quotient Systems for invariant L-presentations
+F 4.1. InitQuotientSystem
+F 4.1. ExtendQuotientSystem
+S 4.2. Attributes of L-presented groups related with the nilpotent quotient algorithm
+F 4.2. NilpotentQuotientSystem
+F 4.2. NilpotentQuotients
+S 4.3. The Info-Class InfoNQL
+F 4.3. InfoNQL
+F 4.3. InfoNQL_MAX_GENS
+C subgrps.tex 5. Subgroups of L-presented groups
+S 5.1. Creating a subgroup of an L-presented group
+F 5.1. Subgroup
+F 5.1. SubgroupLpGroupByCosetTable
+S 5.2. Computing the index of finite index subgroups
+F 5.2. IndexInWholeGroup
+F 5.2. Index
+F 5.2. CosetTableInWholeGroup
+S 5.3. Technical details
+F 5.3. NQL_TCSTART
+F 5.3. NQL_CosetEnumerator
+C schumu.tex 6. Approximating the Schur multiplier
+F 6.0. GeneratingSetOfMultiplier
+F 6.0. FiniteRankSchurMultiplier
+F 6.0. EndomorphismsOfFRSchurMultiplier 
+F 6.0. EpimorphismCoveringGroups
+F 6.0. EpimorphismFiniteRankSchurMultiplier
+F 6.0. ImageInFiniteRankSchurMultiplier
+C autpgrp.tex 7. Investigating the automorphism group
+F 7.0. AutomorphismGroupSequence
+C pargap.tex 8. On a parallel nilpotent quotient algorithm
