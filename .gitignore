@@ -1,0 +1,5 @@
+doc/*.txt
+doc/*.html
+doc/lpres.*
+doc/manual.pdf
+doc/_AutoDocMainFile.xml

@@ -1,9 +1,7 @@
 #############################################################################
 ##  
-##  PackageInfo.g                  NQL                          René Hartung 
+##  PackageInfo.g                  LPRES                         René Hartung 
 ##  
-#H   @(#)$Id: PackageInfo.g,v 1.23 2010/04/01 06:53:24 gap Exp $ 
-##
 ##  Based on Frank Luebeck's template for PackageInfo.g.
 ##  
 
@@ -20,7 +18,7 @@ Persons := [
   FirstNames    := "René",
   IsAuthor      := true,
   IsMaintainer  := false,
-  )
+  ),
   rec(
   LastName      := "Bartholdi",
   FirstNames    := "Laurent",
@@ -49,15 +47,13 @@ AbstractHTML   := Concatenation(
                "presentation for the lower central series quotient ",
                "L/gamma_c(L)."),
 
-                  
 PackageDoc := rec(
-  BookName  := "lpres",
-  ArchiveURLSubset := [ "doc", "htm" ],
+  BookName  := ~.PackageName,
+  ArchiveURLSubset := ["doc"],
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Nilpotent Quotient Algorithm for L-presented Groups",
-  Autoload  := false 
+  LongTitle := ~.Subtitle,
 ),
 
 AvailabilityTest := function()
