@@ -27,9 +27,9 @@ Persons := [
   )
 ],
 
-#Status         := "accepted",
-#CommunicatedBy := "Alexander Konovalov (St Andrews)",
-#AcceptDate     := "02/2009",
+Status         := "accepted",
+CommunicatedBy := "Alexander Konovalov (St Andrews)",
+AcceptDate     := "02/2009",
 
 SourceRepository := rec(
     Type := "git",
