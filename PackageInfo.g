@@ -9,7 +9,7 @@ SetPackageInfo( rec(
 
 PackageName := "lpres",
 Subtitle := "Nilpotent Quotients of L-Presented Groups",
-Version := "0.1.0",
+Version := "0.1.1",
 Date    := "09/03/2016",
 
 Persons := [
