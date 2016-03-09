@@ -1,12 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%W  nq.tex		NQL Doc				René Hartung
-%%
-%H  $Id: nq.tex,v 1.10 2010/03/31 13:42:54 gap Exp $
-%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Chapter{Nilpotent Quotients of L-presented groups}
+<Chapter><Heading>Nilpotent Quotients of L-presented groups</Heading>
 
 Our nilpotent quotient algorithm for finitely $L$-presented groups
 generalizes Nickel's algorithm for finitely presented groups;
@@ -19,9 +11,13 @@ determines a polycyclic presentation for the nilpotent quotient of
 an arbitrary finitely $L$-presented group. For further details on our
 algorithm we refer to~\cite{BEH08} or to the diploma thesis~\cite{H08}.
 
+<Section><Heading>New methods for L-presented groups</Heading>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{New methods for L-presented groups}
+<!--
+<ManSection><Oper Name="" Arg=""/>
+<Description>
+</Description>
+</ManSection>
 
 \> NilpotentQuotient( <LpGroup>[, <c>] ) O
 
@@ -103,10 +99,11 @@ gap> G := ExamplesOfLPresentations( 1 );;
 gap> AbelianInvariants( G );
 [ 2, 2, 2 ]
 \endexample
+-->
+</Section>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{A brief description of the algorithm}
-
+<Section><Heading>A brief description of the algorithm</Heading>
+<!--
 In the following we give a brief description of the nilpotent quotient
 algorithm for an arbitrary finitely $L$-presented group. For further
 details, we refer to \cite{BEH08} and the diploma thesis~\cite{H08} .
@@ -208,7 +205,6 @@ Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2 ]
 gap> StringTime( time );
 " 0:00:02.700"
 \endexample
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%E  nq.tex  . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here
+-->
+</Section>
+</Chapter>

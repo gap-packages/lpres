@@ -1,3 +1,4 @@
+<!--
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %W  autpgrp.tex		NQL Doc				René Hartung
@@ -61,3 +62,4 @@ gap> A := AutomorphismGroupSequence( G, 5 );;
 
 [4,5]: ab [ [ 2, 2 ] ]
 \endexample
+-->

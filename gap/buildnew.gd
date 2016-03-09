@@ -12,4 +12,5 @@ Revision.("nql/gap/buildnew_gd"):=
 ##
 #F  NQL_BuildNewCollector ( )
 ##
+#!
 DeclareGlobalFunction( "NQL_BuildNewCollector" );
