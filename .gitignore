@@ -1,4 +1,5 @@
 *~
+doc/title.xml
 doc/*.txt
 doc/*.html
 doc/lpres.*
