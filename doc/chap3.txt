@@ -1,0 +1,20 @@
+  
+  [1X3 [33X[0;0YNilpotent Quotients of L-presented groups[133X[101X
+  
+  [33X[0;0YOur   nilpotent   quotient   algorithm  for  finitely  $L$-presented  groups
+  generalizes    Nickel's    algorithm    for   finitely   presented   groups;
+  see~\cite{Nickel96}.  It  determines  a nilpotent presentation for the lower
+  central  series  quotient of an invariantly $L$-presented group. A nilpotent
+  presentation  is  a  polycyclic presentation whose polycyclic series refines
+  the  lower  central  series  of  the  group  (see  the  description  in  the
+  {\NQ}-package  for  further details). In general, our algorithm determines a
+  polycyclic  presentation for the nilpotent quotient of an arbitrary finitely
+  $L$-presented   group.  For  further  details  on  our  algorithm  we  refer
+  to~\cite{BEH08} or to the diploma thesis~\cite{H08}.[133X
+  
+  
+  [1X3.1 [33X[0;0YNew methods for L-presented groups[133X[101X
+  
+  
+  [1X3.2 [33X[0;0YA brief description of the algorithm[133X[101X
+  

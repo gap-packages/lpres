@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (lpres) - Chapter 7: Investigating the automorphism group</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap7"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap6_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap8_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap7.html">[MathJax off]</a></p>
+<p><a id="X7B9936B57F4BAD6A" name="X7B9936B57F4BAD6A"></a></p>
+<div class="ChapSects"><a href="chap7_mj.html#X7B9936B57F4BAD6A">7 <span class="Heading">Investigating the automorphism group</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7_mj.html#X86A9B6F87E619FFF">7.1 <span class="Heading">Usage</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X7C47BE547FE50602">7.1-1 AutomorphismGroupSequence</a></span>
+</div></div>
+</div>
+
+<h3>7 <span class="Heading">Investigating the automorphism group</span></h3>
+
+<p>Let <span class="SimpleMath">\(G\)</span> be a finitely generated group. Then the term <span class="SimpleMath">\(\gamma_cG\)</span> of the lower central series is fully invariant subgroup of <span class="SimpleMath">\(G\)</span>. Thus every automorphism <span class="SimpleMath">\(\alpha\in{\rm Aut}(G)\)</span> induces an automorphism <span class="SimpleMath">\(\varphi_c\in{\rm Aut}(G/\gamma_cG)\)</span>. We obtain a homomorphism <span class="SimpleMath">\(\nu_c\colon{\rm Aut}(G)\to{\rm Aut}(G/\gamma_cG)\)</span>, <span class="SimpleMath">\(\alpha\mapsto\alpha_c\)</span>. This homomorphism map the inner automorphism <span class="SimpleMath">\({\rm Inn}(G)\)</span> onto <span class="SimpleMath">\({\rm Inn}(G/\gamma_cG)\)</span> and thus we obtain a homomorphism</p>
+
+<p class="center">\[
+  \nu_c\colon{\rm Out}(G)\to {\rm Out}(G/\gamma_cG).
+\]</p>
+
+<p>Similar, for every <span class="SimpleMath">\(d\leq c\)</span>, we obtain a homomorphism <span class="SimpleMath">\(\mu_{c,d}\colon {\rm Out}(G/\gamma_cG)\to{\rm Out}(G/\gamma_dG)\)</span>. Since <span class="SimpleMath">\(\nu_d = \nu_c\circ \mu_{c,d}\)</span>, this yields that</p>
+
+<p class="center">\[
+  {\rm im}(\nu_d)\leq \ldots\leq {\rm im}(\mu_{c,d})\leq {\rm im}(\mu_{c-1,d})
+  \leq \ldots \leq {\rm im}(\mu_{d,d}) = {\rm Out}(G/\gamma_dG).
+\]</p>
+
+<p>This sequence can be used to guess the shape of <span class="SimpleMath">\({\rm im}(\nu_d)\)</span> and therefore to guess the shape of <span class="SimpleMath">\({\rm Out}(G)/\ker\nu_d\)</span>. The \AutPGrp-Package can be used to compute the images <span class="SimpleMath">\({\rm im}(\mu_{c,d})\)</span> if the abelian quotient of <span class="SimpleMath">\(G\)</span> is elementary abelian. For further details we refer to <a href="chapBib_mj.html#biBEH09">[EH]</a>.</p>
+
+<p><a id="X86A9B6F87E619FFF" name="X86A9B6F87E619FFF"></a></p>
+
+<h4>7.1 <span class="Heading">Usage</span></h4>
+
+<p><a id="X7C47BE547FE50602" name="X7C47BE547FE50602"></a></p>
+
+<h5>7.1-1 AutomorphismGroupSequence</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AutomorphismGroupSequence</code>( <var class="Arg">PcpGroup</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>if the abelianization of <var class="Arg">PcpGroup</var> is elementary abelian, this method computes a list of the images of the outer automorphism group of <span class="SimpleMath">\(G/\gamma_cG\)</span> in <span class="SimpleMath">\({\rm Out}(G/\gamma_dG)\)</span> for any <span class="SimpleMath">\(d\leq c\)</span> with <span class="SimpleMath">\({\rm Out}(G/\gamma_dG)\)</span> being still solvable. More precisely, the entry {\bf a[i][j]} denotes the image of <span class="SimpleMath">\({\rm Out}(G/\gamma_{j+1}G)\)</span> in <span class="SimpleMath">\({\rm Out}(G/\gamma_{i+1}G)\)</span>. In the following example we consider the nilpotent quotients of the Grigorchuk group and compute its outer automorphism group sequence.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := ExamplesOfLPresentations( 1 );;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">A := AutomorphismGroupSequence( G, 5 );;</span>
+[1,2]: ab [ [ 2, 1 ] ]
+[1,3]: ab [ [ 2, 1 ] ]
+[1,4]: ab [ [ 2, 1 ] ]
+[1,5]: ab [ [ 2, 1 ] ]&lt;P/&gt;
+
+[2,3]: ab [ [ 2, 1 ] ]
+[2,4]: ab [ [ 2, 1 ] ]
+[2,5]: ab [ [ 2, 1 ] ]&lt;P/&gt;
+
+[3,4]: id [ 16, 11 ]
+[3,5]: ab [ [ 2, 2 ] ]&lt;P/&gt;
+
+[4,5]: ab [ [ 2, 2 ] ]
+</pre></div>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap6_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap8_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>
