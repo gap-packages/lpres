@@ -31,12 +31,19 @@ Persons := [
 #CommunicatedBy := "Alexander Konovalov (St Andrews)",
 #AcceptDate     := "02/2009",
 
-PackageWWWHome := "http://github.com/laurentbartholdi/lpres/",
+SourceRepository := rec(
+    Type := "git",
+    URL := Concatenation( "https://github.com/laurentbartholdi/", ~.PackageName ),
+),
+IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
+PackageWWWHome  := Concatenation( "https://laurentbartholdi.github.io/", ~.PackageName ),
+README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
+PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
+ArchiveURL      := Concatenation( ~.SourceRepository.URL,
+                                 "/releases/download/v", ~.Version,
+                                 "/", ~.PackageName, "-", ~.Version ),
 
 ArchiveFormats := ".tar.gz",
-ArchiveURL     := Concatenation( ~.PackageWWWHome, "releases/download/v",~.Version,"/fr-",~.Version),
-README_URL     := Concatenation( ~.PackageWWWHome, "README.lpres" ),
-PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
 
 AbstractHTML   := Concatenation( 
                "The NQL Package defines new GAP objects to work with ",
