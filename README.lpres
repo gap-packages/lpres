@@ -1,11 +1,10 @@
-
-The GAP 4 package 'NQL'
-=======================
+The GAP 4 package 'lpres'
+=========================
 
 Introduction
 ------------
 
-This is the package 'NQL' written for GAP 4. It provides a first
+This is the package 'lpres' written for GAP 4. It provides a first
 construction of finitely L-presented groups and a nilpotent quotient
 algorithm for L-presented groups.
 
@@ -24,20 +23,21 @@ There is a manual in the subdirectory 'doc' written in plain TeX which
 describes the functions available.
 
 If you have found a bug or any features missing please let me know
-(Ren\'e Hartung, email r.hartung [ed] tu-braunschweig.de).
+(Laurent Bartholdi, laurent.bartholdi@gmail.com)
 
 
 Contents
 --------
-
 With this version you should have obtained the following files and
 directories:
 
-  README          this file
+  README.lpres    this file
 
   init.g          the file that initializes this package
 
   read.g          the file that reads in the package        
+
+  makedoc.g       the file used to compile the documentation
 
   PackageInfo.g   the file for the new package loading mechanism
 
@@ -51,57 +51,23 @@ Installation
 
 Make sure that the GAP 4 packages Polycyclic and FGA are installed. It
 suffices to unpack the package in the 'pkg' directory and load the
-package from within gap using `LoadPackage("NQL");'.
+package from within gap using `LoadPackage("lpres");'.
 
 
 Test-Files
 ----------
 
-The NQL-package can be tested with `ReadPackage("NQL","tst/testall.gi");'.
+The lpres-package can be tested with `ReadPackage("lpres","tst/testall.gi");'.
 
 
 Compiling the Manual
 --------------------
 
-To get the manual and the GAP Help System work you have to compile the
-documentation of the 'NQL' package. For this purpose, change into the
-'doc' directory of 'NQL' and compile the manual via 'make':
-
-  sh> cd $GAPPATH/pkg/nql/doc
-  sh> make
-
+If you obtained the package from its git repository, you have to compile
+the manual. For this, enter the directory of lpres (the one containing
+the file makedoc.g) and run `gap makedoc.g'.
 
 BugFixes/Changes/Features Added
 -----------------------------
-
-- Version 0.09: - added methods for computing (finite index) subgroups
-                - AutPGrp as SuggestedOtherPackages
-
-- Version 0.08: - minor changes due to problems with the FR-package
-                - added operation `DwyerQuotient'
-
-- Version 0.07: - added methods for approximating the Schur-multiplier
- 		  of an LpGroup via its Dwyer-filtration
-                - added method for approximation the outer automorphism
-                  group of an LpGroup
-                - bug fixed in <SmallerQuotientSystem>,
-		- added method for saving a nilpotent quotient system,
-		- added method for <IsomorphismLpGroup> and <AsLpGroup>,
-		- added methods <NqEpimorphismNilpotentQuotient> and 
-                  <NilpotentQuotient> for FpGroups (if Werner's NQ is not
-                  present),
-		- added a parallel version of <ExtendQuotientSystem> using
- 		  Gene Cooperman's ParGap-package,
-
-- Version 0.06: - finally accepted!
-
-- Version 0.05: - replaced DepthVector by PositionNonZero (due to 
-                  conflicts with FR).
-
-- Version 0.04: - Included the remarks from the referee, 
-		- added test files,
-		- added test whether or not an LpGroup is invariant
-		- name space for internal functions `NQL_*'
-
-- Version 0.03: Renamed the function CoveringGroup due to conflicts 
-                with the cohomolo package.
+- Version 0.1.0:
+                - maintenance taken over by Laurent Bartholdi
