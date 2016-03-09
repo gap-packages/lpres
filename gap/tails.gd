@@ -10,27 +10,27 @@ Revision.("nql/gap/tails_gd"):=
 
 ############################################################################
 ## 
-#F  NQL_Tails_lji ( <coll> , <Def of k> , <l> , <k>)  
+#F  LPRES_Tails_lji ( <coll> , <Def of k> , <l> , <k>)  
 ##
 ## computes t_{kl}^{++}
 ##
-DeclareGlobalFunction( "NQL_Tails_lji" );
+DeclareGlobalFunction( "LPRES_Tails_lji" );
 
 ############################################################################
 ## 
-#F  NQL_Tails_lkk ( <coll> , <l> , <k>) 
+#F  LPRES_Tails_lkk ( <coll> , <l> , <k>) 
 ##
 ## computes t_{kl}^{-+}
 ##
-DeclareGlobalFunction( "NQL_Tails_lkk" );
+DeclareGlobalFunction( "LPRES_Tails_lkk" );
 
 ############################################################################
 ##  
-#F  NQL_Tails_llk ( <coll> , <l> , <k>) 
+#F  LPRES_Tails_llk ( <coll> , <l> , <k>) 
 ##
 ## computes t_{kl}^{+-} AND t_{kl}^{--}
 ##
-DeclareGlobalFunction( "NQL_Tails_llk" );
+DeclareGlobalFunction( "LPRES_Tails_llk" );
 
 ############################################################################
 ##

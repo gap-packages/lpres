@@ -10,6 +10,6 @@ Revision.("nql/gap/endos_gd"):=
 
 ############################################################################
 ##
-#F  NQL_EndomorphismsOfCover
+#F  LPRES_EndomorphismsOfCover
 ##
-DeclareGlobalFunction( "NQL_EndomorphismsOfCover" );
+DeclareGlobalFunction( "LPRES_EndomorphismsOfCover" );

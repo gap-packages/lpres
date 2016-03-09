@@ -10,7 +10,7 @@ Revision.("nql/gap/consist_gi"):=
 
 ############################################################################
 ##
-#F  NQL_CheckConsistencyRelations ( <coll> , <weights> )
+#F  LPRES_CheckConsistencyRelations ( <coll> , <weights> )
 ##
 ## This function checks the local confluence (or consistency) of a weighted 
 ## nilpotent presentation. It implements the check from Nickel: "Computing 
@@ -22,7 +22,7 @@ Revision.("nql/gap/consist_gi"):=
 ##          i i^m = i^m i,                i in I, 2 w_i <= c
 ##            j   = ( j i^-1 ) i,         i < j, i not in I, w_i+w_j <= c
 ## 
-InstallGlobalFunction( NQL_CheckConsistencyRelations,
+InstallGlobalFunction( LPRES_CheckConsistencyRelations,
   function( coll, weights )
   local   HNF,		# Hermite normal form of the inconsistencies
    	  n, 		# number of generators of coll
@@ -62,7 +62,7 @@ InstallGlobalFunction( NQL_CheckConsistencyRelations,
             ev2 := ListWithIdenticalEntries( n, 0 );
           until CollectWordOrFail( coll, ev2, [k,1,j,1,i,1] )<>fail;
               
-          NQL_AddRow(HNF,ev1-ev2);
+          LPRES_AddRow(HNF,ev1-ev2);
         else 
           # the weight function is an increasing function! 
           break;
@@ -91,7 +91,7 @@ InstallGlobalFunction( NQL_CheckConsistencyRelations,
             ev2 := ExponentsByObj( coll, [j,coll![ PC_EXPONENTS ][j]-1] );
           until CollectWordOrFail( coll, ev2, w )<>fail;
   
-          NQL_AddRow(HNF,ev1-ev2);
+          LPRES_AddRow(HNF,ev1-ev2);
         else 
           break;
         fi;
@@ -118,7 +118,7 @@ InstallGlobalFunction( NQL_CheckConsistencyRelations,
           until CollectWordOrFail(coll,ev2,[j,1,i,coll![PC_EXPONENTS][i]] )
 		 <>fail;
         
-          NQL_AddRow(HNF,ev1-ev2);
+          LPRES_AddRow(HNF,ev1-ev2);
         else 
           break;
         fi;
@@ -142,7 +142,7 @@ InstallGlobalFunction( NQL_CheckConsistencyRelations,
           ev2 := ExponentsByObj( coll, [i,1] );
         fi;
             
-        NQL_AddRow(HNF,ev1-ev2);
+        LPRES_AddRow(HNF,ev1-ev2);
       else 
         break;
       fi;
@@ -159,7 +159,7 @@ InstallGlobalFunction( NQL_CheckConsistencyRelations,
           until CollectWordOrFail( coll, ev1, [j,1,i,-1,i,1] )<>fail;
   
           ev1[j] := ev1[j] - 1;
-          NQL_AddRow(HNF,ev1);
+          LPRES_AddRow(HNF,ev1);
         else 
           break;
         fi;
@@ -181,7 +181,7 @@ InstallGlobalFunction( NQL_CheckConsistencyRelations,
             ev1 := ExponentsByObj( coll, [j,-1] );
           until CollectWordOrFail( coll, ev1, w )<>fail;
               
-          NQL_AddRow(HNF, ev1 - ExponentsByObj( coll, [i,1] ));
+          LPRES_AddRow(HNF, ev1 - ExponentsByObj( coll, [i,1] ));
             
           # -i = -j (j -i)
           if not IsBound( coll![ PC_EXPONENTS ][i] ) then
@@ -194,7 +194,7 @@ InstallGlobalFunction( NQL_CheckConsistencyRelations,
               ev1 := ExponentsByObj( coll, [j,-1] );
             until CollectWordOrFail( coll, ev1, w )<>fail;
                   
-            NQL_AddRow( HNF, ExponentsByObj( coll, [i,-1] ) - ev1);
+            LPRES_AddRow( HNF, ExponentsByObj( coll, [i,-1] ) - ev1);
           fi;
         else 
           break;

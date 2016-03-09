@@ -106,11 +106,11 @@ InstallMethod( GeneratingSetOfMultiplier,
   # check the fixed relators for basis elements
   while IsBound( frels[1] ) do 
     if IsEmpty( HNF.Heads ) then
-      NQL_AddRow( HNF, frelsEV[1] );
+      LPRES_AddRow( HNF, frelsEV[1] );
       Add( basis, frels[1] );
     else
       hnf := ShallowCopy( HNF.mat );
-      if NQL_AddRow( HNF, frelsEV[1] ) then 
+      if LPRES_AddRow( HNF, frelsEV[1] ) then 
         # obtained a new basis-element...
           # either we just add frels[1]
           # or we move a basis element to GensMultiplier.FixedGens
@@ -160,13 +160,13 @@ InstallMethod( GeneratingSetOfMultiplier,
   # check the iterated relators for basis elements (use spinning)
   while IsBound( irels[1] ) do 
     if IsEmpty( HNF.Heads ) then
-      NQL_AddRow( HNF, irelsEV[1] );
+      LPRES_AddRow( HNF, irelsEV[1] );
       Add( basis, irels[1] );
       Append( irels, List( EndomorphismsOfLpGroup( G ), x -> irels[1] ^ x ));
       Append( irelsEV, List( endos, x -> irelsEV[1] * x ));
     else
       hnf := ShallowCopy( HNF.mat );
-      if NQL_AddRow( HNF, irelsEV[1] ) then 
+      if LPRES_AddRow( HNF, irelsEV[1] ) then 
         # obtained a new basis-element...
           # either we just add frels[i]
           # or we move a basis element to GensMultiplier.FixedGens
@@ -302,14 +302,14 @@ InstallMethod( EndomorphismsOfFRSchurMultiplier,
         Q := SmallerQuotientSystem( NilpotentQuotientSystem( G ), c );;
       else 
         if NilpotencyClassOfGroup( NilpotentQuotient( G, c ) ) < c then 
-          Info( InfoNQL, 1, "The group has a maximal nilpotent quotient of",
+          Info( InfoLPRES, 1, "The group has a maximal nilpotent quotient of",
                             " class ", Maximum( Q.Weights ) );
           return( fail );
         fi;
         Q := NilpotentQuotientSystem( G );
       fi;
 
-      QS := NQL_QSystemOfCoveringGroup( Q );
+      QS := LPRES_QSystemOfCoveringGroup( Q );
    
       Cov    := ShallowCopy( CoveringGroups( G ) );
       Cov[c] := QS;
@@ -329,7 +329,7 @@ InstallMethod( EndomorphismsOfFRSchurMultiplier,
       Q := NilpotentQuotientSystem( G );
     fi;
 
-    QS := NQL_QSystemOfCoveringGroup( Q );
+    QS := LPRES_QSystemOfCoveringGroup( Q );
   
     Cov := []; Cov[c] := QS;
     SetCoveringGroups( G, Cov );
@@ -339,8 +339,8 @@ InstallMethod( EndomorphismsOfFRSchurMultiplier,
   H := Range( QS.Epimorphism );
 
   # induce EndomorphismsOfLpGroup to endomorphisms of the covering group <H>
-# endos := NQL_InduceEndosToCover( QS, Q.Lpres );
-  endos := NQL_InduceEndosToCover( G, EndomorphismsOfLpGroup( G ), c );
+# endos := LPRES_InduceEndosToCover( QS, Q.Lpres );
+  endos := LPRES_InduceEndosToCover( G, EndomorphismsOfLpGroup( G ), c );
 
   # modify the invariant L-presentation 
   GensMultiplier := GeneratingSetOfMultiplier( G );;
@@ -377,7 +377,7 @@ InstallMethod( EndomorphismsOfFRSchurMultiplier,
 ##    Remove( stack, 1 );
 ##  od;
 
-  SchuMu := NQL_SchuMuFromCover( QS, GensMultiplier, endos );;
+  SchuMu := LPRES_SchuMuFromCover( QS, GensMultiplier, endos );;
 
   # return the restriction of the induced endomorphisms to the subgroup <SchuMu>
   for i in [ 1 .. Length( endos ) ] do
@@ -398,9 +398,9 @@ InstallMethod( EndomorphismsOfFRSchurMultiplier,
 
 ############################################################################
 ##
-#F  NQL_SchuMuFromCover( <QS>, <GensMult>, <Endos> )
+#F  LPRES_SchuMuFromCover( <QS>, <GensMult>, <Endos> )
 ##
-InstallGlobalFunction( NQL_SchuMuFromCover, 
+InstallGlobalFunction( LPRES_SchuMuFromCover, 
   function( QS, GensMult, endos )
   local SchuMu, # the (finite rank) Schur multiplier
 	b,	# position of the first generators of the multiplier
@@ -428,7 +428,7 @@ InstallGlobalFunction( NQL_SchuMuFromCover,
   for i in Filtered( [ b .. n ], x -> orders[x] <> 0 ) do
     ev := ExponentsByObj( QS.Pccol, GetPower( QS.Pccol, i ));;
     ev[i] := - orders[i];;
-    NQL_AddRow( HNF, ev{[b..n]} );
+    LPRES_AddRow( HNF, ev{[b..n]} );
   od;
 
   # compute a matrix for our endomorphisms (of the multiplier)
@@ -455,7 +455,7 @@ InstallGlobalFunction( NQL_SchuMuFromCover,
   while IsBound( stack[1] ) do
     for mat in Endos do
       ev := stack[1] * mat;;
-      if NQL_AddRow( HNF, ev ) then 
+      if LPRES_AddRow( HNF, ev ) then 
         Add( gens, PcpElementByExponents( QS.Pccol, 
                    Concatenation( ListWithIdenticalEntries( b-1, 0 ), ev ) ));
         Add( stack, ev );
@@ -469,11 +469,11 @@ InstallGlobalFunction( NQL_SchuMuFromCover,
 
 ############################################################################
 ##
-#F  NQL_BuildCoveringGroup( <Q>, <ftl>, <HNF>, <weights>, <Defs>, <Imgs> )
+#F  LPRES_BuildCoveringGroup( <Q>, <ftl>, <HNF>, <weights>, <Defs>, <Imgs> )
 ##
 ## computes the covering group from a given quotient system
 ## 
-InstallGlobalFunction( NQL_BuildCoveringGroup, 
+InstallGlobalFunction( LPRES_BuildCoveringGroup, 
   function( Q, ftl, HNF, weights, Defs, Imgs )
   local col,	# collector of the covering group
 	c,	# nilpotency class of the covering group
@@ -516,7 +516,7 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
     else
       rhs      := ExponentsByObj( ftl, Imgs[i] );
       rhsTails := rhs{[b..Length(rhs)]};
-      if rhsTails <> NQL_RowReduce( rhsTails, HNF ) then 
+      if rhsTails <> LPRES_RowReduce( rhsTails, HNF ) then 
         Error("got torsion from a tail of a non-defining image");
       else 
         rhs := Concatenation( rhs{[1..b-1]}, rhsTails{Gens} );
@@ -533,10 +533,10 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
   for i in Filtered( [1..Length(orders)], x -> orders[x] <> 0 ) do 
     rhs      := ExponentsByObj( ftl, GetPower( ftl, i ) );
     rhsTails := rhs{ [ b..Length(rhs) ] };
-    if weights[i] = 1 and rhsTails <> NQL_RowReduce( rhsTails, HNF ) then
+    if weights[i] = 1 and rhsTails <> LPRES_RowReduce( rhsTails, HNF ) then
        Error("got torsion from a tail of a power relation with weight 1");
     fi;
-    rhs := Concatenation( rhs{[1..b-1]}, NQL_RowReduce( rhsTails, HNF ){Gens} );
+    rhs := Concatenation( rhs{[1..b-1]}, LPRES_RowReduce( rhsTails, HNF ){Gens} );
     SetRelativeOrder( QS.Pccol, i, orders[i] );
     SetPower( QS.Pccol, i, ObjByExponents( QS.Pccol, rhs ) );
   od;
@@ -549,7 +549,7 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
       rhsTails := rhs{[b..Length(rhs)]};
       if not IsZero( rhsTails ) then 
         rhs := Concatenation( rhs{[1..b-1]}, 
-                              NQL_RowReduce( rhsTails, HNF ){Gens});
+                              LPRES_RowReduce( rhsTails, HNF ){Gens});
       else
         rhs := Concatenation( rhs{[1..b-1]}, 0 * Gens );
       fi;
@@ -561,7 +561,7 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
         rhsTails := rhs{[b..Length(rhs)]};
         if not IsZero( rhsTails ) then 
           rhs := Concatenation( rhs{[1..b-1]},
-                                NQL_RowReduce( rhsTails, HNF ){Gens} );
+                                LPRES_RowReduce( rhsTails, HNF ){Gens} );
         else 
           rhs := Concatenation( rhs{[1..b-1]}, 0 * Gens );
         fi;
@@ -573,7 +573,7 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
           rhsTails := rhs{[b..Length(rhs)]};
           if not IsZero( rhsTails ) then
             rhs := Concatenation( rhs{[1..b-1]},
-                                  NQL_RowReduce( rhsTails, HNF ){Gens} );
+                                  LPRES_RowReduce( rhsTails, HNF ){Gens} );
           else
             rhs := Concatenation( rhs{[1..b-1]}, 0 * Gens );
           fi;
@@ -585,7 +585,7 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
         rhsTails := rhs{[1..b-1]};
         if not IsZero( rhsTails ) then 
           rhs := Concatenation( rhs{[1..b-1]}, 
-                                NQL_RowReduce( rhsTails, HNF ){Gens} );
+                                LPRES_RowReduce( rhsTails, HNF ){Gens} );
         else
           rhs := Concatenation( rhs{[1..b-1]}, 0 * Gens );
         fi;
@@ -602,7 +602,7 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
     rhs := ListWithIdenticalEntries( Length(weights)-(b-1), 0 );
     rhs[ HNF.Heads[i] ] := HNF.mat[i][ HNF.Heads[i] ];
     rhs := Concatenation( ListWithIdenticalEntries( b-1, 0 ), 
-                          NQL_RowReduce( rhs, HNF ){Gens} );
+                          LPRES_RowReduce( rhs, HNF ){Gens} );
     SetPower( QS.Pccol, k+(b-1), ObjByExponents( QS.Pccol, rhs ) );
   od;
 
@@ -632,12 +632,12 @@ InstallGlobalFunction( NQL_BuildCoveringGroup,
 
 ############################################################################
 ##
-#F  NQL_InduceEndosToCover( <LpGroup>, <int> )
+#F  LPRES_InduceEndosToCover( <LpGroup>, <int> )
 ##
 ## induces the endomorphisms of the invariant L-presentation of <LpGroup>
 ## to the covering group of the class-<int> quotient.
 ##
-InstallGlobalFunction( NQL_InduceEndosToCover, 
+InstallGlobalFunction( LPRES_InduceEndosToCover, 
   function( G, Endos, c )
   local QS,	# quotient system of the covering group of the class-c quotient
 	endos,	# the induced endomorphisms
@@ -732,11 +732,11 @@ InstallGlobalFunction( NQL_InduceEndosToCover,
 
 ############################################################################
 ##
-#F  NQL_QSystemOfCoveringGroup( <QS> )
+#F  LPRES_QSystemOfCoveringGroup( <QS> )
 ##
 ## computes a quotient system of the covering group.
 ##
-InstallGlobalFunction( NQL_QSystemOfCoveringGroup,
+InstallGlobalFunction( LPRES_QSystemOfCoveringGroup,
   function( Q )
   local QS,	# quotient system of the covering group
 	weights,# weight function
@@ -753,24 +753,24 @@ InstallGlobalFunction( NQL_QSystemOfCoveringGroup,
   Imgs    := ShallowCopy( Q.Imgs );
 
   # compute a polycyclic presentation for the covering group
-  ftl := NQL_QSystemOfCoveringGroupByQSystem( Q.Pccol, weights, Defs, Imgs);
+  ftl := LPRES_QSystemOfCoveringGroupByQSystem( Q.Pccol, weights, Defs, Imgs);
 
   # use tails routine to complete the polycyclic presentation <ftl>
   UpdateNilpotentCollector( ftl, weights, Defs );
 
   # enforce consistency of the polycyclic presentation for the covering group
   b   := Position( weights, Maximum( weights ) );
-  HNF := NQL_CheckConsistencyRelations( ftl, weights );
+  HNF := LPRES_CheckConsistencyRelations( ftl, weights );
   for i in [ 1 .. Length( HNF.mat ) ] do 
     HNF.mat[i]   := HNF.mat[i]{[ b .. Length( weights ) ]};
     HNF.Heads[i] := HNF.Heads[i] - b + 1;
   od;
 
   # consistent polycyclic presentation for the covering group and epimorphism
-  QS := NQL_BuildCoveringGroup( Q, ftl, HNF, weights, Defs, Imgs );
+  QS := LPRES_BuildCoveringGroup( Q, ftl, HNF, weights, Defs, Imgs );
   QS.Lpres := Q.Lpres;
   if Q.Weights = QS.Weights then
-    Info( InfoNQL, 1, "failed in computing the covering group");
+    Info( InfoLPRES, 1, "failed in computing the covering group");
     return( fail );
   else 
     return( QS );
@@ -810,7 +810,7 @@ InstallMethod( EpimorphismCoveringGroups,
         Qd := SmallerQuotientSystem( NilpotentQuotientSystem( G ), d );
       else
         if NilpotencyClassOfGroup( NilpotentQuotient( G, d ) ) < d then 
-          Info( InfoNQL, 1, "The group has a maximal nilpotent quotient of",
+          Info( InfoLPRES, 1, "The group has a maximal nilpotent quotient of",
                             " class ", Maximum( Qd.Weights ) );
           return( fail );
         fi;
@@ -818,7 +818,7 @@ InstallMethod( EpimorphismCoveringGroups,
       fi;
 
       # compute a q-system of the covering group (of the class-d quotient)
-      QSd := NQL_QSystemOfCoveringGroup( Qd );
+      QSd := LPRES_QSystemOfCoveringGroup( Qd );
 
       # store the new covering group
       Cov    := ShallowCopy( CoveringGroups( G ) );; 
@@ -834,7 +834,7 @@ InstallMethod( EpimorphismCoveringGroups,
       Qc := SmallerQuotientSystem( NilpotentQuotientSystem( G ), c );
 
       # compute a q-system of the covering group (of the class-d quotient)
-      QSc := NQL_QSystemOfCoveringGroup( Qc );
+      QSc := LPRES_QSystemOfCoveringGroup( Qc );
 
       # store the new covering group
       Cov    := ShallowCopy( CoveringGroups( G ) );; 
@@ -849,7 +849,7 @@ InstallMethod( EpimorphismCoveringGroups,
       Qd := SmallerQuotientSystem( NilpotentQuotientSystem( G ), d );
     else
       if NilpotencyClassOfGroup( NilpotentQuotient( G, d ) ) < d then
-        Info( InfoNQL, 1, "The group has a maximal nilpotent quotient of",
+        Info( InfoLPRES, 1, "The group has a maximal nilpotent quotient of",
                           " class ", Maximum( Qd.Weights ) );
         return( fail );
       fi;
@@ -858,8 +858,8 @@ InstallMethod( EpimorphismCoveringGroups,
     fi;   
 
     # compute quotient systems for the covering groups
-    QSc := NQL_QSystemOfCoveringGroup( Qc );
-    QSd := NQL_QSystemOfCoveringGroup( Qd );
+    QSc := LPRES_QSystemOfCoveringGroup( Qc );
+    QSd := LPRES_QSystemOfCoveringGroup( Qd );
     Cov := []; Cov[c] := QSc;; Cov[d] := QSd;
     SetCoveringGroups( G, Cov );
   fi;

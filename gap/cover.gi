@@ -10,12 +10,12 @@ Revision.("nql/gap/cover_gi"):=
 
 ############################################################################
 ##
-#F  NQL_QSystemOfCoveringGroupByQSystem ( <col>, <weights>, <Defs>, <Imgs> )
+#F  LPRES_QSystemOfCoveringGroupByQSystem ( <col>, <weights>, <Defs>, <Imgs> )
 ## 
 ## computes a (possibly inconsistent) weighted nilpotent quotient system 
 ## for the covering group of <col>. 
 ##
-InstallGlobalFunction( NQL_QSystemOfCoveringGroupByQSystem,
+InstallGlobalFunction( LPRES_QSystemOfCoveringGroupByQSystem,
   function(pccol,weights,Defs,Imgs)
   local c,		# nilpotency class
 	r,		# number of generators <pccol>
@@ -92,7 +92,7 @@ InstallGlobalFunction( NQL_QSystemOfCoveringGroupByQSystem,
     od;
   od; 
   
-  if NQL_TEST_ALL then 
+  if LPRES_TEST_ALL then 
     if not n-1=NumberOfGenerators(ftl) then 
       Error("Number of new generators might be wrong");
     fi;
@@ -129,12 +129,12 @@ InstallGlobalFunction( NQL_QSystemOfCoveringGroupByQSystem,
 
 ############################################################################
 ##
-#F  NQL_CoveringGroupByQSystem( <col>, <weights>, <Defs>, <Imgs> )
+#F  LPRES_CoveringGroupByQSystem( <col>, <weights>, <Defs>, <Imgs> )
 ##
 ## computes a weighted nilpotent presentation for the covering group of
 ## <col>.
 ##
-InstallGlobalFunction( NQL_CoveringGroupByQSystem,
+InstallGlobalFunction( LPRES_CoveringGroupByQSystem,
   function(pccol,weights,Defs,Imgs)
   local c,		# nilpotency class
 	r,		# number of generators <pccol>
@@ -237,10 +237,10 @@ InstallGlobalFunction( NQL_CoveringGroupByQSystem,
   b:=Position(weights,Maximum(weights));
 
   # consistency relations (words in T)
-  HNF := NQL_CheckConsistencyRelations(ftl,weights);
+  HNF := LPRES_CheckConsistencyRelations(ftl,weights);
   for i in [1..Length(HNF.mat)] do
     if not IsZero(HNF.mat[i]{[1..b-1]}) then
-      Error("NQL_CoveringGroupByQSystem: wrong HNF from consistency check");
+      Error("LPRES_CoveringGroupByQSystem: wrong HNF from consistency check");
     fi;
     # forget the first b-1 (zero) entries
     HNF.mat[i]:=HNF.mat[i]{[b..Length(weights)]};

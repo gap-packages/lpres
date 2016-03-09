@@ -281,7 +281,7 @@ ParInstallTOPCGlobalFunction( "NQLPar_MSCheckConsistencyRelations",
 
   CheckTaskResult := function( input, output )
     local ev;
-    for ev in output do NQL_AddRow( HNF, ev ); od;
+    for ev in output do LPRES_AddRow( HNF, ev ); od;
     return NO_ACTION;
     end;
 

@@ -10,7 +10,7 @@ Revision.("nql/gap/consist_gd"):=
 
 ############################################################################
 ##
-#F  NQL_CheckConsistencyRelations ( <coll> , <weights> )
+#F  LPRES_CheckConsistencyRelations ( <coll> , <weights> )
 ##
 ## This function checks the local confluence (or consistency) of a weighted 
 ## nilpotent presentation. It implements the check from Nickel: "Computing 
@@ -22,4 +22,4 @@ Revision.("nql/gap/consist_gd"):=
 ##          i i^m = i^m i,                i in I, 2 w_i <= c
 ##            j   = ( j i^-1 ) i,         i < j, i not in I, w_i+w_j <= c
 ## 
-DeclareGlobalFunction( "NQL_CheckConsistencyRelations" );
+DeclareGlobalFunction( "LPRES_CheckConsistencyRelations" );

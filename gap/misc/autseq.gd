@@ -18,7 +18,7 @@ DeclareOperation( "AutomorphismGroupSequence", [ IsGroup ] );
 
 ############################################################################
 ##
-#F NQL_AutGroupPGroup
+#F LPRES_AutGroupPGroup
 ##
 ############################################################################
-DeclareGlobalFunction( "NQL_AutGroupPGroup" );
+DeclareGlobalFunction( "LPRES_AutGroupPGroup" );

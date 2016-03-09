@@ -115,9 +115,9 @@ InstallGlobalFunction( SmallerQuotientSystem,
 
 ############################################################################
 ##
-#F  NQL_SaveQuotientSystem( <Q>, <file> )
+#F  LPRES_SaveQuotientSystem( <Q>, <file> )
 ##
-InstallGlobalFunction( NQL_SaveQuotientSystem,
+InstallGlobalFunction( LPRES_SaveQuotientSystem,
   function( Q, file )
   local endo,	# an endomorphism of <Q.Lpres>
 	mapi,	# MappingGeneratorsImages
@@ -224,9 +224,9 @@ InstallGlobalFunction( NQL_SaveQuotientSystem,
 
 ############################################################################
 ##
-#F  NQL_SaveQuotientSystemCover( <Q>, <file> )
+#F  LPRES_SaveQuotientSystemCover( <Q>, <file> )
 ##
-InstallGlobalFunction( NQL_SaveQuotientSystemCover,
+InstallGlobalFunction( LPRES_SaveQuotientSystemCover,
   function( Q, file )
   local endo,	# an endomorphism of <Q.Lpres>
 	mapi,	# MappingGeneratorsImages
@@ -327,9 +327,9 @@ InstallGlobalFunction( NQL_SaveQuotientSystemCover,
 
 ############################################################################
 ##
-#F  NQL_LoadCoveringGroups( G, <List> )
+#F  LPRES_LoadCoveringGroups( G, <List> )
 ##
-NQL_LoadCoveringGroups := function( G, L )
+LPRES_LoadCoveringGroups := function( G, L )
   local f,
 	Cov,
 	Q,
@@ -370,7 +370,7 @@ NQL_LoadCoveringGroups := function( G, L )
     if not IsBound(Cov[ Maximum( Q.Weights ) - 1]) then 
       Cov[ Maximum( Q.Weights ) - 1 ] := Q;
     else
-      Info( InfoNQL, 1, "this quotient system is already bound" );
+      Info( InfoLPRES, 1, "this quotient system is already bound" );
     fi;
   od;
   if HasCoveringGroups( G ) then ResetFilterObj( G, CoveringGroups ); fi;

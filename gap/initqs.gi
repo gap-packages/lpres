@@ -48,7 +48,7 @@ InstallMethod( InitQuotientSystem,
       ev[obj[i]]:=ev[obj[i]]+obj[i+1];
     od;
     Add(stack,ShallowCopy(ev));
-    NQL_AddRow(HNF,ev);
+    LPRES_AddRow(HNF,ev);
   od;
   
   # determine the endomorphisms
@@ -74,7 +74,7 @@ InstallMethod( InitQuotientSystem,
     if not IsZero(ev) then 
       for i in [1..Length(endos)] do 
         evn:=ev*endos[i];
-        if NQL_AddRow(HNF,evn) then 
+        if LPRES_AddRow(HNF,evn) then 
           Add(stack,evn);
         fi;
       od;
@@ -88,11 +88,11 @@ InstallMethod( InitQuotientSystem,
     for i in [1,3..Length(obj)-1] do 
       ev[obj[i]]:=ev[obj[i]]+obj[i+1];
     od;
-    NQL_AddRow(HNF,ev);
+    LPRES_AddRow(HNF,ev);
   od;
   
   # translate the Hermite normal form to power relations
-  A:=NQL_PowerRelationsOfHNF(HNF);
+  A:=LPRES_PowerRelationsOfHNF(HNF);
   
   # generators with power relation
   Gens:=HNF.Heads{Filtered([1..Length(HNF.Heads)],

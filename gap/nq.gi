@@ -36,7 +36,7 @@ InstallOtherMethod( NilpotentQuotient,
   if c=j then 
     # the given nilpotency class <j> is already known
     H:=PcpGroupByCollectorNC(Q.Pccol);
-    SetLowerCentralSeriesOfGroup(H,NQL_LCS(Q));
+    SetLowerCentralSeriesOfGroup(H,LPRES_LCS(Q));
 
     return(H);
   elif c<j then
@@ -45,7 +45,7 @@ InstallOtherMethod( NilpotentQuotient,
 
     # build the nilpotent quotient with lcs
     H:=PcpGroupByCollectorNC(QS.Pccol);
-    SetLowerCentralSeriesOfGroup(H,NQL_LCS(QS));
+    SetLowerCentralSeriesOfGroup(H,LPRES_LCS(QS));
 
     return(H);
   else
@@ -71,17 +71,17 @@ InstallOtherMethod( NilpotentQuotient,
         break;
       fi;
 
-      if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-        Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+      if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 	               Length(Q.Weights)-Length(QS.Weights), " generators");
       else
-        Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 	               Length(Q.Weights)-Length(QS.Weights),
 		       " generators with relative orders: ",
 		       RelativeOrders(Q.Pccol)
 		       {[Length(QS.Weights)+1..Length(Q.Weights)]});
       fi;
-      Info(InfoNQL,2,"Runtime for this step ",StringTime(Runtime()-time) );
+      Info(InfoLPRES,2,"Runtime for this step ",StringTime(Runtime()-time) );
     od;
 
     # store the largest nilpotent quotient system
@@ -90,7 +90,7 @@ InstallOtherMethod( NilpotentQuotient,
 
     # build the nilpotent quotient with its lower central series attribute
     H:=PcpGroupByCollectorNC(Q.Pccol);
-    SetLowerCentralSeriesOfGroup(H,NQL_LCS(Q));
+    SetLowerCentralSeriesOfGroup(H,LPRES_LCS(Q));
 
     return(H);
   fi;
@@ -119,14 +119,14 @@ InstallOtherMethod( NilpotentQuotient,
   # Compute a confluent nilpotent presentation for G/G'
   Q:=InitQuotientSystem(G);
 
-  if Length(Q.Weights) > InfoNQL_MAX_GENS then
-    Info(InfoNQL,1,"Class ",1,": ",Length(Q.Weights), " generators");
+  if Length(Q.Weights) > InfoLPRES_MAX_GENS then
+    Info(InfoLPRES,1,"Class ",1,": ",Length(Q.Weights), " generators");
   else
-    Info(InfoNQL,1,"Class ",1,": ",Length(Q.Weights),
+    Info(InfoLPRES,1,"Class ",1,": ",Length(Q.Weights),
 		     " generators with relative orders: ",
 		     RelativeOrders(Q.Pccol));
   fi;
-  Info(InfoNQL,2,"Runtime for this step ", StringTime(Runtime()-time));
+  Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
   
   for i in [1..c-1] do 
     # copy the old quotient system to compare with the extended qs.
@@ -145,17 +145,17 @@ InstallOtherMethod( NilpotentQuotient,
       break;
     fi;
 
-    if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-      Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+    if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+      Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 			 Length(Q.Weights)-Length(QS.Weights), " generators");
     else
-      Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+      Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 			 Length(Q.Weights)-Length(QS.Weights),
 			 " generators with relative orders: ",
 			 RelativeOrders(Q.Pccol)
 			   {[Length(QS.Weights)+1..Length(Q.Weights)]});
     fi;
-    Info(InfoNQL,2,"Runtime for this step ", StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
   od;
   
   # store the largest known nilpotent quotient of <G>
@@ -164,7 +164,7 @@ InstallOtherMethod( NilpotentQuotient,
 
   # build the nilpotent quotient with lcs
   H:=PcpGroupByCollectorNC(Q.Pccol);
-  SetLowerCentralSeriesOfGroup(H,NQL_LCS(Q));
+  SetLowerCentralSeriesOfGroup(H,LPRES_LCS(Q));
 
   return(H);
   end);
@@ -207,21 +207,21 @@ InstallOtherMethod( NilpotentQuotient,
     fi;
   
     if QS.Weights <> Q.Weights then 
-      if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-        Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+      if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 	                Length(Q.Weights)-Length(QS.Weights), " generators");
       else
-        Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 			 Length(Q.Weights)-Length(QS.Weights),
 			 " generators with relative orders: ",
 			 RelativeOrders(Q.Pccol)
 			   {[Length(QS.Weights)+1..Length(Q.Weights)]});
       fi; 
     else 
-      Info(InfoNQL,1,"the group has a maximal nilpotent quotient of class ",
+      Info(InfoLPRES,1,"the group has a maximal nilpotent quotient of class ",
                       Maximum(Q.Weights) );
     fi;
-    Info(InfoNQL,2,"Runtime for this step ", StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
 
   until QS.Weights = Q.Weights;
   
@@ -233,7 +233,7 @@ InstallOtherMethod( NilpotentQuotient,
 
   # build the nilpotent quotient with lcs
   H:=PcpGroupByCollectorNC(Q.Pccol);
-  SetLowerCentralSeriesOfGroup(H,NQL_LCS(Q));
+  SetLowerCentralSeriesOfGroup(H,LPRES_LCS(Q));
 
   return(H);
   end);
@@ -263,13 +263,13 @@ InstallOtherMethod( NilpotentQuotient,
   # Compute a confluent nilpotent presentation for G/G'
   Q:=InitQuotientSystem(G);
 
-  if Length(Q.Weights) > InfoNQL_MAX_GENS then 
-    Info(InfoNQL,1,"Class ",1,": ", Length(Q.Weights), " generators");
+  if Length(Q.Weights) > InfoLPRES_MAX_GENS then 
+    Info(InfoLPRES,1,"Class ",1,": ", Length(Q.Weights), " generators");
   else
-    Info(InfoNQL,1,"Class ",1,": ", Length(Q.Weights),
+    Info(InfoLPRES,1,"Class ",1,": ", Length(Q.Weights),
                " generators with relative orders: ", RelativeOrders(Q.Pccol));
   fi;
-  Info(InfoNQL,2,"Runtime for this step ", StringTime(Runtime()-time));
+  Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
   
   repeat
     QS:=ShallowCopy(Q);
@@ -282,18 +282,18 @@ InstallOtherMethod( NilpotentQuotient,
     fi;
   
     if QS.Weights <> Q.Weights then 
-      if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-        Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+      if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 			 Length(Q.Weights)-Length(QS.Weights), " generators");
       else
-        Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 			 Length(Q.Weights)-Length(QS.Weights),
 			 " generators with relative orders: ",
 			 RelativeOrders(Q.Pccol)
 			   {[Length(QS.Weights)+1..Length(Q.Weights)]});
       fi;
     fi;
-    Info(InfoNQL,2,"Runtime for this step ", StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
 
   until QS.Weights = Q.Weights;
   
@@ -305,7 +305,7 @@ InstallOtherMethod( NilpotentQuotient,
 
   # build the nilpotent quotient with lcs
   H:=PcpGroupByCollectorNC(Q.Pccol);
-  SetLowerCentralSeriesOfGroup(H,NQL_LCS(Q));
+  SetLowerCentralSeriesOfGroup(H,LPRES_LCS(Q));
 
   return(H);
   end);
@@ -345,7 +345,7 @@ InstallOtherMethod( NqEpimorphismNilpotentQuotient,
     return(QS.Epimorphism);
   else
     if HasLargestNilpotentQuotient(G) then 
-      Info(InfoNQL,1,"Largest nilpotent quotient of class ",
+      Info(InfoLPRES,1,"Largest nilpotent quotient of class ",
 		     NilpotencyClassOfGroup(LargestNilpotentQuotient(G)));
       return(Q.Epimorphism);
     fi;
@@ -364,23 +364,23 @@ InstallOtherMethod( NqEpimorphismNilpotentQuotient,
       # if we couldn't extend the quotient system any more, we're finished
       if QS.Weights = Q.Weights then 
         SetLargestNilpotentQuotient(G,PcpGroupByCollectorNC(Q.Pccol));
-        Info(InfoNQL,1,"Largest nilpotent quotient of class ",
+        Info(InfoLPRES,1,"Largest nilpotent quotient of class ",
                         Maximum(Q.Weights));
 		     
         break;
       else 
-        if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-          Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+        if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+          Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
  			 Length(Q.Weights)-Length(QS.Weights), " generators");
         else
-          Info(InfoNQL,1,"Class ",Maximum(Q.Weights),": ",
+          Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ",
 			 Length(Q.Weights)-Length(QS.Weights),
 			 " generators with relative orders: ",
 			 RelativeOrders(Q.Pccol)
 			   {[Length(QS.Weights)+1..Length(Q.Weights)]});
         fi;
       fi;
-      Info(InfoNQL,2,"Runtime for this step ", StringTime(Runtime()-time));
+      Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
   
     od;
 
@@ -460,12 +460,12 @@ InstallOtherMethod( NqEpimorphismNilpotentQuotient,
 
 ############################################################################
 ##
-#F  NQL_LCS( <QS> )
+#F  LPRES_LCS( <QS> )
 ##
 ## computes the lower central series of a nilpotent quotient given by a 
 ## quotient system <QS>.
 ##
-InstallGlobalFunction( NQL_LCS,
+InstallGlobalFunction( LPRES_LCS,
   function(Q)
   local weights,	# weights-function of <Q>
   	i,		# loop variable

@@ -10,8 +10,8 @@ Revision.("nql/gap/nq_non_gd"):=
 
 ############################################################################
 ##
-#F  NQL_TerminatedNonInvariantNQ( <LpGroup>, <QS> )
+#F  LPRES_TerminatedNonInvariantNQ( <LpGroup>, <QS> )
 ##
-DeclareGlobalFunction("NQL_TerminatedNonInvariantNQ");
+DeclareGlobalFunction("LPRES_TerminatedNonInvariantNQ");
 
-BindGlobal( "InfoNQL_MAX_GENS", 10);
+BindGlobal( "InfoLPRES_MAX_GENS", 10);

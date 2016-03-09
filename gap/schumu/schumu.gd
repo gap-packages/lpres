@@ -32,21 +32,21 @@ DeclareOperation( "EndomorphismsOfFRSchurMultiplier", [ IsLpGroup and
 
 ############################################################################
 ##
-#F  NQL_BuildCoveringGroup
+#F  LPRES_BuildCoveringGroup
 ##
-DeclareGlobalFunction( "NQL_BuildCoveringGroup" );
+DeclareGlobalFunction( "LPRES_BuildCoveringGroup" );
 
 ############################################################################
 ##
-#F  NQL_InduceEndosToCover
+#F  LPRES_InduceEndosToCover
 ##
-DeclareGlobalFunction( "NQL_InduceEndosToCover" );
+DeclareGlobalFunction( "LPRES_InduceEndosToCover" );
 
 ############################################################################
 ##
-#F  NQL_QSystemOfCoveringGroup
+#F  LPRES_QSystemOfCoveringGroup
 ##
-DeclareGlobalFunction( "NQL_QSystemOfCoveringGroup" );
+DeclareGlobalFunction( "LPRES_QSystemOfCoveringGroup" );
 
 ############################################################################
 ##
@@ -64,9 +64,9 @@ DeclareGlobalFunction( "ImageInFiniteRankSchurMultiplier" );
 
 ############################################################################
 ##
-#F  NQL_SchuMuFromCover( <QS>, <gens>, <Endos> )
+#F  LPRES_SchuMuFromCover( <QS>, <gens>, <Endos> )
 ##
-DeclareGlobalFunction( "NQL_SchuMuFromCover" );
+DeclareGlobalFunction( "LPRES_SchuMuFromCover" );
 
 
 ############################################################################

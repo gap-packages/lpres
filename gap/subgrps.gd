@@ -17,7 +17,7 @@ DeclareOperation( "SubgroupLpGroupByCosetTable", [ IsObject, IsList ] );
 
 DeclareOperation( "IsCosetTableLpGroup", [ IsSubgroupLpGroup, IsList ] );
 
-DeclareGlobalFunction( "NQL_EnforceCoincidences" );
+DeclareGlobalFunction( "LPRES_EnforceCoincidences" );
 
 DeclareOperation( "LowIndexSubgroupsLpGroupByFpGroup", [ IsLpGroup, IsPosInt, IsPosInt ] );
 DeclareOperation( "LowIndexSubgroupsLpGroupIterator", [ IsLpGroup, IsPosInt, IsPosInt ] );

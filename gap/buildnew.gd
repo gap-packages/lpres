@@ -10,7 +10,7 @@ Revision.("nql/gap/buildnew_gd"):=
 
 ############################################################################
 ##
-#F  NQL_BuildNewCollector ( )
+#F  LPRES_BuildNewCollector ( )
 ##
-#!
-DeclareGlobalFunction( "NQL_BuildNewCollector" );
+##
+DeclareGlobalFunction( "LPRES_BuildNewCollector" );

@@ -10,7 +10,7 @@ SetPackageInfo( rec(
 PackageName := "lpres",
 Subtitle := "Nilpotent Quotients of L-Presented Groups",
 Version := "0.1.0",
-Date    := "06/03/2016",
+Date    := "09/03/2016",
 
 Persons := [
   rec(
@@ -31,10 +31,10 @@ Persons := [
 #CommunicatedBy := "Alexander Konovalov (St Andrews)",
 #AcceptDate     := "02/2009",
 
-PackageWWWHome := "http://github.com/...",
+PackageWWWHome := "http://github.com/laurentbartholdi/lpres/",
 
 ArchiveFormats := ".tar.gz",
-ArchiveURL     := Concatenation( ~.PackageWWWHome, "lpres-",~.Version),
+ArchiveURL     := Concatenation( ~.PackageWWWHome, "releases/download/v",~.Version,"/fr-",~.Version),
 README_URL     := Concatenation( ~.PackageWWWHome, "README.lpres" ),
 PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
 

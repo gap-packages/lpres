@@ -45,11 +45,11 @@ InstallMethod( ExtendQuotientSystem,
   # storing the result
   dir  := DirectoryTemporary();
   file := Filename( dir, "NQLPar.g" );
-  Info( InfoNQL, 1, "Storing results in \"", file, "\"" );
+  Info( InfoLPRES, 1, "Storing results in \"", file, "\"" );
 
-  # enable/disable tracing in ParGap w.r.t. InfoNQL
+  # enable/disable tracing in ParGap w.r.t. InfoLPRES
   tmpParTrace := ParTrace;
-  if InfoLevel( InfoNQL ) >= 2 then 
+  if InfoLevel( InfoLPRES ) >= 2 then 
     ParTrace := true;
   else
     ParTrace := false;
@@ -65,10 +65,10 @@ InstallMethod( ExtendQuotientSystem,
   Imgs    := ShallowCopy( Q.Imgs );
   
   # quotient system of the covering group
-  ftl := NQL_QSystemOfCoveringGroupByQSystem(Q.Pccol,weights,Defs,Imgs);
+  ftl := LPRES_QSystemOfCoveringGroupByQSystem(Q.Pccol,weights,Defs,Imgs);
 
   # use tails-routine to complete the nilpotent presentation
-  Info( InfoNQL, 1, "Computing a polycyclic presentation ",
+  Info( InfoLPRES, 1, "Computing a polycyclic presentation ",
                     "for the covering group..." );
   UpdateNilpotentCollector( ftl, weights, Defs );
 
@@ -83,20 +83,20 @@ InstallMethod( ExtendQuotientSystem,
   n := ftl![ PC_NUMBER_OF_GENERATORS ];
   
   # Check the consisistency relations
-  Info( InfoNQL, 1, "Checking the consistency relations..." );
+  Info( InfoLPRES, 1, "Checking the consistency relations..." );
   HNF := NQLPar_CheckConsistencyRelations( ftl, weights );
  
   # store the HNF of the consistency-checks...
   AppendTo( file, "HNF := rec( Heads := ", HNF.Heads, ", mat := ", 
                    HNF.mat, " );\n");
 
-  Info( InfoNQL, 1, "Broadcasting the slaves...");
+  Info( InfoLPRES, 1, "Broadcasting the slaves...");
   for i in [1..MPI_Comm_size()-1] do
-    Info( InfoNQL, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
+    Info( InfoLPRES, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
   od;
 
   # induce the endomorphisms to the cover
-  Info( InfoNQL, 1, "Inducing the endomorphisms..." );
+  Info( InfoLPRES, 1, "Inducing the endomorphisms..." );
   Mats  := [];
   AppendTo( file, "Mats := [];;\n");
   for endo in EndomorphismsOfLpGroup( Q.Lpres ) do
@@ -110,7 +110,7 @@ InstallMethod( ExtendQuotientSystem,
 
     for i in [ 1 .. Length( mat ) ] do
       if not IsZero( mat[i]{[ 1 .. b-1 ]} ) then 
-        Info( InfoNQL, 3, "not inducing an endomorphism of the multiplier");
+        Info( InfoLPRES, 3, "not inducing an endomorphism of the multiplier");
         return( fail );
       else
         mat[i] := mat[i]{[b..n]};
@@ -120,13 +120,13 @@ InstallMethod( ExtendQuotientSystem,
     AppendTo( file, "Add( Mats, ", mat , " );;\n" );
   od;
 
-  Info( InfoNQL, 1, "Broadcasting the slaves...");
+  Info( InfoLPRES, 1, "Broadcasting the slaves...");
   for i in [1..MPI_Comm_size()-1] do
-    Info( InfoNQL, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
+    Info( InfoLPRES, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
   od;
 
   ParTrace:=true;
-  Info( InfoNQL, 1, "Mapping the relations..." );
+  Info( InfoLPRES, 1, "Mapping the relations..." );
   AppendTo( file, "Rels := [];;\n" );
   Rels := NQLPar_MapRelationsStoring( Imgs, 
           Concatenation( List( FixedRelatorsOfLpGroup( Q.Lpres ), ExtRepOfObj ),
@@ -135,21 +135,21 @@ InstallMethod( ExtendQuotientSystem,
   FRels := Rels{[ 1 .. Length( FixedRelatorsOfLpGroup( Q.Lpres ) ) ]};
   IRels := Rels{[ Length( FixedRelatorsOfLpGroup( Q.Lpres ) ) + 1 .. Length( Rels ) ]};
 
-  if InfoLevel( InfoNQL ) >= 2 then 
+  if InfoLevel( InfoLPRES ) >= 2 then 
     ParTrace := true;
   else
     ParTrace := false;
   fi;
 
-  Info( InfoNQL, 1, "Start spinning..." );
+  Info( InfoLPRES, 1, "Start spinning..." );
   # start the spinning algorithm
   for i in [ 1 .. Length( FRels ) ] do
-    NQL_AddRow( HNF, FRels[i]{[b..n]} );
+    LPRES_AddRow( HNF, FRels[i]{[b..n]} );
   od;
 
   stack := List( IRels, x -> x{[b..n]} );
   for i in [ 1 .. Length( stack ) ] do 
-    NQL_AddRow( HNF, stack[i] );
+    LPRES_AddRow( HNF, stack[i] );
   od;
 
   while IsBound( stack[1] ) do
@@ -159,14 +159,14 @@ InstallMethod( ExtendQuotientSystem,
     if not IsZero(ev) then 
       for mat in Mats do 
         evn := ev * mat;
-        if NQL_AddRow( HNF, evn ) then 
+        if LPRES_AddRow( HNF, evn ) then 
           Add( stack, evn );
         fi;
       od;
     fi;
   od;
 
-  Info( InfoNQL, 1, "Extend the quotient system..." );
+  Info( InfoLPRES, 1, "Extend the quotient system..." );
   if Length(HNF.mat)=0 then 
     # the presentation ftl satisfy the relations and is consistent
     QS := rec( Lpres       := Q.Lpres,
@@ -196,7 +196,7 @@ InstallMethod( ExtendQuotientSystem,
   ParTrace := tmpParTrace;
   ParEval( "Unbind(ftl);" );
 
-  return( NQL_BuildNewCollector( Q, ftl, HNF, weights, Defs, Imgs ) );
+  return( LPRES_BuildNewCollector( Q, ftl, HNF, weights, Defs, Imgs ) );
 
   end);
 
@@ -236,16 +236,16 @@ InstallOtherMethod( ExtendQuotientSystem,
     TryNextMethod();
   fi;
  
-  Info( InfoNQL, 1, "Continue calculations..." );
+  Info( InfoLPRES, 1, "Continue calculations..." );
 
   # storing the results
   dir  := DirectoryTemporary();
   file := Filename( dir, "NQLPar.g" );
-  Info( InfoNQL, 1, "Storing results in \"", file, "\"" );
+  Info( InfoLPRES, 1, "Storing results in \"", file, "\"" );
 
-  # enable/disable tracing in ParGap w.r.t. InfoNQL
+  # enable/disable tracing in ParGap w.r.t. InfoLPRES
   tmpParTrace := ParTrace;
-  if InfoLevel( InfoNQL ) >= 2 then 
+  if InfoLevel( InfoLPRES ) >= 2 then 
     ParTrace := true;
   else
     ParTrace := false;
@@ -268,10 +268,10 @@ InstallOtherMethod( ExtendQuotientSystem,
 # if not IsFunction( func ) or not IsBound( ftl ) or 
 #    not IsFromTheLeftCollectorRep( ftl ) then
 
-    ftl := NQL_QSystemOfCoveringGroupByQSystem(Q.Pccol,weights,Defs,Imgs);
+    ftl := LPRES_QSystemOfCoveringGroupByQSystem(Q.Pccol,weights,Defs,Imgs);
 
     # use tails-routine to complete the nilpotent presentation
-    Info( InfoNQL, 1, "Computing a polycyclic presentation ",
+    Info( InfoLPRES, 1, "Computing a polycyclic presentation ",
                       "for the covering group..." );
     UpdateNilpotentCollector( ftl, weights, Defs );
 # fi;
@@ -285,7 +285,7 @@ InstallOtherMethod( ExtendQuotientSystem,
   
   # Check the consisistency relations
   if Length( HNF.Heads ) = 0 then 
-    Info( InfoNQL, 1, "Checking the consistency relations..." );
+    Info( InfoLPRES, 1, "Checking the consistency relations..." );
     HNF := NQLPar_CheckConsistencyRelations( ftl, weights );
   else 
     # broadcast the collector...
@@ -298,9 +298,9 @@ InstallOtherMethod( ExtendQuotientSystem,
   AppendTo( file, "HNF := rec( Heads := ", HNF.Heads, ", mat := ", 
                    HNF.mat, " );\n");
 
-  Info( InfoNQL, 1, "Broadcasting the slaves...");
+  Info( InfoLPRES, 1, "Broadcasting the slaves...");
   for i in [1..MPI_Comm_size()-1] do
-    Info( InfoNQL, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
+    Info( InfoLPRES, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
   od;
 
   # store the induced matrices...
@@ -311,7 +311,7 @@ InstallOtherMethod( ExtendQuotientSystem,
 
   # induce the endomorphisms to the cover
   if Length( Mats ) <> Length( EndomorphismsOfLpGroup( Q.Lpres ) ) then 
-    Info( InfoNQL, 1, "Inducing the endomorphisms..." );
+    Info( InfoLPRES, 1, "Inducing the endomorphisms..." );
     for endo in EndomorphismsOfLpGroup( Q.Lpres ){[ Length( Mats ) + 1 .. Length( EndomorphismsOfLpGroup( Q.Lpres ) )]} do
       Endo := NQLPar_InduceEndomorphism( 
                          List( FreeGeneratorsOfLpGroup( Q.Lpres ), 
@@ -324,7 +324,7 @@ InstallOtherMethod( ExtendQuotientSystem,
 
       for i in [ 1 .. Length( mat ) ] do
         if not IsZero( mat[i]{[ 1 .. b-1 ]} ) then 
-          Info( InfoNQL, 3, "not inducing an endomorphism of the multiplier");
+          Info( InfoLPRES, 3, "not inducing an endomorphism of the multiplier");
           return( fail );
         else
           mat[i] := mat[i]{[b..n]};
@@ -335,9 +335,9 @@ InstallOtherMethod( ExtendQuotientSystem,
     od;
   fi;
    
-  Info( InfoNQL, 1, "Broadcasting the slaves...");
+  Info( InfoLPRES, 1, "Broadcasting the slaves...");
   for i in [1..MPI_Comm_size()-1] do
-    Info( InfoNQL, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
+    Info( InfoLPRES, 2, "HOST", i,": ",SendRecvMsg("UNIX_Hostname();",i));
   od;
 
   # store the mapped relations...
@@ -356,7 +356,7 @@ InstallOtherMethod( ExtendQuotientSystem,
   od;
 
   ParTrace:=true;
-  Info( InfoNQL, 1, "Mapping the relations..." );
+  Info( InfoLPRES, 1, "Mapping the relations..." );
  
   # fill up the mapped relations <Rels>
   defects := NQLPar_MapRelationsStoring( Imgs, Defects, file );
@@ -368,21 +368,21 @@ InstallOtherMethod( ExtendQuotientSystem,
   FRels := Rels{[ 1 .. nFRels ]};
   IRels := Rels{[ nFRels + 1 .. Length( Rels ) ]};
 
-  if InfoLevel( InfoNQL ) >= 2 then 
+  if InfoLevel( InfoLPRES ) >= 2 then 
     ParTrace := true;
   else
     ParTrace := false;
   fi;
 
-  Info( InfoNQL, 1, "Start spinning..." );
+  Info( InfoLPRES, 1, "Start spinning..." );
   # start the spinning algorithm
   for i in [ 1 .. Length( FRels ) ] do
-    NQL_AddRow( HNF, FRels[i]{[b..n]} );
+    LPRES_AddRow( HNF, FRels[i]{[b..n]} );
   od;
 
   stack := List( IRels, x -> x{[b..n]} );
   for i in [ 1 .. Length( stack ) ] do 
-    NQL_AddRow( HNF, stack[i] );
+    LPRES_AddRow( HNF, stack[i] );
   od;
 
   while IsBound( stack[1] ) do
@@ -392,7 +392,7 @@ InstallOtherMethod( ExtendQuotientSystem,
     if not IsZero(ev) then 
       for mat in Mats do 
         evn := ev * mat;
-        if NQL_AddRow( HNF, evn ) then 
+        if LPRES_AddRow( HNF, evn ) then 
           Add( stack, evn );
         fi;
       od;
@@ -400,7 +400,7 @@ InstallOtherMethod( ExtendQuotientSystem,
   od;
 
 
-  Info( InfoNQL, 1, "Extend the quotient system..." );
+  Info( InfoLPRES, 1, "Extend the quotient system..." );
   if Length(HNF.mat)=0 then 
     # the presentation ftl satisfy the relations and is consistent
     QS := rec( Lpres       := Q.Lpres,
@@ -430,7 +430,7 @@ InstallOtherMethod( ExtendQuotientSystem,
   ParTrace := tmpParTrace;
   ParEval( "Unbind(ftl);" );
 
-  return( NQL_BuildNewCollector( Q, ftl, HNF, weights, Defs, Imgs ) );
+  return( LPRES_BuildNewCollector( Q, ftl, HNF, weights, Defs, Imgs ) );
 
   end);
 

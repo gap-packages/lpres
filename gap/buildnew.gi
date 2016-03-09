@@ -10,12 +10,12 @@ Revision.("nql/gap/buildnew_gi"):=
 
 ############################################################################
 ##
-#F  NQL_BuildNewCollector ( )
+#F  LPRES_BuildNewCollector ( )
 ##
 ## Builds a new collector with respect to the relations and the consistency
 ## relations for the covering group.
 ##
-InstallGlobalFunction( NQL_BuildNewCollector,
+InstallGlobalFunction( LPRES_BuildNewCollector,
   function(Q,ftl,HNF,weights,Defs,Imgs)
   local A,		# power relations with attention to the HNF
 	orders,		# relative order of the 'old' collector
@@ -36,7 +36,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
   orders:=RelativeOrders(Q.Pccol);
 
   # power relations from Hermite normal form
-  A:=NQL_PowerRelationsOfHNF(HNF);
+  A:=LPRES_PowerRelationsOfHNF(HNF);
   
   # find new generators in HNF
   Gens:=HNF.Heads{Filtered([1..Length(HNF.Heads)],
@@ -61,7 +61,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
     elif IsList(Imgs[i]) then 
       rhs:=ExponentsByObj(ftl,Imgs[i]);
       rhsTails:=rhs{[b..Length(rhs)]};
-      rhs:=Concatenation(rhs{[1..b-1]}, NQL_RowReduce(rhsTails,HNF){Gens});
+      rhs:=Concatenation(rhs{[1..b-1]}, LPRES_RowReduce(rhsTails,HNF){Gens});
       QS.Imgs[i]:=ObjByExponents(QS.Pccol,rhs);
     else
       Error("Strange entry in Imgs");
@@ -76,7 +76,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
   for i in Filtered([1..Length(orders)],x-> orders[x]<>0) do 
     rhs:=ExponentsByObj(ftl,GetPower(ftl,i));
     rhsTails:=rhs{[b..Length(rhs)]};
-    rhs:=Concatenation(rhs{[1..b-1]}, NQL_RowReduce(rhsTails,HNF){Gens});
+    rhs:=Concatenation(rhs{[1..b-1]}, LPRES_RowReduce(rhsTails,HNF){Gens});
 
     SetRelativeOrder(QS.Pccol,i,orders[i]);
     SetPower(QS.Pccol,i,ObjByExponents(QS.Pccol,rhs));
@@ -89,7 +89,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
       rhs:=ExponentsByObj(ftl,GetConjugate(ftl,j,i));
       rhsTails:=rhs{[b..Length(rhs)]};
       if not IsZero(rhsTails) then 
-        rhs:=Concatenation(rhs{[1..b-1]}, NQL_RowReduce(rhsTails,HNF){Gens});
+        rhs:=Concatenation(rhs{[1..b-1]}, LPRES_RowReduce(rhsTails,HNF){Gens});
       else
         rhs:=Concatenation(rhs{[1..b-1]},
                            ListWithIdenticalEntries(Length(Gens),0));
@@ -101,7 +101,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
         rhs:=ExponentsByObj(ftl,GetConjugate(ftl,j,-i));
         rhsTails:=rhs{[b..Length(rhs)]};
         if not IsZero(rhsTails) then 
-          rhs:=Concatenation(rhs{[1..b-1]}, NQL_RowReduce(rhsTails,HNF){Gens});
+          rhs:=Concatenation(rhs{[1..b-1]}, LPRES_RowReduce(rhsTails,HNF){Gens});
         else
           rhs:=Concatenation(rhs{[1..b-1]},
                              ListWithIdenticalEntries(Length(Gens),0));
@@ -113,7 +113,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
           rhs:=ExponentsByObj(ftl,GetConjugate(ftl,-j,-i));
           rhsTails:=rhs{[b..Length(rhs)]};
           if not IsZero(rhsTails) then 
-            rhs:=Concatenation(rhs{[1..b-1]}, NQL_RowReduce(rhsTails,HNF){Gens});
+            rhs:=Concatenation(rhs{[1..b-1]}, LPRES_RowReduce(rhsTails,HNF){Gens});
           else
             rhs:=Concatenation(rhs{[1..b-1]},
                                ListWithIdenticalEntries(Length(Gens),0));
@@ -125,7 +125,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
         rhs:=ExponentsByObj(ftl,GetConjugate(ftl,-j,i));
         rhsTails:=rhs{[b..Length(rhs)]};
         if not IsZero(rhsTails) then 
-          rhs:=Concatenation(rhs{[1..b-1]}, NQL_RowReduce(rhsTails,HNF){Gens});
+          rhs:=Concatenation(rhs{[1..b-1]}, LPRES_RowReduce(rhsTails,HNF){Gens});
         else
           rhs:=Concatenation(rhs{[1..b-1]},
                              ListWithIdenticalEntries(Length(Gens),0));
@@ -142,7 +142,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
     rhs:=ListWithIdenticalEntries(Length(weights)-(b-1),0);
     rhs[HNF.Heads[i]]:=HNF.mat[i][HNF.Heads[i]];
     rhs:=Concatenation(ListWithIdenticalEntries(b-1,0),
-                       NQL_RowReduce(rhs,HNF){Gens});;
+                       LPRES_RowReduce(rhs,HNF){Gens});;
     SetPower(QS.Pccol,k+(b-1),ObjByExponents(QS.Pccol,rhs));
   od;
 
@@ -156,7 +156,7 @@ InstallGlobalFunction( NQL_BuildNewCollector,
   SetFeatureObj(QS.Pccol,IsUpToDatePolycyclicCollector,true);
 # SetFeatureObj(QS.Pccol,UseLibraryCollector,true);
 
-  if NQL_TEST_ALL then 
+  if LPRES_TEST_ALL then 
     if not IsConfluent(QS.Pccol) then
       Error("presentation is not confluent");
     fi;

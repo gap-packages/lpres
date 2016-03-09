@@ -10,10 +10,10 @@ Revision.("nql/misc/autseq_gi"):=
 
 ############################################################################
 ##
-#F NQL_AutGroupPGroup( <PcGroup> )
+#F LPRES_AutGroupPGroup( <PcGroup> )
 ##
 ############################################################################
-InstallGlobalFunction( NQL_AutGroupPGroup,
+InstallGlobalFunction( LPRES_AutGroupPGroup,
   function( G )
   local p, r, pcgs, first, n, iso, F, f, Auts, A, Q, epi, H, h,
         s, t, P, M, N, U, baseN, baseU, i;
@@ -128,7 +128,7 @@ InstallMethod( AutomorphismGroupSequence,
   fi;
 
   # get all relevant aut groups
-  A   := NQL_AutGroupPGroup( G );
+  A   := LPRES_AutGroupPGroup( G );
 
   # find first quotient with solvable aut group
   t := First([1..Length(A)], x -> Length(A[x].glAutos)=0);

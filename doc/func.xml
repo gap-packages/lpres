@@ -1,70 +1,63 @@
-<!--
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%W  func.tex		NQL Doc				René Hartung
-%%
-%H  $Id: func.tex,v 1.8 2010/03/31 13:42:53 gap Exp $
-%%
+<Chapter><Heading>The underlying functions</Heading>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Chapter{The underlying functions}
+<Section><Heading>Nilpotent Quotient Systems for invariant L-presentations</Heading>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Nilpotent Quotient Systems for invariant L-presentations}
+For an invariantly L-presented group <M>G</M>, our algorithm computes
+a nilpotent presentation for <M>G/\gamma_{c+1}(G)</M> by computing a
+<A>weighted nilpotent quotient system</A> for <M>G/G'</M> and
+extending it inductively to a weighted nilpotent quotient system for
+<M>G/\gamma_{c+1}(G)</M>.<P/>
 
-For an invariantly $L$-presented group $G$, our algorithm computes a
-nilpotent presentation for $G/\gamma_{c+1}(G)$ by computing a <weighted
-nilpotent quotient system> for $G/G'$ and extending it inductively to
-a weighted nilpotent quotient system for $G/\gamma_{c+1}(G)$.
-
-In the {\NQL} package, a weighted nilpotent quotient system is a record
+In the &lpres; package, a weighted nilpotent quotient system is a record
 containing the following entries:
+<List>
+<Mark>Lpres</Mark><Item>the invariantly L-presented group <M>G</M>.</Item>
 
-\beginitems
-<Lpres> & the invariantly $L$-presented group $G$.
+<Mark>Pccol</Mark><Item>`FromTheLeftCollector' of the nilpotent
+quotient represented by this quotient system.</Item>
 
-<Pccol> & `FromTheLeftCollector' of the nilpotent quotient represented by this 
-	  quotient system.
+<Mark>Imgs</Mark><Item>the images of the generators of the L-presented
+group <M>G</M> under the epimorphism onto the nilpotent quotient
+<A>Pccol</A>. For each generator of <M>G</M> there is an integer or a
+generator exponent list. If the image is an integer <A>int</A>, the
+image is a definition of the <A>int</A>-th generator of the nilpotent
+presentation <A>Pccol</A>.</Item>
 
-<Imgs>  & the images of the generators of the $L$-presented group $G$ under
-	  the epimorphism onto the nilpotent quotient <Pccol>. For
-	  each generator of $G$ there is an integer or a generator
-	  exponent list. If the image is an integer <int>, the image
-	  is a definition of the <int>-th generator of the nilpotent
-	  presentation <Pccol>.
+<Mark>Epimorphism</Mark><Item>an epimorphism from the L-presented
+group <M>G</M> onto its nilpotent quotient <A>Pccol</A> with the
+images of the generators given by <A>Imgs</A>.</Item>
 
-<Epimorphism>& an epimorphism from the $L$-presented group $G$ onto its 
-	       nilpotent quotient <Pccol> with the images of the generators
-	       given by <Imgs>.
+<Mark>Weights</Mark><Item>a list of the weight of each generator of
+the nilpotent presentation <A>Pccol</A>.</Item>
 
-<Weights> & a list of the weight of each generator of the nilpotent
-            presentation <Pccol>.
+<Mark>Definitions</Mark><Item>the definition of each generator of
+<A>Pccol</A>. Each generator in the quotient system has a definition
+as an image or as a commutator of the form <M>[a_j,a_i]</M> where
+<M>a_j</M> and <M>a_i</M> are generators of a certain weight. If the
+<A>i</A>-th entry is an integer, the <A>i</A>-th generator of
+<A>Pccol</A> has a definition as an image. Otherwise, the <A>i</A>-th
+entry is a <M>2</M>-tuple <M>[k,l]</M> and the <A>i</A>-th generator
+has a definition as commutator <M>[a_k,a_l]</M>.</Item>
+</List>
 
-<Definitions>
-       & the definition of each generator of <Pccol>. Each generator in the 
-	 quotient system has a definition as an image or as a commutator
-	 of the form $[a_j,a_i]$ where $a_j$ and $a_i$ are generators of
-	 a certain weight. If the <i>-th entry is an integer, the <i>-th
-	 generator of <Pccol> has a definition as an image. Otherwise,
-	 the <i>-th entry is a $2$-tuple $[k,l]$ and the <i>-th generator
-	 has a definition as commutator $[a_k,a_l]$.
-\enditems
+A weighted nilpotent quotient system of an invariantly L-presented group 
+can be computed with the following functions.
 
-A weighted nilpotent quotient system of an invariantly $L$-presented group 
-can be computed with the following functions. 
-
-\> InitQuotientSystem( <LpGroup> ) O
-
+<ManSection><Oper Name="InitQuotientSystem" Arg="lpgroup"/>
+<Description>
 computes a weighted nilpotent quotient system for the abelian quotient
-of the $L$-presented group <LpGroup>.
+of the L-presented group <A>lpgroup</A>.
+</Description>
+</ManSection>
 
-\> ExtendQuotientSystem( <QS> ) O
+<ManSection><Oper Name="ExtendQuotientSystem" Arg="QS"/>
+<Description>
+extends the weighted nilpotent quotient system <A>QS</A> for a
+class-<M>c</M> quotient of an invariantly L-presented group to a
+weighted nilpotent quotient system of its class-<M>c+1</M>
+quotient.
 
-extends the weighted nilpotent quotient system <QS> for a class-$c$
-quotient of an invariantly $L$-presented group to a weighted nilpotent
-quotient system of its class-$c+1$ quotient.
-
-\beginexample
+<Example><![CDATA[
 gap> G := ExamplesOfLPresentations( 1 );
 <L-presented group on the generators [ a, b, c, d ]>
 gap> Q := InitQuotientSystem( G );
@@ -80,23 +73,25 @@ rec( Lpres := <L-presented group on the generators [ a, b, c, d ]>,
   Definitions := [ 1, 3, 4, [ 2, 1 ], [ 3, 1 ] ], 
   Weights := [ 1, 1, 1, 2, 2 ], Epimorphism := [ a, b, c, d ] -> 
     [ g1, g2*g3, g2, g3 ] )
-\endexample
+]]></Example>
+</Description>
+</ManSection>
+</Section>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{Attributes of L-presented groups related with the nilpotent quotient algorithm}
+<Section><Heading>Attributes of L-presented groups related with the nilpotent quotient algorithm</Heading><P/>
 
 To avoid repeated extensions of a weighted nilpotent quotient system
 the largest known quotient system is stored as an attribute of the
-invariantly $L$-presented group. For non-invariantly $L$-presented groups
-(or groups which are not known to be invariantly $L$-presented) the known
+invariantly L-presented group. For non-invariantly L-presented groups
+(or groups which are not known to be invariantly L-presented) the known
 epimorphisms onto the nilpotent quotients are stored as an attribute.
 
-\> NilpotentQuotientSystem( <LpGroup> ) A
-
+<ManSection><Attr Name="NilpotentQuotientSystem" Arg="lpgroup"/>
+<Description>
 stores the largest known weighted nilpotent quotient system of an
-invariantly $L$-presented group.
+invariantly L-presented group.
 
-\beginexample
+<Example><![CDATA[
 gap> G := ExamplesOfLPresentations( 1 );;
 gap> NilpotentQuotient( G, 5 );
 Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
@@ -109,14 +104,17 @@ rec( Lpres := <L-presented group on the generators [ a, b, c, d ]>,
   Epimorphism := [ a, b, c, d ] -> [ g1, g2*g3, g2, g3 ] )
 gap> NilpotencyClassOfGroup( PcpGroupByCollectorNC( last.Pccol ) );
 5
-\endexample
+]]></Example>
+</Description>
+</ManSection>
 
-\> NilpotentQuotients( <LpGroup> ) A
+<ManSection><Attr Name="NilpotentQuotients" Arg="lpgroup"/>
+<Description>
+stores all known epimorphisms onto the nilpotent quotients of
+<A>lpgroup</A>.  The nilpotent quotients are accessible by the
+operation `Range'.
 
-stores all known epimorphisms onto the nilpotent quotients of <LpGroup>.
-The nilpotent quotients are accessible by the operation `Range'.
-
-\beginexample
+<Example><![CDATA[
 gap> G:=ExamplesOfLPresentations( 3 );;
 gap> HasIsInvariantLPresentation( G );
 false
@@ -127,35 +125,39 @@ gap> NilpotentQuotients( G );
   [ a, t, u ] -> [ g2, g1, g2 ] ]
 gap> Range( last[2] );
 Pcp-group with orders [ 0, 2, 2 ]
-\endexample
-The underlying invariant $L$-presentation has stored its largest
+]]></Example>
+
+The underlying invariant L-presentation has stored its largest
 weighted nilpotent quotient system as an attribute.
-\beginexample
+<Example><![CDATA[
 gap> NilpotentQuotientSystem( UnderlyingInvariantLPresentation( G ) );
 rec( Lpres := <L-presented group on the generators [ a, t, u ]>,
   Pccol := <<from the left collector with 9 generators>>, Imgs := [ 1, 2, 3 ],
   Definitions := [ 1, 2, 3, [ 2, 1 ], [ 3, 2 ], [ 4, 1 ], [ 4, 2 ], [ 5, 2 ],
       [ 5, 3 ] ], Weights := [ 1, 1, 1, 2, 2, 3, 3, 3, 3 ],
   Epimorphism := [ a, t, u ] -> [ g1, g2, g3 ] )
-\endexample
+]]></Example>
+</Description>
+</ManSection>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\Section{The Info-Class InfoNQL}
+</Section>
+
+<Section><Heading>The Info-Class InfoLPRES</Heading><P/>
 
 To get some information about the progress of the algorithm,
-one can use the info class `InfoNQL'. 
+one can use the info class `InfoLPRES'.
 
-\> InfoNQL
-
-is the info class of the {\NQL}-package. If the info-level is $1$, the
+<ManSection><InfoClass Name="InfoLPRES"/>
+<Description>
+is the info class of the &lpres;-package. If the info-level is <M>1</M>, the
 info-class gives further information on the progress of the nilpotent
-quotient algorithm for $L$-presented groups. The info-level $2$ also
+quotient algorithm for L-presented groups. The info-level <M>2</M> also
 includes some information on the runtime of our algorithm while the
-info-level $3$ is mainly used for debugging-purposes. An example of such
+info-level <M>3</M> is mainly used for debugging-purposes. An example of such
 a session for the Grigorchuk group is shown below:
 
-\beginexample
-gap> SetInfoLevel( InfoNQL, 1 );;
+<Example><![CDATA[
+gap> SetInfoLevel( InfoLPRES, 1 );;
 gap> G:=ExamplesOfLPresentations( 1 );
 #I  The Grigorchuk group on 4 generators
 <L-presented group on the generators [ a, b, c, d ]>
@@ -164,7 +166,7 @@ gap> NilpotentQuotient( G, 3 );
 #I  Class 2: 2 generators with relative orders: [ 2, 2 ]
 #I  Class 3: 2 generators with relative orders: [ 2, 2 ]
 Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2 ]
-gap> SetInfoLevel( InfoNQL, 2 );
+gap> SetInfoLevel( InfoLPRES, 2 );
 gap> NilpotentQuotient( G, 5 );
 #I  Time spent for spinning algo:  0:00:00.004
 #I  Class 4: 1 generators with relative orders: [ 2 ]
@@ -173,15 +175,16 @@ gap> NilpotentQuotient( G, 5 );
 #I  Class 5: 2 generators with relative orders: [ 2, 2 ]
 #I  Runtime for this step  0:00:00.036
 Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
-\endexample
+]]></Example>
+</Description>
+</ManSection>
 
-\> InfoNQL_MAX_GENS 
-
+<ManSection><Var Name="InfoLPRES_MAX_GENS"/>
+<Description>
 this global variable sets the limit of generators whose relative order
 will be shown on each step of the nilpotent quotient algorithm, if the
-info-level of `InfoNQL' is positive.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%E  func.tex  . . . . . . . . . . . . . . . . . . . . . . . . ends here
--->
+info-level of `InfoLPRES' is positive.
+</Description>
+</ManSection>
+</Section>
+</Chapter>

@@ -46,7 +46,7 @@ InstallMethod( ExtendQuotientSystem,
   
   # build a (possibly inconsistent) nilpotent presentation for the 
   # covering group of Q
-  ftl:=NQL_QSystemOfCoveringGroupByQSystem(Q.Pccol,weights,Defs,Imgs);
+  ftl:=LPRES_QSystemOfCoveringGroupByQSystem(Q.Pccol,weights,Defs,Imgs);
 
   # complete the nilpotent presentation using the tails routine
   UpdateNilpotentCollector(ftl,weights,Defs);
@@ -55,7 +55,7 @@ InstallMethod( ExtendQuotientSystem,
   b:=Position(weights,Maximum(weights));
   
   # consistency relations (words in T)
-  HNF := NQL_CheckConsistencyRelations(ftl,weights);
+  HNF := LPRES_CheckConsistencyRelations(ftl,weights);
   for i in [1..Length(HNF.mat)] do
     if not IsZero(HNF.mat[i]{[1..b-1]}) then 
       Error("in ExtendQuotientSystem: wrong HNF from consistency check");
@@ -66,7 +66,7 @@ InstallMethod( ExtendQuotientSystem,
   od;
   
   # build the endomorphisms
-  A:=NQL_EndomorphismsOfCover( Q.Lpres, ftl, Imgs, Defs, weights );
+  A:=LPRES_EndomorphismsOfCover( Q.Lpres, ftl, Imgs, Defs, weights );
 
   # if the endomorphisms do not induces endomorphisms of the multiplier
   if A = fail then 
@@ -78,16 +78,16 @@ InstallMethod( ExtendQuotientSystem,
   # spinning algorithm
   stack:=A.IteratedRelations;
   for i in [1..Length(stack)] do 
-    NQL_AddRow(HNF,stack[i]);
+    LPRES_AddRow(HNF,stack[i]);
   od;
   while not Length(stack)=0 do
-    Info(InfoNQL,3,"Spinning stack has size ",Length(stack));
+    Info(InfoLPRES,3,"Spinning stack has size ",Length(stack));
     ev:=stack[1];
     Remove( stack, 1 );
     if not IsZero(ev) then 
       for i in [1..Length(A.Endomorphisms)] do 
         evn:=ev*A.Endomorphisms[i];
-        if NQL_AddRow(HNF,evn) then 
+        if LPRES_AddRow(HNF,evn) then 
           Add(stack,evn);
         fi;
       od;
@@ -96,10 +96,10 @@ InstallMethod( ExtendQuotientSystem,
   
   # add the non-iterated relations
   for i in [1..Length(A.Relations)] do
-    NQL_AddRow(HNF,A.Relations[i]);
+    LPRES_AddRow(HNF,A.Relations[i]);
   od;
   
-  Info(InfoNQL,2,"Time spent for spinning algorithm: ",
+  Info(InfoLPRES,2,"Time spent for spinning algorithm: ",
 			StringTime(Runtime()-time));
   
   if Length(HNF.mat)=0 then 
@@ -125,6 +125,6 @@ InstallMethod( ExtendQuotientSystem,
   else 
     # use the Hermite normal form to compute a consistent presentation 
     # that satisfy the relations
-    return(NQL_BuildNewCollector(Q,ftl,HNF,weights,Defs,Imgs));
+    return(LPRES_BuildNewCollector(Q,ftl,HNF,weights,Defs,Imgs));
   fi;
   end);

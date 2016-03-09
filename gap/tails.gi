@@ -12,11 +12,11 @@ Revision.("nql/gap/tails_gi"):=
 
 ############################################################################
 ## 
-#F  NQL_Tails_lji ( <coll> , <Def of k> , <l> , <k>) 
+#F  LPRES_Tails_lji ( <coll> , <Def of k> , <l> , <k>) 
 ##
 ## computes t_{kl}^{++}
 ##
-InstallGlobalFunction( NQL_Tails_lji,
+InstallGlobalFunction( LPRES_Tails_lji,
   function(coll,Defs,l,k)
   local ev1,ev2, 	# exponent vectors of the consistency relation
 	i,j,		# definition of k as commutator [a_j,a_i]
@@ -45,11 +45,11 @@ InstallGlobalFunction( NQL_Tails_lji,
 
 ############################################################################
 ## 
-#F  NQL_Tails_lkk ( <coll> , <l> , <k>) 
+#F  LPRES_Tails_lkk ( <coll> , <l> , <k>) 
 ##
 ## computes t_{kl}^{-+}
 ##
-InstallGlobalFunction( NQL_Tails_lkk,
+InstallGlobalFunction( LPRES_Tails_lkk,
   function(coll,l,k)
   local ev1; 	# exponent vector
 
@@ -60,7 +60,7 @@ InstallGlobalFunction( NQL_Tails_lkk,
   until CollectWordOrFail(coll,ev1,[AbsInt(k),-SignInt(k)])<>fail;
   
   if not ev1[AbsInt(l)]=1 then 
-    Error("in NQL_Tails_lkk\n");
+    Error("in LPRES_Tails_lkk\n");
   fi;
   
   ev1[AbsInt(l)]:=0;
@@ -70,11 +70,11 @@ InstallGlobalFunction( NQL_Tails_lkk,
 
 ############################################################################
 ##  
-#F  NQL_Tails_llk ( <coll> , <l> , <k>)
+#F  LPRES_Tails_llk ( <coll> , <l> , <k>)
 ##
 ## computes t_{kl}^{+-} AND t_{kl}^{--}
 ##
-InstallGlobalFunction( NQL_Tails_llk,
+InstallGlobalFunction( LPRES_Tails_llk,
   function(coll,l,k)
   local ev1,	# exponent vector
 	rhs;	# rhs of the relation a_l^{a_k}
@@ -87,7 +87,7 @@ InstallGlobalFunction( NQL_Tails_llk,
   until CollectWordOrFail(coll,ev1,rhs)<>fail;
   
   if not ev1[AbsInt(k)]=SignInt(k) then
-    Error("in NQL_Tails_llk\n");
+    Error("in LPRES_Tails_llk\n");
   fi;
   
   ev1[AbsInt(k)]:=0;
@@ -117,7 +117,7 @@ InstallMethod( UpdateNilpotentCollector,
   # nilpotency class
   c:=Maximum(weights);
   
-  if NQL_TEST_ALL then 
+  if LPRES_TEST_ALL then 
     for i in [1..Length(orders)-1] do 
       for k in [i+1..Length(orders)] do 
         if not GetConjugate(coll,k,i){[1,2]}=[k,1] then 
@@ -139,7 +139,7 @@ InstallMethod( UpdateNilpotentCollector,
       for j in [i+1..Length(weights)] do 
         if weights[i]+weights[j]=b then 
           if not weights[i]=1 then
-            rhs:=NQL_Tails_lji(coll,Defs[i],j,i);
+            rhs:=LPRES_Tails_lji(coll,Defs[i],j,i);
             for a in [1,3..Length(rhs)-1] do
               if orders[rhs[a]]<>0 and rhs[a+1]<0 then 
                 if not GetPower(coll,a)=[] then 
@@ -150,7 +150,7 @@ InstallMethod( UpdateNilpotentCollector,
               fi;
             od;
             rhs:=Concatenation(GetConjugate(coll,j,i),rhs);
-            if NQL_TEST_ALL then 
+            if LPRES_TEST_ALL then 
               if not rhs{[1,2]}=[j,1] then 
                 Error("no nilpotent presentation j i");
               fi;
@@ -162,9 +162,9 @@ InstallMethod( UpdateNilpotentCollector,
           if orders[i]=0 then 
             repeat
               rhs:=ListWithIdenticalEntries(Length(weights),0);
-            until CollectWordOrFail(coll,rhs,NQL_Tails_lkk(coll,j,-i))<>fail;
+            until CollectWordOrFail(coll,rhs,LPRES_Tails_lkk(coll,j,-i))<>fail;
             rhs:=ObjByExponents(coll,rhs);
-            if NQL_TEST_ALL then 
+            if LPRES_TEST_ALL then 
               if not rhs{[1,2]}=[j,1] then 
                 Error("no nilpotent presentation j -i");
               fi;
@@ -175,9 +175,9 @@ InstallMethod( UpdateNilpotentCollector,
           if orders[j]=0 then  
             repeat
               rhs:=ListWithIdenticalEntries(Length(weights),0);
-            until CollectWordOrFail(coll,rhs,NQL_Tails_llk(coll,-j,i))<>fail;
+            until CollectWordOrFail(coll,rhs,LPRES_Tails_llk(coll,-j,i))<>fail;
             rhs:=ObjByExponents(coll,rhs);
-            if NQL_TEST_ALL then
+            if LPRES_TEST_ALL then
               if not rhs{[1,2]}=[j,-1] then 
                 Error("no nilpotent presentation -j i");
               fi;
@@ -188,9 +188,9 @@ InstallMethod( UpdateNilpotentCollector,
           if orders[i]+orders[j]=0 then
             repeat
               rhs:=ListWithIdenticalEntries(Length(weights),0);
-            until CollectWordOrFail(coll,rhs,NQL_Tails_llk(coll,-j,-i))<>fail;
+            until CollectWordOrFail(coll,rhs,LPRES_Tails_llk(coll,-j,-i))<>fail;
             rhs:=ObjByExponents(coll,rhs);
-            if NQL_TEST_ALL then
+            if LPRES_TEST_ALL then
               if not rhs{[1,2]}=[j,-1] then 
                 Error("no nilpotent presentation -j -i");
               fi;

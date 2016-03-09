@@ -503,7 +503,7 @@ InstallMethod( UnderlyingInvariantLPresentation,
   itrels := IteratedRelatorsOfLpGroup( G );
 
   # generators of a f.g. subgroup of <F>
-  W := NQL_WordsOfLengthAtMostN( EndomorphismsOfLpGroup(G), 3 );
+  W := LPRES_WordsOfLengthAtMostN( EndomorphismsOfLpGroup(G), 3 );
   if Length(W) >= 30 then
     W := W{[1..30]};
   fi;
@@ -568,7 +568,7 @@ InstallMethod( EpimorphismFromFpGroup,
   rels := ShallowCopy( FixedRelatorsOfLpGroup( L ) );
 
   # all words in the free monoid of length at most <n>
-  Endos := NQL_WordsOfLengthAtMostN( EndomorphismsOfLpGroup( L ), n );
+  Endos := LPRES_WordsOfLengthAtMostN( EndomorphismsOfLpGroup( L ), n );
 
   # apply the endomorphisms
   for sig in Endos do 

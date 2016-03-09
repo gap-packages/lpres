@@ -95,23 +95,23 @@ InstallMethod( CosetTableInWholeGroup,
   sig := EndomorphismsOfLpGroup( G )[1];
 
   # find an FpGroup which has <H> as a finite ind. subgroup and maps onto <G>
-  l := NQL_TCSTART;
+  l := LPRES_TCSTART;
   repeat
     g   := Source( EpimorphismFromFpGroup( G , l ) );
     fam := ElementsFamily( FamilyObj( g ) );
     h   := Subgroup( g, List( GeneratorsOfGroup( H ), 
                      x -> ElementOfFpGroup( fam, UnderlyingElement( x ) ) ) );
    
-    Info( InfoNQL, 1, "Trying FpGroup with ", l, " iterations..." );
+    Info( InfoLPRES, 1, "Trying FpGroup with ", l, " iterations..." );
 
     # call usual Todd-Coxeter algorithm for this finitely presented group
-    Tab := NQL_CosetEnumerator( h );
+    Tab := LPRES_CosetEnumerator( h );
 
     if Tab <> fail then 
       if Length( Tab ) = 0 or Length( Tab[1] ) = 0 then 
-        Info( InfoNQL, 1, "Coset-enumeration succeeded: the index is 1" ); 
+        Info( InfoLPRES, 1, "Coset-enumeration succeeded: the index is 1" ); 
       else
-        Info( InfoNQL, 1, "Coset-enumeration succeeded: the index is ", 
+        Info( InfoLPRES, 1, "Coset-enumeration succeeded: the index is ", 
                           Length( Tab[1] ) ); 
       fi;
     fi;
@@ -145,14 +145,14 @@ InstallMethod( CosetTableInWholeGroup,
     if ForAny( IteratedRelatorsOfLpGroup( G ), 
        x -> not IsOne( Image( Maps[j], x ) ) ) then 
  
-      Info( InfoNQL, 1, "An iterated relator yields a coincidence..." );
+      Info( InfoLPRES, 1, "An iterated relator yields a coincidence..." );
     
-      Tab := NQL_EnforceCoincidences( Tab, H, Maps[ Length( Maps ) ] );
+      Tab := LPRES_EnforceCoincidences( Tab, H, Maps[ Length( Maps ) ] );
       
       if Length( Tab ) = 0 then return( Tab ); fi;
 
       ind := Length( Tab[1] );
-      Info( InfoNQL, 1, "  -> the index is ", ind );
+      Info( InfoLPRES, 1, "  -> the index is ", ind );
  
       # continue with the new coset-table setting
       Sym := SymmetricGroup( ind );
@@ -206,23 +206,23 @@ InstallMethod( CosetTableInWholeGroup,
   G := Parent( H );
 
   # find an FpGroup which has <H> as a f.i.-subgroup and maps onto <G>
-  l := NQL_TCSTART;
+  l := LPRES_TCSTART;
   repeat
     g   := Source( EpimorphismFromFpGroup( G, l ) );
     fam := ElementsFamily( FamilyObj( g ) );
     h   := Subgroup( g, List( GeneratorsOfGroup( H ), 
                      x -> ElementOfFpGroup( fam, UnderlyingElement( x ) ) ) );
    
-    Info( InfoNQL, 1, "Trying FpGroup with ", l, " iterations..." );
+    Info( InfoLPRES, 1, "Trying FpGroup with ", l, " iterations..." );
 
     # call usual Todd-Coxeter algorithm for this finitely presented group
-    Tab := NQL_CosetEnumerator( h );
+    Tab := LPRES_CosetEnumerator( h );
 
     if Tab <> fail then 
       if Length( Tab ) = 0 or Length( Tab[1] ) = 0 then 
-        Info( InfoNQL, 1, "Coset-enumeration succeeded: the index is 1" );
+        Info( InfoLPRES, 1, "Coset-enumeration succeeded: the index is 1" );
       else
-        Info( InfoNQL, 1, "Coset-enumeration succeeded: the index is ", 
+        Info( InfoLPRES, 1, "Coset-enumeration succeeded: the index is ", 
                           Length( Tab[1] ) );
       fi;
     fi;
@@ -258,16 +258,16 @@ InstallMethod( CosetTableInWholeGroup,
         if ForAny( IteratedRelatorsOfLpGroup( G ), 
                    x -> not IsOne( Image( map, x ) ) ) then 
 
-          Info( InfoNQL, 1, "An iterated relator yields a coincidence..." );
+          Info( InfoLPRES, 1, "An iterated relator yields a coincidence..." );
 
           # enforce this coincidence 
-          Tab := NQL_EnforceCoincidences( Tab, H, map );
+          Tab := LPRES_EnforceCoincidences( Tab, H, map );
 
           if Length( Tab ) = 0 or Length( Tab[1] ) = 0 then
-            Info( InfoNQL, 1, "  -> the index is 1 ");
+            Info( InfoLPRES, 1, "  -> the index is 1 ");
             return( Tab );
           else 
-            Info( InfoNQL, 1, " -> the index is ", Length( Tab[1] ) );
+            Info( InfoLPRES, 1, " -> the index is ", Length( Tab[1] ) );
           fi;
 
           ModTab := true;
@@ -533,9 +533,9 @@ InstallMethod( GeneratorsOfMagmaWithInverses,
 
 ############################################################################
 ##
-#F NQL_EnforceCoincidences
+#F LPRES_EnforceCoincidences
 ##
-InstallGlobalFunction( NQL_EnforceCoincidences,
+InstallGlobalFunction( LPRES_EnforceCoincidences,
   function( tab, H, map )
   local i, j, ind, G, Tab, co, c, Entries, pos, l, Bij, coinc, img;
 

@@ -10,24 +10,24 @@ Revision.("nql/gap/hnf_gd"):=
 
 ############################################################################
 ##
-#F  NQL_PowerRelationsOfHNF ( <rec> )
+#F  LPRES_PowerRelationsOfHNF ( <rec> )
 ##
-DeclareGlobalFunction( "NQL_PowerRelationsOfHNF" );
+DeclareGlobalFunction( "LPRES_PowerRelationsOfHNF" );
 
 ############################################################################
 ##
-#F  NQL_ReduceHNF ( <mat> , <int> )
+#F  LPRES_ReduceHNF ( <mat> , <int> )
 ##
-DeclareGlobalFunction( "NQL_ReduceHNF" );
+DeclareGlobalFunction( "LPRES_ReduceHNF" );
 
 ############################################################################
 ##
-#F  NQL_AddRow ( <mat> , <evec> )
+#F  LPRES_AddRow ( <mat> , <evec> )
 ##
-DeclareGlobalFunction( "NQL_AddRow" );
+DeclareGlobalFunction( "LPRES_AddRow" );
 
 ############################################################################
 ##
-#F  NQL_RowReduce( <ev>, <HNF> )
+#F  LPRES_RowReduce( <ev>, <HNF> )
 ##
-DeclareGlobalFunction( "NQL_RowReduce" );
+DeclareGlobalFunction( "LPRES_RowReduce" );

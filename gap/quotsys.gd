@@ -19,14 +19,14 @@ DeclareGlobalFunction( "SmallerQuotientSystem" );
 
 ############################################################################
 ##
-#F  NQL_SaveQuotientSystem( <Q>, <String> )
+#F  LPRES_SaveQuotientSystem( <Q>, <String> )
 ##
 ## stores the quotient system <Q> in the file <String>.
 ##
-DeclareGlobalFunction( "NQL_SaveQuotientSystem" );
+DeclareGlobalFunction( "LPRES_SaveQuotientSystem" );
 
 ############################################################################
 ##
-#F  NQL_SaveQuotientSystemCover( <Q>, <String> )
+#F  LPRES_SaveQuotientSystemCover( <Q>, <String> )
 ##
-DeclareGlobalFunction( "NQL_SaveQuotientSystemCover" );
+DeclareGlobalFunction( "LPRES_SaveQuotientSystemCover" );

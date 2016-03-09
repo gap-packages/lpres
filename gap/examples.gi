@@ -26,12 +26,12 @@ InstallGlobalFunction(ExamplesOfLPresentations,
         T,U,V, 		# free group generators
         G,		# L-presented group
 	e,f,g,h,i,	# for abbreviation in the Hanoi tower group
-	IL;		# info level of InfoNQL
+	IL;		# info level of InfoLPRES
 
 
   if n=1 then 
     # The Grigorchuk group on 4 generators
-    Info(InfoNQL,1,"The Grigorchuk group on 4 generators from [Lys85]");
+    Info(InfoLPRES,1,"The Grigorchuk group on 4 generators from [Lys85]");
     F:=FreeGroup("a","b","c","d");
     a:=F.1;;b:=F.2;;c:=F.3;;d:=F.4;;
     rels:=[a^2,b^2,c^2,d^2,b*c*d];
@@ -44,7 +44,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetSize( G, infinity );
   elif n=2 then
     # The Grigorchuk group on 3 generators
-    Info(InfoNQL,1,"The Grigorchuk group on 3 generators");
+    Info(InfoLPRES,1,"The Grigorchuk group on 3 generators");
     F:=FreeGroup("a","c","d");
     a:=F.1;;c:=F.2;;d:=F.3;;
     rels:=[];
@@ -56,15 +56,15 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetSize( G, infinity );
   elif n=3 then 
     # The lamplighter group \Z_2 \wr \Z
-    Info(InfoNQL,1,"The lamplighter group on two lamp states");
-    IL := InfoLevel( InfoNQL );
-    SetInfoLevel( InfoNQL, 0 );
+    Info(InfoLPRES,1,"The lamplighter group on two lamp states");
+    IL := InfoLevel( InfoLPRES );
+    SetInfoLevel( InfoLPRES, 0 );
     G := LamplighterGroup( IsLpGroup, 2 );
-    SetInfoLevel( InfoNQL, IL );
+    SetInfoLevel( InfoLPRES, IL );
     SetSize( G, infinity );
   elif n=4 then 
     # Brunner-Sidki-Vieira group
-    Info(InfoNQL,1,"The Brunner-Sidki-Vieira group");
+    Info(InfoLPRES,1,"The Brunner-Sidki-Vieira group");
     F:=FreeGroup("a","b");
     a:=F.1;;b:=F.2;;
     rels:=[];
@@ -76,7 +76,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetSize( G, infinity );
   elif n=5 then 
     # The Grigorchuk supergroup
-    Info(InfoNQL,1,"The Grigorchuk supergroup");
+    Info(InfoLPRES,1,"The Grigorchuk supergroup");
     F:=FreeGroup("a","b","c","d");
     a:=F.1;;b:=F.2;;c:=F.3;;d:=F.4;;
     rels:=[];
@@ -89,12 +89,12 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetSize( G, infinity );
   elif n=6 then 
     # The Fabrykowski-Gupta group
-    Info(InfoNQL,1,"The Fabrykowski-Gupta group");
+    Info(InfoLPRES,1,"The Fabrykowski-Gupta group");
     G:=GeneralizedFabrykowskiGuptaLpGroup( 3 );
     SetSize( G, infinity );
   elif n=7 then 
     # The Gupta-Sidki group
-    Info(InfoNQL,1,"The Gupta-Sidki group");
+    Info(InfoLPRES,1,"The Gupta-Sidki group");
     F:=FreeGroup("a","t","u","v");
     a:=F.1;;t:=F.2;;   u:=F.3;;   v:=F.4;;
             T:=F.2^-1;;U:=F.3^-1;;V:=F.4^-1;;
@@ -153,7 +153,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetSize( G, infinity );
   elif n=8 then 
     # An index-3 subgroups of the Gupta-Sidki group
-    Info(InfoNQL,1,"An index-3 subgroup of the Gupta-Sidki group");
+    Info(InfoLPRES,1,"An index-3 subgroup of the Gupta-Sidki group");
     F:=FreeGroup("t","u","v");
     t:=F.1;    u:=F.2;    v:=F.3; 
     T:=F.1^-1; U:=F.2^-1; V:=F.3^-1; 
@@ -210,7 +210,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetSize( G, infinity );
   elif n=9 then 
     # The Basilica group
-    Info(InfoNQL,1,"The Basilica group");
+    Info(InfoLPRES,1,"The Basilica group");
     F:=FreeGroup("a","b");
     a:=F.1; b:=F.2;
     rels:=[];
@@ -220,7 +220,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetSize( G, infinity );
   elif n=10 then 
     # Gilbert Baumslag's group
-    Info(InfoNQL,1,"Baumslag's group");
+    Info(InfoLPRES,1,"Baumslag's group");
     F:=FreeGroup("a","b","t","u");
     a:=F.1; b:= F.2; t:=F.3; u:=F.4;
     rels:=[u/b];
@@ -231,7 +231,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     SetIsInvariantLPresentation( G, false );  # as proved in [Har08];
     SetSize( G, infinity );
   elif n = 11 then 
-    Info( InfoNQL, 1, "The modified L-presentation of the Basilica Group" );
+    Info( InfoLPRES, 1, "The modified L-presentation of the Basilica Group" );
     F := FreeGroup( "a", "b" );;
     a := F.1; b := F.2;;
     rels := [];;
@@ -241,7 +241,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
     G := LPresentedGroup( F, rels, endos, itrels );
     SetSize( G, infinity );
   elif n = 12 then 
-    Info( InfoNQL, 1, "The Hanoi-Tower group from [BSZ09]" );
+    Info( InfoLPRES, 1, "The Hanoi-Tower group from [BSZ09]" );
     # as determined in Bartholdi, Siegenthaler, Zalesski, 2009
     F := FreeGroup( "a", "b", "c" );;
     a := F.1;; b := F.2;; c := F.3;;
@@ -286,7 +286,7 @@ InstallMethod( FreeEngelGroup,
 	imgs,	# loop variable to build Endos
         Endos;	# the endomorphism of the free group F 
 
-  Info(InfoNQL,1,"Free ",c,"-Engel group on ",n," generators");
+  Info(InfoLPRES,1,"Free ",c,"-Engel group on ",n," generators");
   
   # construct an L-presentation by introducing two "stable letters"
   F:=FreeGroup( n + 2 );
@@ -344,7 +344,7 @@ InstallMethod( FreeBurnsideGroup,
 	imgs,	# generators images of a substitution
 	j;	# loop variable
 
-  Info(InfoNQL,1,"The Free Burnside Group B(",m,",",n,")\n");
+  Info(InfoLPRES,1,"The Free Burnside Group B(",m,",",n,")\n");
 
   # introduce a "stable letter"
   F:=FreeGroup(m+1);
@@ -387,7 +387,7 @@ InstallMethod(FreeNilpotentGroup,
 	endos,	# endomorphisms
 	L;	# L presented group
 
-   Info(InfoNQL,1,"Free nilpotent group on ",n," generators of class ",c);
+   Info(InfoLPRES,1,"Free nilpotent group on ",n," generators of class ",c);
 
    # underlying free group <n> gens + <c+1> gens for the iterated rels
    F:=FreeGroup(n+c+1);
@@ -474,7 +474,7 @@ InstallMethod( LamplighterGroup,
 	endos,	# set of endomorphisms
 	G;	# the LpGroup 
 
-  Info(InfoNQL,1,"The lamplighter group on ",c," lamp states");
+  Info(InfoLPRES,1,"The lamplighter group on ",c," lamp states");
   F:=FreeGroup( "a", "t", "u" );
   a:=F.1;;t:=F.2;;u:=F.3;;
   rels:=[ a^-1*u ];

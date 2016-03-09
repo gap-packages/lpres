@@ -12,7 +12,7 @@ Revision.("nql/gap/nq_gd"):=
 ##
 #I InfoClass
 ##
-DeclareInfoClass( "InfoNQL" );
+DeclareInfoClass( "InfoLPRES" );
 
 ############################################################################
 ##
@@ -50,12 +50,12 @@ DeclareAttribute( "NilpotentQuotients", IsLpGroup );
 
 ############################################################################
 ##
-#F  NQL_LCS( <QS> )
+#F  LPRES_LCS( <QS> )
 ##
 ## computes the lower central series of the nilpotent quotient represented
 ## by the weighted nilpotent quotient system <QS>.
 ##
-DeclareGlobalFunction( "NQL_LCS" );
+DeclareGlobalFunction( "LPRES_LCS" );
 
 ############################################################################
 ##

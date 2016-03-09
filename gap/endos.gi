@@ -10,13 +10,13 @@ Revision.("nql/gap/endos_gi"):=
 
 ############################################################################
 ##
-#F  NQL_EndomorphismsOfCover
+#F  LPRES_EndomorphismsOfCover
 ##
 ## translates the endomorphisms of the LpGroup to endomorphisms of the 
 ## covering group and determines the images of the relators in the 
 ## multiplier.
 ##
-InstallGlobalFunction( NQL_EndomorphismsOfCover,
+InstallGlobalFunction( LPRES_EndomorphismsOfCover,
   function( G, ftl, Imgs, Defs, weights )
   local H,	# covering group as Pcp group
 	orders, # relative orders of the covering group
@@ -68,9 +68,9 @@ InstallGlobalFunction( NQL_EndomorphismsOfCover,
 	  imgs[j]:=ElementOfLpGroup(fam,
                         FreeGeneratorsOfLpGroup( G )[Defs[j]]^map)^Epim;
 
-          if NQL_TEST_ALL then 
+          if LPRES_TEST_ALL then 
             if j>=b and not PositionNonZero(Exponents(imgs[j]))>=b then 
-              Info(InfoNQL,3,"wrong image of type 1\n");
+              Info(InfoLPRES,3,"wrong image of type 1\n");
               return(fail);
             fi;
           fi;
@@ -86,9 +86,9 @@ InstallGlobalFunction( NQL_EndomorphismsOfCover,
           # map is an endomorphism of the free group (no LpGroup-element)
           imgs[j]:=w^-1* ElementOfLpGroup(fam,
                          FreeGeneratorsOfLpGroup( G )[Defs[j]]^map)^Epim;
-          if NQL_TEST_ALL then 
+          if LPRES_TEST_ALL then 
             if j>=b and not PositionNonZero(Exponents(imgs[j]))>=b then 
-              Info(InfoNQL,3,"wrong image of type 2\n");
+              Info(InfoLPRES,3,"wrong image of type 2\n");
               return(fail);
             fi;
           fi;
@@ -103,9 +103,9 @@ InstallGlobalFunction( NQL_EndomorphismsOfCover,
 
           imgs[j]:=w^-1*imgs[-Defs[j]]^orders[-Defs[j]];
 
-          if NQL_TEST_ALL then
+          if LPRES_TEST_ALL then
             if j>=b and not PositionNonZero(Exponents(imgs[j]))>=b then 
-              Info(InfoNQL,3,"wrong image of type 3\n");
+              Info(InfoLPRES,3,"wrong image of type 3\n");
               return(fail);
             fi;
           fi;
@@ -122,9 +122,9 @@ InstallGlobalFunction( NQL_EndomorphismsOfCover,
         od;
          
         imgs[j]:=w^-1*Comm(imgs[Defs[j][1]],imgs[Defs[j][2]]);
-        if NQL_TEST_ALL then 
+        if LPRES_TEST_ALL then 
           if j>=b and not PositionNonZero(Exponents(imgs[j]))>=b then 
-            Info(InfoNQL,3,"wrong image of type 4\n");
+            Info(InfoLPRES,3,"wrong image of type 4\n");
             return(fail);
           fi;
         fi;
@@ -145,7 +145,7 @@ InstallGlobalFunction( NQL_EndomorphismsOfCover,
     A.Endomorphisms[i]:=[];
     for k in [b..Length(endos[i])] do
       if not IsZero(Exponents(endos[i][k]){[1..b-1]}) then 
-        Info(InfoNQL,3,"L-presentation is not invariant\n");
+        Info(InfoLPRES,3,"L-presentation is not invariant\n");
         return(fail);
       fi;
       Add(A.Endomorphisms[i],Exponents(endos[i][k]){[b..Length(weights)]});
@@ -157,7 +157,7 @@ InstallGlobalFunction( NQL_EndomorphismsOfCover,
   for rel in FixedRelatorsOfLpGroup( G ) do
     image:=ElementOfLpGroup(fam,rel)^Epim;
     if not IsZero(Exponents(image){[1..b-1]}) then 
-      Error("in NQL_EndomorphismsOfCover: wrong image in cover\n");
+      Error("in LPRES_EndomorphismsOfCover: wrong image in cover\n");
     fi;
     Add(A.Relations,Exponents(image){[b..Length(weights)]});
   od;
@@ -167,7 +167,7 @@ InstallGlobalFunction( NQL_EndomorphismsOfCover,
   for rel in IteratedRelatorsOfLpGroup( G ) do
     image:=ElementOfLpGroup(fam,rel)^Epim;
     if not IsZero(Exponents(image){[1..b-1]}) then 
-      Error("in NQL_EndomorphismsOfCover: wrong image in cover\n");
+      Error("in LPRES_EndomorphismsOfCover: wrong image in cover\n");
     fi;
     Add(A.IteratedRelations,Exponents(image){[b..Length(weights)]});
   od;

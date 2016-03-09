@@ -10,12 +10,12 @@ Revision.("nql/gap/cover_gd"):=
 
 ############################################################################
 ##
-#F  NQL_QSystemOfCoveringGroupByQSystem ( <col>, <weights>, <Defs>, <Imgs> )
+#F  LPRES_QSystemOfCoveringGroupByQSystem ( <col>, <weights>, <Defs>, <Imgs> )
 ## 
-DeclareGlobalFunction( "NQL_QSystemOfCoveringGroupByQSystem" );
+DeclareGlobalFunction( "LPRES_QSystemOfCoveringGroupByQSystem" );
 
 ############################################################################
 ##
-#F  NQL_CoveringGroupByQSystem ( <col>, <weights>, <Defs>, <Imgs> )
+#F  LPRES_CoveringGroupByQSystem ( <col>, <weights>, <Defs>, <Imgs> )
 ## 
-DeclareGlobalFunction( "NQL_CoveringGroupByQSystem" );
+DeclareGlobalFunction( "LPRES_CoveringGroupByQSystem" );

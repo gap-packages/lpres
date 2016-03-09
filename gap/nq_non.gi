@@ -56,17 +56,17 @@ InstallOtherMethod( NilpotentQuotient,
   SetNilpotentQuotientSystem(InvLp,Q);
 
   if c > 1 then 
-    if Length(Q.Weights) > InfoNQL_MAX_GENS then 
-      Info(InfoNQL, 1,"Class InvLpGroup ", Maximum(Q.Weights),": ",
+    if Length(Q.Weights) > InfoLPRES_MAX_GENS then 
+      Info(InfoLPRES, 1,"Class InvLpGroup ", Maximum(Q.Weights),": ",
 			Length(Q.Weights), " generators");
     else
-      Info(InfoNQL, 1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+      Info(InfoLPRES, 1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
  			Length(Q.Weights),
 			" generators with relative orders: ",
 			RelativeOrders(Q.Pccol));
     fi;
   fi;
-  Info(InfoNQL,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
+  Info(InfoLPRES,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
 
   for i in [2..c] do 
     QS:=ShallowCopy(Q);
@@ -81,18 +81,18 @@ InstallOtherMethod( NilpotentQuotient,
     fi;
 
     if QS.Weights <> Q.Weights then 
-      if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-        Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+      if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+        Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights), " generators");
       else
-        Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+        Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights),
 			" generators with relative orders: ",
 			RelativeOrders(Q.Pccol)
 			{[Length(QS.Weights)+1..Length(Q.Weights)]});
       fi;
     fi;
-    Info(InfoNQL,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
     
     if QS.Weights = Q. Weights then 
       # quotient system of the invariant L-presentation terminated
@@ -100,16 +100,16 @@ InstallOtherMethod( NilpotentQuotient,
         Error("unbound entry in NilpotentQuotients");
       else
         SetLargestNilpotentQuotient(G, Range(NilpotentQuotients(G)[i-1]) );
-        Info(InfoNQL,1,"Largest nilpotent quotient of class ", 
+        Info(InfoLPRES,1,"Largest nilpotent quotient of class ", 
 	                Maximum(Q.Weights));
         return( LargestNilpotentQuotient(G) );
       fi;
-    elif NQL_TerminatedNonInvariantNQ(G,Q) then 
+    elif LPRES_TerminatedNonInvariantNQ(G,Q) then 
       if not IsBound(NilpotentQuotients(G)[i-1]) then 
         Error("unbound entry in NilpotentQuotients");
       else
         SetLargestNilpotentQuotient(G, Range(NilpotentQuotients(G)[i-1]));
-        Info(InfoNQL,1,"Largest nilpotent quotient of class ", 
+        Info(InfoLPRES,1,"Largest nilpotent quotient of class ", 
              NilpotencyClassOfGroup( Range(NilpotentQuotients(G)[i-1])));
         return(LargestNilpotentQuotient(G));
       fi;
@@ -119,7 +119,7 @@ InstallOtherMethod( NilpotentQuotient,
  		NilpotentQuotientSystem);
       SetNilpotentQuotientSystem(UnderlyingInvariantLPresentation(G),Q);
     fi;
-    Info(InfoNQL,2,"Runtime for the whole step ",StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for the whole step ",StringTime(Runtime()-time));
   od;
 
   return( Range(NilpotentQuotients(G)[c]) ); 
@@ -154,7 +154,7 @@ InstallOtherMethod( NilpotentQuotient,
   if IsBound(NilpotentQuotients(G)[c]) then
     return(Range(NilpotentQuotients(G)[c]));
   elif HasLargestNilpotentQuotient(G) and Length(NilpotentQuotients(G)) < c then
-    Info( InfoNQL, 1, "The group has a largest nilpotent quotient of class ",
+    Info( InfoLPRES, 1, "The group has a largest nilpotent quotient of class ",
                       NilpotencyClassOfGroup(LargestNilpotentQuotient(G)) );
     return( LargestNilpotentQuotient(G) );
   fi;
@@ -172,7 +172,7 @@ InstallOtherMethod( NilpotentQuotient,
   
   if n < c then 
     if HasLargestNilpotentQuotient(G) then 
-      Info(InfoNQL,1,"Largest nilpotent quotient of class ",
+      Info(InfoLPRES,1,"Largest nilpotent quotient of class ",
 	              NilpotencyClassOfGroup(LargestNilpotentQuotient(G)));
       return(LargestNilpotentQuotient(G));
     fi;
@@ -189,18 +189,18 @@ InstallOtherMethod( NilpotentQuotient,
       fi;
 
       if QS.Weights <> Q.Weights then 
-        if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-          Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+        if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+          Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights), " generators");
         else
-          Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+          Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights),
 			" generators with relative orders: ",
 			RelativeOrders(Q.Pccol)
 			{[Length(QS.Weights)+1..Length(Q.Weights)]});
         fi;
       fi;
-      Info(InfoNQL,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
+      Info(InfoLPRES,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
 
       if QS.Weights = Q.Weights then 
         # the quotient system of the ascending presentation terminated
@@ -208,16 +208,16 @@ InstallOtherMethod( NilpotentQuotient,
           Error("unbound entry in NilpotentQuotients");
         else
 	  SetLargestNilpotentQuotient(G,Range(NilpotentQuotients(G)[i-1]));
- 	  Info(InfoNQL,1,"Largest nilpotent quotient of class ",
+ 	  Info(InfoLPRES,1,"Largest nilpotent quotient of class ",
 			  Maximum(Q.Weights));
  	  return(LargestNilpotentQuotient(G));
         fi;
-      elif NQL_TerminatedNonInvariantNQ(G,Q) then 
+      elif LPRES_TerminatedNonInvariantNQ(G,Q) then 
         if not IsBound(NilpotentQuotients(G)[i-1]) then 
           Error("unbound entry in NilpotentQuotients");
         else
 	  SetLargestNilpotentQuotient(G,Range(NilpotentQuotients(G)[i-1]));
- 	  Info(InfoNQL,1,"Largest nilpotent quotient of class ",
+ 	  Info(InfoLPRES,1,"Largest nilpotent quotient of class ",
 	       NilpotencyClassOfGroup( Range( NilpotentQuotients(G)[i-1]) ) );
  	  return(LargestNilpotentQuotient(G));
         fi;
@@ -227,7 +227,7 @@ InstallOtherMethod( NilpotentQuotient,
 				NilpotentQuotientSystem);
         SetNilpotentQuotientSystem(UnderlyingInvariantLPresentation(G),Q);
       fi;
-      Info(InfoNQL,2,"Runtime for the whole step ",StringTime(Runtime()-time));
+      Info(InfoLPRES,2,"Runtime for the whole step ",StringTime(Runtime()-time));
     od;
 
     return( Range(NilpotentQuotients(G)[c]) ); 
@@ -292,16 +292,16 @@ InstallOtherMethod( NilpotentQuotient,
   # store the largest nilpotent quotient system of <InvLp>
   SetNilpotentQuotientSystem(InvLp,Q);
 
-  if Length(Q.Weights) > InfoNQL_MAX_GENS then 
-    Info(InfoNQL, 1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+  if Length(Q.Weights) > InfoLPRES_MAX_GENS then 
+    Info(InfoLPRES, 1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights), " generators");
   else
-    Info(InfoNQL, 1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+    Info(InfoLPRES, 1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights),
 			" generators with relative orders: ",
 			RelativeOrders(Q.Pccol));
   fi;
-  Info(InfoNQL,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
+  Info(InfoLPRES,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
 
   repeat 
     QS:=ShallowCopy(Q);
@@ -316,32 +316,32 @@ InstallOtherMethod( NilpotentQuotient,
     fi;
   
     if QS.Weights <> Q.Weights then 
-      if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-        Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+      if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+        Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights), " generators");
       else
-        Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+        Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights),
 			" generators with relative orders: ",
 			RelativeOrders(Q.Pccol)
 			{[Length(QS.Weights)+1..Length(Q.Weights)]});
       fi;
     fi;
-    Info(InfoNQL,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
     
-    if NQL_TerminatedNonInvariantNQ(G,Q) then 
-      Info(InfoNQL,1,"Largest nilpotent quotient of class ",
+    if LPRES_TerminatedNonInvariantNQ(G,Q) then 
+      Info(InfoLPRES,1,"Largest nilpotent quotient of class ",
 		      NilpotencyClassOfGroup(
 		      Range(NilpotentQuotients(G)[Maximum(Q.Weights)-1])));
       SetLargestNilpotentQuotient(G,Range(NilpotentQuotients(G)
 					 [Maximum(Q.Weights)-1]));
       return(LargestNilpotentQuotient(G));
     fi;
-    Info(InfoNQL,2,"Runtime for the whole step  ",StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for the whole step  ",StringTime(Runtime()-time));
 
   until QS.Weights = Q.Weights;
 
-  Info(InfoNQL,1,"Largest nilpotent quotient of class ", 
+  Info(InfoLPRES,1,"Largest nilpotent quotient of class ", 
 		  Maximum(Q.Weights));
 
   SetLargestNilpotentQuotient( G, Range(NilpotentQuotients(G)
@@ -371,7 +371,7 @@ InstallOtherMethod( NilpotentQuotient,
 
   # the largest nilpotent quotient has been computed
   if HasLargestNilpotentQuotient(G) then
-    Info(InfoNQL,1,"Largest nilpotent quotient of class ",
+    Info(InfoLPRES,1,"Largest nilpotent quotient of class ",
  		NilpotencyClassOfGroup(LargestNilpotentQuotient(G)));
     return(LargestNilpotentQuotient(G));
   fi;
@@ -399,26 +399,26 @@ InstallOtherMethod( NilpotentQuotient,
     fi;
 
     if QS.Weights <> Q.Weights then 
-      if Length(Q.Weights)-Length(QS.Weights) > InfoNQL_MAX_GENS then 
-        Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+      if Length(Q.Weights)-Length(QS.Weights) > InfoLPRES_MAX_GENS then 
+        Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights), " generators");
       else
-        Info(InfoNQL,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
+        Info(InfoLPRES,1,"Class InvLpGroup ",Maximum(Q.Weights),": ",
 			Length(Q.Weights)-Length(QS.Weights),
 			" generators with relative orders: ",
 			RelativeOrders(Q.Pccol)
 			{[Length(QS.Weights)+1..Length(Q.Weights)]});
       fi;
     fi;
-    Info(InfoNQL,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
+    Info(InfoLPRES,2,"Runtime for the invariant step ",StringTime(Runtime()-time));
 
-    if NQL_TerminatedNonInvariantNQ(G,Q) then 
+    if LPRES_TerminatedNonInvariantNQ(G,Q) then 
       if not IsBound(NilpotentQuotients(G)[Maximum(Q.Weights)-1]) then 
         Error( "unbound entry in NilpotentQuotients");
       else 
         SetLargestNilpotentQuotient(G,
            Range(NilpotentQuotients(G)[Maximum(Q.Weights)-1]));
-        Info( InfoNQL,1 ,"Largest nilpotent quotient of class ",
+        Info( InfoLPRES,1 ,"Largest nilpotent quotient of class ",
 	      NilpotencyClassOfGroup( LargestNilpotentQuotient(G) ) );
         return(LargestNilpotentQuotient(G));
       fi;
@@ -426,7 +426,7 @@ InstallOtherMethod( NilpotentQuotient,
   
   until QS.Weights = Q.Weights;
   
-  Info(InfoNQL,1,"Largest nilpotent quotient of class ", 
+  Info(InfoLPRES,1,"Largest nilpotent quotient of class ", 
 		  Maximum(Q.Weights));
 
   SetLargestNilpotentQuotient(G,
@@ -475,7 +475,7 @@ InstallOtherMethod( NqEpimorphismNilpotentQuotient,
   if IsBound(NilpotentQuotients(G)[c]) then 
     return(NilpotentQuotients(G)[c]);
   elif HasLargestNilpotentQuotient(G) and Length(NilpotentQuotients(G)) < c then
-    Info( InfoNQL, 1, "The group has a largest nilpotent quotient of class ",
+    Info( InfoLPRES, 1, "The group has a largest nilpotent quotient of class ",
           NilpotencyClassOfGroup(LargestNilpotentQuotient(G)) );
     return(LargestNilpotentQuotient(G));
   else
@@ -555,11 +555,11 @@ InstallOtherMethod( NqEpimorphismNilpotentQuotient,
 
 ############################################################################
 ##
-#F  NQL_TerminatedNonInvariantNQ( <LpGroup>, <QS> )
+#F  LPRES_TerminatedNonInvariantNQ( <LpGroup>, <QS> )
 ##
 ## checks whether the non-invariant NQ already terminated.
 ##
-InstallGlobalFunction( NQL_TerminatedNonInvariantNQ,
+InstallGlobalFunction( LPRES_TerminatedNonInvariantNQ,
   function(G,Q)
   local H,	# nilpotent quotient of the invariant LpGroup
 	EpiInv,	# epimorphism G->H

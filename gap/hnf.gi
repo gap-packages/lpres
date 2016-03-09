@@ -10,11 +10,11 @@ Revision.("nql/gap/hnf_gi"):=
 
 ############################################################################
 ##
-#F  NQL_PowerRelationsOfHNF ( <rec> )
+#F  LPRES_PowerRelationsOfHNF ( <rec> )
 ##
 ## computes the power relations w.r.t. the Hermite normal form <rec>.
 ##
-InstallGlobalFunction( NQL_PowerRelationsOfHNF,
+InstallGlobalFunction( LPRES_PowerRelationsOfHNF,
   function(HNF)
   local i,j,	# loop variables
 	A;	# matrix of power relations w.r.t. HNF
@@ -36,10 +36,10 @@ InstallGlobalFunction( NQL_PowerRelationsOfHNF,
           fi;
         fi;
   
-        if NQL_TEST_ALL then 
+        if LPRES_TEST_ALL then 
           if not A[j][HNF.Heads[i]]<=0 or 
              not A[j][HNF.Heads[i]]>-A[i][HNF.Heads[i]] then 
-            Error("in NQL_PowerRelationsOfHNF");
+            Error("in LPRES_PowerRelationsOfHNF");
           fi;
         fi;
       od;
@@ -51,12 +51,12 @@ InstallGlobalFunction( NQL_PowerRelationsOfHNF,
 
 ############################################################################
 ##
-#F  NQL_ReduceHNF ( <mat> , <int> )
+#F  LPRES_ReduceHNF ( <mat> , <int> )
 ##
 ## if a new reduced row is added to the Hermite normal form, it has to be 
 ## reduced again.
 ##
-InstallGlobalFunction( NQL_ReduceHNF,
+InstallGlobalFunction( LPRES_ReduceHNF,
   function(HNF,n)
   local corner,	# corner entries in HNF
 	column,	# corresponding column in HNF
@@ -85,12 +85,12 @@ InstallGlobalFunction( NQL_ReduceHNF,
 
 ############################################################################
 ##
-#F  NQL_AddRow ( <mat> , <evec> )
+#F  LPRES_AddRow ( <mat> , <evec> )
 ##
 ## adds the row <evec> to the Hermite normal form <mat> and returns
 ## whether <mat> has changed.
 ##
-InstallGlobalFunction( NQL_AddRow,
+InstallGlobalFunction( LPRES_AddRow,
   function(HNF,ev)
   local evn,		# reduced <ev>
 	lcm,		# least common multiple
@@ -98,7 +98,7 @@ InstallGlobalFunction( NQL_AddRow,
 	Changed,	# did <ev> changed the HNF?
 	B,b;		# check variables
 
-  if NQL_TEST_ALL then 
+  if LPRES_TEST_ALL then 
     B:=ShallowCopy(HNF.mat);
     b:=ShallowCopy(ev);
   fi;
@@ -163,7 +163,7 @@ InstallGlobalFunction( NQL_AddRow,
         fi;
         
         # since we have changed the HNF we have to reduce the remaining part
-        NQL_ReduceHNF(HNF,j);  
+        LPRES_ReduceHNF(HNF,j);  
   
         Changed:=true;
         break;
@@ -185,7 +185,7 @@ InstallGlobalFunction( NQL_AddRow,
           fi;
           ev:=evn;
          
-          NQL_ReduceHNF(HNF,l);
+          LPRES_ReduceHNF(HNF,l);
        
           Changed:=true;
         else
@@ -199,7 +199,7 @@ InstallGlobalFunction( NQL_AddRow,
   
           HNF.mat[l]:=q[1]*HNF.mat[l]+q[2]*ev;
   
-          NQL_ReduceHNF(HNF,l);
+          LPRES_ReduceHNF(HNF,l);
   
           k:=PositionNonZero(evn);
           if IsBound(evn[k]) and evn[k]<0 then 
@@ -216,13 +216,13 @@ InstallGlobalFunction( NQL_AddRow,
     fi;
   od;
   
-  if NQL_TEST_ALL then 
+  if LPRES_TEST_ALL then 
     if not Filtered(HermiteNormalFormIntegerMat(Concatenation(B,[b])),
                     x->not IsZero(x))=HNF.mat then 
-      Error("in NQL_AddRow: wrong Hermite normal form!");
+      Error("in LPRES_AddRow: wrong Hermite normal form!");
     fi;
     if not List(HNF.mat,x->PositionNonZero(x))=HNF.Heads then 
-      Error("in NQL_AddRow: wrong heads");
+      Error("in LPRES_AddRow: wrong heads");
     fi;
   fi;
   
@@ -231,11 +231,11 @@ InstallGlobalFunction( NQL_AddRow,
 
 ############################################################################
 ##
-#F  NQL_RowReduce( <ev>, <HNF> )
+#F  LPRES_RowReduce( <ev>, <HNF> )
 ##
 ## reduces the exponent vector <ev> via the Hermite normal form <HNF>.
 ##
-InstallGlobalFunction( NQL_RowReduce,
+InstallGlobalFunction( LPRES_RowReduce,
   function(ev,HNF)
   local i,l;	# loop variables
   
