@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W    init.g               GAP 4 package NQL                     Rene Hartung  
+#W    init.g               GAP 4 package LPRES                     Rene Hartung  
 ##
 #H   @(#)$Id: init.g,v 1.6 2010/03/17 13:09:28 gap Exp $
 ##
@@ -10,19 +10,19 @@
 ## Put the name of the package into a single variable. This makes it 
 ## easier to change it to something else if necessary.
 ##
-NQLPkgName:="NQL";
+LPRESPkgName:="lpres";
 
 ############################################################################
 ##
 ##    Declare the package and test for the existence of the package 
 ##    polycyclic.
 ##
-DeclarePackage( NQLPkgName , "0.0",
+DeclarePackage( LPRESPkgName , "0.0",
   function()
     
     if TestPackageAvailability( "polycyclic", "1.0" ) = fail then
       Info( InfoWarning, 1, 
-           "Loading the NQL package: package polycyclic must be available" );
+           "Loading the LPRES package: package polycyclic must be available" );
       return fail;
     fi;
 
@@ -30,7 +30,7 @@ DeclarePackage( NQLPkgName , "0.0",
 end );
 
 # install the documentation
-DeclarePackageDocumentation( NQLPkgName, "doc", "NQL", 
+DeclarePackageDocumentation( LPRESPkgName, "doc", "lpres", 
         "Computation of nilpotent quotients" );
 
 
@@ -49,30 +49,30 @@ fi;
 ##
 #D Read .gd files
 ##
-ReadPkg( NQLPkgName, "gap/lpres.gd");
-ReadPkg( NQLPkgName, "gap/hnf.gd");
-ReadPkg( NQLPkgName, "gap/initqs.gd");
-ReadPkg( NQLPkgName, "gap/homs.gd");
-ReadPkg( NQLPkgName, "gap/tails.gd");
-ReadPkg( NQLPkgName, "gap/consist.gd");
-ReadPkg( NQLPkgName, "gap/cover.gd");
-ReadPkg( NQLPkgName, "gap/endos.gd");
-ReadPkg( NQLPkgName, "gap/buildnew.gd");
-ReadPkg( NQLPkgName, "gap/extqs.gd");
-ReadPkg( NQLPkgName, "gap/misc.gd");
-ReadPkg( NQLPkgName, "gap/quotsys.gd");
-ReadPkg( NQLPkgName, "gap/nq.gd");
-ReadPkg( NQLPkgName, "gap/nq_non.gd");
-ReadPkg( NQLPkgName, "gap/examples.gd");
-ReadPkg( NQLPkgName, "gap/subgrps.gd" );
+ReadPkg( LPRESPkgName, "gap/lpres.gd");
+ReadPkg( LPRESPkgName, "gap/hnf.gd");
+ReadPkg( LPRESPkgName, "gap/initqs.gd");
+ReadPkg( LPRESPkgName, "gap/homs.gd");
+ReadPkg( LPRESPkgName, "gap/tails.gd");
+ReadPkg( LPRESPkgName, "gap/consist.gd");
+ReadPkg( LPRESPkgName, "gap/cover.gd");
+ReadPkg( LPRESPkgName, "gap/endos.gd");
+ReadPkg( LPRESPkgName, "gap/buildnew.gd");
+ReadPkg( LPRESPkgName, "gap/extqs.gd");
+ReadPkg( LPRESPkgName, "gap/misc.gd");
+ReadPkg( LPRESPkgName, "gap/quotsys.gd");
+ReadPkg( LPRESPkgName, "gap/nq.gd");
+ReadPkg( LPRESPkgName, "gap/nq_non.gd");
+ReadPkg( LPRESPkgName, "gap/examples.gd");
+ReadPkg( LPRESPkgName, "gap/subgrps.gd" );
 
 # approximating the Schur multiplier
-ReadPkg( NQLPkgName, "gap/schumu/schumu.gd" );
+ReadPkg( LPRESPkgName, "gap/schumu/schumu.gd" );
 
 # approximating the outer automorphism group
-ReadPkg( NQLPkgName, "gap/misc/autseq.gd" );
+ReadPkg( LPRESPkgName, "gap/misc/autseq.gd" );
 
-# parallel version of NQL's nilpotent quotient algorithm
+# parallel version of LPRES's nilpotent quotient algorithm
 if TestPackageAvailability( "ParGap", "1.1.2" ) <> fail then
-  ReadPkg( NQLPkgName, "gap/pargap/pargap.gd" );
+  ReadPkg( LPRESPkgName, "gap/pargap/pargap.gd" );
 fi;

@@ -7,3 +7,4 @@ doc/_AutoDocMainFile.xml
 doc/*.css
 doc/*.js
 gh-pages
+tmp

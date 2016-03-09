@@ -23,7 +23,16 @@ Persons := [
   LastName      := "Bartholdi",
   FirstNames    := "Laurent",
   IsAuthor      := false,
-  IsMaintainer  := true
+  IsMaintainer  := true,
+  Email         := "laurent.bartholdi@gmail.com",
+  WWWHome       := "http://www.uni-math.gwdg.de/laurent",
+  PostalAddress := Concatenation( [
+                       "Mathematisches Institut\n",
+                       "Bunsenstraße 3-5\n",
+                       "D-37073 Göttingen\n",
+                       "Germany" ] ),
+  Place         := "Göttingen",
+  Institution   := "Georg-August Universität zu Göttingen"
   )
 ],
 
@@ -63,9 +72,9 @@ PackageDoc := rec(
   LongTitle := ~.Subtitle,
 ),
 
-AvailabilityTest := function()
-    return true;
-end,
+AvailabilityTest := ReturnTrue,
+
+BannerString := Concatenation("Loading ", ~.PackageName, " ", String( ~.Version ), " ...\n"),
 
 Dependencies := rec(
   GAP                    := ">= 4.4",
