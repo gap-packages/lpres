@@ -1,12 +1,7 @@
 ############################################################################
 ##
-#W quotsys.gi			NQL				René Hartung
+#W quotsys.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: quotsys.gi,v 1.4 2009/05/06 12:56:53 gap Exp $
-##
-Revision.("nql/gap/quotsys_gi"):=
-  "@(#)$Id: quotsys.gi,v 1.4 2009/05/06 12:56:53 gap Exp $";
-
 
 ############################################################################
 ##
@@ -134,7 +129,7 @@ InstallGlobalFunction( LPRES_SaveQuotientSystem,
     Error("in input: <Q> must be a quotient system!");
   fi;
   
-  PrintTo( file, "RequirePackage(\"NQL\");\n");
+  PrintTo( file, "RequirePackage(\"LPRES\");\n");
   AppendTo( file, "Q:=rec( ); \n");
  
   # the LpGroup

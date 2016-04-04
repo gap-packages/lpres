@@ -1,12 +1,7 @@
 ############################################################################
 ##
-#W examples.gi			NQL				René Hartung
+#W examples.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: examples.gi,v 1.12 2010/03/17 12:51:26 gap Exp $
-##
-Revision.("nql/gap/examples_gi"):=
-  "@(#)$Id: examples.gi,v 1.12 2010/03/17 12:51:26 gap Exp $";
-
 
 ############################################################################
 ##

@@ -1,12 +1,7 @@
 ############################################################################
 ##
-#W  buildnew.gi			NQL				René Hartung
+#W  buildnew.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: buildnew.gi,v 1.6 2008/08/28 08:04:20 gap Exp $
-##
-Revision.("nql/gap/buildnew_gi"):=
-  "@(#)$Id: buildnew.gi,v 1.6 2008/08/28 08:04:20 gap Exp $";
-
 
 ############################################################################
 ##

@@ -1,12 +1,7 @@
 ############################################################################
 ##
-#W nq_non.gi			NQL				René Hartung
+#W nq_non.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: nq_non.gi,v 1.6 2009/05/06 12:54:47 gap Exp $
-##
-Revision.("nql/gap/nq_non_gi"):=
-  "@(#)$Id: nq_non.gi,v 1.6 2009/05/06 12:54:47 gap Exp $";
-
 
 ############################################################################
 ##
@@ -233,7 +228,7 @@ InstallOtherMethod( NilpotentQuotient,
     return( Range(NilpotentQuotients(G)[c]) ); 
   else 
     # all known smaller quotients are stored in `NilpotentQuotients'
-    Error(" may not occur (redundant in NQL 0.03) ");
+    Error(" may not occur (redundant in LPRES 0.03) ");
   fi;
   end);
 

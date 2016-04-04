@@ -1,6 +1,6 @@
 <Chapter><Heading>Approximating the Schur multiplier</Heading>
 
-The algorithm in <Cite Key="Har09"/> approximates the Schur multiplier of
+The algorithm in <Cite Key="MR2678952"/> approximates the Schur multiplier of
 an invariantly finitely L-presented group by the quotients in its
 Dwyer-filtration. This is implemented in the &lpres;-package and the
 following methods are available:

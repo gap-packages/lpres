@@ -41,6 +41,7 @@ ReadPackage( LPRESPkgName, "gap/nq.gi");
 ReadPackage( LPRESPkgName, "gap/nq_non.gi");
 ReadPackage( LPRESPkgName, "gap/lpres.gi");
 ReadPackage( LPRESPkgName, "gap/subgrps.gi" );
+ReadPackage( LPRESPkgName, "gap/reidschr.gi" );
 ReadPackage( LPRESPkgName, "gap/examples.gi");
 
 # approximating the Schur multiplier

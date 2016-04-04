@@ -1,14 +1,7 @@
 ############################################################################
 ##
-#W tails.gi			NQL				René Hartung
+#W tails.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: tails.gi,v 1.2 2008/08/28 08:04:20 gap Exp $
-##
-## based on Werner Nickel's "/pkg/nq/src/tails.c"
-##
-Revision.("nql/gap/tails_gi"):=
-  "@(#)$Id: tails.gi,v 1.2 2008/08/28 08:04:20 gap Exp $";
-
 
 ############################################################################
 ## 

@@ -1,8 +1,6 @@
 #############################################################################
 ##
-#W    init.g               GAP 4 package LPRES                     Rene Hartung  
-##
-#H   @(#)$Id: init.g,v 1.6 2010/03/17 13:09:28 gap Exp $
+#W    init.g               GAP 4 package LPRES                   Rene Hartung  
 ##
 
 ############################################################################
@@ -49,30 +47,31 @@ fi;
 ##
 #D Read .gd files
 ##
-ReadPkg( LPRESPkgName, "gap/lpres.gd");
-ReadPkg( LPRESPkgName, "gap/hnf.gd");
-ReadPkg( LPRESPkgName, "gap/initqs.gd");
-ReadPkg( LPRESPkgName, "gap/homs.gd");
-ReadPkg( LPRESPkgName, "gap/tails.gd");
-ReadPkg( LPRESPkgName, "gap/consist.gd");
-ReadPkg( LPRESPkgName, "gap/cover.gd");
-ReadPkg( LPRESPkgName, "gap/endos.gd");
-ReadPkg( LPRESPkgName, "gap/buildnew.gd");
-ReadPkg( LPRESPkgName, "gap/extqs.gd");
-ReadPkg( LPRESPkgName, "gap/misc.gd");
-ReadPkg( LPRESPkgName, "gap/quotsys.gd");
-ReadPkg( LPRESPkgName, "gap/nq.gd");
-ReadPkg( LPRESPkgName, "gap/nq_non.gd");
-ReadPkg( LPRESPkgName, "gap/examples.gd");
-ReadPkg( LPRESPkgName, "gap/subgrps.gd" );
+ReadPackage( LPRESPkgName, "gap/lpres.gd");
+ReadPackage( LPRESPkgName, "gap/hnf.gd");
+ReadPackage( LPRESPkgName, "gap/initqs.gd");
+ReadPackage( LPRESPkgName, "gap/homs.gd");
+ReadPackage( LPRESPkgName, "gap/tails.gd");
+ReadPackage( LPRESPkgName, "gap/consist.gd");
+ReadPackage( LPRESPkgName, "gap/cover.gd");
+ReadPackage( LPRESPkgName, "gap/endos.gd");
+ReadPackage( LPRESPkgName, "gap/buildnew.gd");
+ReadPackage( LPRESPkgName, "gap/extqs.gd");
+ReadPackage( LPRESPkgName, "gap/misc.gd");
+ReadPackage( LPRESPkgName, "gap/quotsys.gd");
+ReadPackage( LPRESPkgName, "gap/nq.gd");
+ReadPackage( LPRESPkgName, "gap/nq_non.gd");
+ReadPackage( LPRESPkgName, "gap/examples.gd");
+ReadPackage( LPRESPkgName, "gap/subgrps.gd" );
+ReadPackage( LPRESPkgName, "gap/reidschr.gd" );
 
 # approximating the Schur multiplier
-ReadPkg( LPRESPkgName, "gap/schumu/schumu.gd" );
+ReadPackage( LPRESPkgName, "gap/schumu/schumu.gd" );
 
 # approximating the outer automorphism group
-ReadPkg( LPRESPkgName, "gap/misc/autseq.gd" );
+ReadPackage( LPRESPkgName, "gap/misc/autseq.gd" );
 
 # parallel version of LPRES's nilpotent quotient algorithm
 if TestPackageAvailability( "ParGap", "1.1.2" ) <> fail then
-  ReadPkg( LPRESPkgName, "gap/pargap/pargap.gd" );
+  ReadPackage( LPRESPkgName, "gap/pargap/pargap.gd" );
 fi;

@@ -1,15 +1,10 @@
 ############################################################################
 ##
-#W  lpres.gi			The NQL-package			René Hartung
-##
-#H   @(#)$Id: lpres.gi,v 1.9 2010/03/17 13:03:41 gap Exp $
+#W  lpres.gi			The LPRES-package		René Hartung
 ##
 ## Based on Alexander Hulpke's and Volkmar Felsch's construction of
 ## finitely presented groups ("GAPDIR/lib/grpfp.gi").
 ##
-Revision.("nql/gap/lpres_gi"):=
-  "@(#)$Id: lpres.gi,v 1.9 2010/03/17 13:03:41 gap Exp $";
-
 
 ############################################################################
 ##

@@ -1,12 +1,7 @@
 ############################################################################
 ##
-#W lpres.gd 			The NQL-package			René Hartung
+#W lpres.gd 			The LPRES-package		René Hartung
 ##
-#H   @(#)$Id: lpres.gd,v 1.7 2010/03/17 13:03:41 gap Exp $
-##
-Revision.("nql/gap/lpres_gd"):=
-  "@(#)$Id: lpres.gd,v 1.7 2010/03/17 13:03:41 gap Exp $";
-
 
 ############################################################################
 ##

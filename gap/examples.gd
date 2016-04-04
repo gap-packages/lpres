@@ -1,12 +1,7 @@
 ############################################################################
 ##
-#W examples.gd		The NQL-package				René Hartung
+#W examples.gd		The LPRES-package			René Hartung
 ##
-#H   @(#)$Id: examples.gd,v 1.7 2009/08/31 07:55:22 gap Exp $
-##
-Revision.("nql/gap/examples_gd"):=
-  "@(#)$Id: examples.gd,v 1.7 2009/08/31 07:55:22 gap Exp $";
-
 
 ############################################################################
 ##

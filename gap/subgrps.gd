@@ -1,11 +1,7 @@
 ############################################################################
 ##
-#W  subgrps.gd			The NQL-package			René Hartung
+#W  subgrps.gd			The LPRES-package		René Hartung
 ##
-#H   @(#)$Id: subgrps.gd,v 1.1 2010/03/17 13:03:40 gap Exp $
-##
-Revision.("nql/gap/subgrps_gd"):= 
-  "@(#)$Id: subgrps.gd,v 1.1 2010/03/17 13:03:40 gap Exp $";
 
 ############################################################################
 ##

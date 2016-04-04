@@ -1,8 +1,11 @@
 <Chapter><Heading>Subgroups of L-presented groups</Heading><P/>
 
-As shown in <Cite Key="Har10"/> it is possible to deal with finite index
+As shown in <Cite Key="MR2864562"/> it is possible to deal with finite index
 subgroups of L-presented groups algorithmically. The &lpres;-package
-provides straightforward methods to deal with these subgroups.
+provides straightforward methods to deal with these subgroups.<P/>
+
+The Reidemeister-Schreier algorithm from <Cite Key="MR2876891"/> is
+implemented, and computes presentations for such subgroups.
 
 <Section><Heading>Creating a subgroup of an L-presented group</Heading>
 
@@ -58,14 +61,14 @@ which is implemented in the method 'GeneratorsOfGroup'.
 <Section><Heading>Computing the index of finite index subgroups</Heading><P/>
 
 In principle, it is possible to compute the index of a finite index
-subgroup of an <A>lpgroup</A> <Cite Key="Har10"/>. The method reduces
+subgroup of an <A>lpgroup</A> <Cite Key="MR2864562"/>. The method reduces
 the case to certain finitely presented groups by applying only
 finitely many endomorphisms to the iterated relations. It then uses
 coset enumeration for finitely presented groups to compute an upper
 bound on the index of the subgroup.  If the coset enumeration for
 finitely presented groups terminated, the method attempts to prove
 that the upper bound is sharp. For further details we refer to <Cite
-Key="Har10"/>.
+Key="MR2864562"/>.
 
 <ManSection><Meth Name="IndexInWholeGroup" Arg="H"/>
 <Description>

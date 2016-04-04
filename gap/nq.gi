@@ -1,11 +1,7 @@
 ############################################################################
 ##
-#W nq.gi			NQL				René Hartung
+#W nq.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: nq.gi,v 1.5 2009/05/06 13:00:40 gap Exp $
-##
-Revision.("nql/gap/nq_gi"):=
-  "@(#)$Id: nq.gi,v 1.5 2009/05/06 13:00:40 gap Exp $";
 
 ############################################################################
 ##
@@ -530,14 +526,14 @@ InstallMethod( NilpotentQuotients,
 #M  NilpotentQuotient( <FpGroup> )
 ##
 InstallOtherMethod( NilpotentQuotient,
-  "for an FpGroup using the NQL-package", true,
+  "for an FpGroup using the LPRES-package", true,
   [ IsFpGroup, IsPosInt ], 0, 
   function( G, c )
   return( NilpotentQuotient( Range( IsomorphismLpGroup( G ) ), c ) );
   end);
 
 InstallOtherMethod( NilpotentQuotient,
-  "for an FpGroup using the NQL-package", true,
+  "for an FpGroup using the LPRES-package", true,
   [ IsFpGroup ], 0, 
   G -> NilpotentQuotient( Range( IsomorphismLpGroup( G ) ) ) );
 
@@ -546,7 +542,7 @@ InstallOtherMethod( NilpotentQuotient,
 #M  NqEpimorphismNilpotentQuotient( <FpGroup> )
 ##
 InstallOtherMethod( NqEpimorphismNilpotentQuotient,
-  "for an FpGroup using the NQL-package", true,
+  "for an FpGroup using the LPRES-package", true,
   [ IsFpGroup, IsPosInt ], 0,
   function( G, c )
   local iso, 	# isomorphism from FpGroup to LpGroup

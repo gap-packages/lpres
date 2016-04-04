@@ -65,9 +65,22 @@ Key="BEH08"/> or in the diploma thesis <Cite Key="H08"/>.
 <!-- which is publicly available from the website
 <URL>http://www-public.tu-bs.de:8080/~y0019492/pub/index.html</URL>.--><P/>
 
-Further the &lpres;-package includes the algorithms
-of <Cite Key="Har09"/> and <Cite Key="EH09"/> for approximating the
-Schur multiplier and the outer automorphism group, respectively, of
-finitely L-presented groups.
+Furthermore the &lpres;-package includes the algorithms of <Cite
+Key="MR2678952"/> for approximating the Schur multiplier of finitely
+L-presented groups.
+<!-- and <Cite Key="EH09"/> for the outer automorphism group --><P/>
+
+
+The &lpres;-package also includes the Reidemeister-Schreier algorithm
+from <Cite Key="MR2876891"/>.
+
+L-presented groups were introduced as a tool to understand self-similar
+groups such as the Grigorchuk group. As such, &lpres; works in close contact
+with the package <Package>fr</Package>. See <Cite Key="MR3133711"/> for more
+on the relationships between L-presented groups and self-similar groups.<P/>
+
+Finally, we note that we use the term "algorithm" somewhat loosely:
+many of the algorithms in this package are in fact semi-algorithms,
+guaranteed to give a correct answer but not guaranteed to terminate.
 </Section>
 </Chapter>

@@ -1,11 +1,7 @@
 ############################################################################
 ##
-#W  subgrps.gi			The NQL-package			René Hartung
+#W  subgrps.gi			The LPRES-package		René Hartung
 ##
-#H   @(#)$Id: subgrps.gi,v 1.1 2010/03/17 13:03:40 gap Exp $
-##
-Revision.("nql/gap/subgrps_gi"):=
-  "@(#)$Id: subgrps.gi,v 1.1 2010/03/17 13:03:40 gap Exp $";
 
 ############################################################################
 ##
@@ -311,7 +307,7 @@ InstallMethod( CosetTable,
   if HasParent( H ) and IsIdenticalObj( Parent( H ), G ) then
     return( CosetTableInWholeGroup( H ) );
   else
-    Error("not implemented yet in <nql/gap/subgrps.gi>");
+    Error("not implemented yet in <lpres/gap/subgrps.gi>");
   fi;
   end);
 
@@ -428,7 +424,7 @@ InstallMethod( NaturalHomomorphismByNormalSubgroupNCOrig,
     fi;
    
     if IndexInWholeGroup( G ) > 1 then
-      Error("not implemented yet in <nql/gap/subgrps.gi>");
+      Error("not implemented yet in <lpres/gap/subgrps.gi>");
     fi;
 
     Tab := CosetTableInWholeGroup( N );
