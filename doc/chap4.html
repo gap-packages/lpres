@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>GAP (lpres) - Chapter 4: The underlying functions</title>
+<title>GAP (lpres) - Chapter 4: Subgroups of L-presented groups</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="GAPDoc2HTML" />
 <link rel="stylesheet" type="text/css" href="manual.css" />
@@ -15,214 +15,190 @@
 <body class="chap4"  onload="jscontent()">
 
 
-<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5.html">[Next Chapter]</a>&nbsp;  </div>
 
 <p id="mathjaxlink" class="pcenter"><a href="chap4_mj.html">[MathJax on]</a></p>
-<p><a id="X7A921612811C1325" name="X7A921612811C1325"></a></p>
-<div class="ChapSects"><a href="chap4.html#X7A921612811C1325">4 <span class="Heading">The underlying functions</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X864A3F6F796E99DF">4.1 <span class="Heading">Nilpotent Quotient Systems for invariant L-presentations</span></a>
+<p><a id="X874D64AA789F224E" name="X874D64AA789F224E"></a></p>
+<div class="ChapSects"><a href="chap4.html#X874D64AA789F224E">4 <span class="Heading">Subgroups of L-presented groups</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X86B9E4BD7F5D1610">4.1 <span class="Heading">Creating a subgroup of an L-presented group</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7E58D47A8729FA8E">4.1-1 InitQuotientSystem</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7910D0698781E02A">4.1-2 ExtendQuotientSystem</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7C82AA387A42DCA0">4.1-1 Subgroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7FC6C908782DEA48">4.1-2 SubgroupLpGroupByCosetTable</a></span>
 </div></div>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X87CA2F188762A2B5">4.2 <span class="Heading">Attributes of L-presented groups related with the nilpotent quotient algorithm</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X7ADA10C57EC39C83">4.2 <span class="Heading">Computing the index of finite index subgroups</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7CC4586B85C22457">4.2-1 NilpotentQuotientSystem</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7D54126783CB7118">4.2-2 NilpotentQuotients</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X8014135884DCC53E">4.2-1 IndexInWholeGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X83A0356F839C696F">4.2-2 Index</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X846EC8AB7803114D">4.2-3 CosetTableInWholeGroup</a></span>
 </div></div>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X7BB56B4C7C1EFAB8">4.3 <span class="Heading">The Info-Class InfoLPRES</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X87A9EC0A7DF04931">4.3 <span class="Heading">Technical details</span></a>
 </span>
 <div class="ContSSBlock">
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X85F6BC1F8573D710">4.3-1 InfoLPRES</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X80F8139B81D2294E">4.3-2 InfoLPRES_MAX_GENS</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X823EECA37A8EC3FE">4.3-1 LPRES_TCSTART</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7C46A9B57BA4CA84">4.3-2 LPRES_CosetEnumerator</a></span>
 </div></div>
 </div>
 
-<h3>4 <span class="Heading">The underlying functions</span></h3>
+<h3>4 <span class="Heading">Subgroups of L-presented groups</span></h3>
 
-<p><a id="X864A3F6F796E99DF" name="X864A3F6F796E99DF"></a></p>
+<p>As shown in <a href="chapBib.html#biBMR2864562">[Har11]</a> it is possible to deal with finite index subgroups of L-presented groups algorithmically. The <strong class="pkg">lpres</strong>-package provides straightforward methods to deal with these subgroups.</p>
 
-<h4>4.1 <span class="Heading">Nilpotent Quotient Systems for invariant L-presentations</span></h4>
+<p>The Reidemeister-Schreier algorithm from <a href="chapBib.html#biBMR2876891">[Har12]</a> is implemented, and computes presentations for such subgroups.</p>
 
-<p>For an invariantly L-presented group <span class="SimpleMath">G</span>, our algorithm computes a nilpotent presentation for <span class="SimpleMath">G/γ_c+1(G)</span> by computing a <var class="Arg">weighted nilpotent quotient system</var> for <span class="SimpleMath">G/G'</span> and extending it inductively to a weighted nilpotent quotient system for <span class="SimpleMath">G/γ_c+1(G)</span>.</p>
+<p><a id="X86B9E4BD7F5D1610" name="X86B9E4BD7F5D1610"></a></p>
 
-<p>In the <strong class="pkg">lpres</strong> package, a weighted nilpotent quotient system is a record containing the following entries:</p>
+<h4>4.1 <span class="Heading">Creating a subgroup of an L-presented group</span></h4>
 
+<p>There are two ways of defining subgroups of finite index of an <var class="Arg">lpgroup</var>. The first is to define the subgroup by its generators while the second defines the subgroup by a coset-table. Generators of subgroup of the latter type can be computed with the usual Schreier-algorithm.</p>
 
-<dl>
-<dt><strong class="Mark">Lpres</strong></dt>
-<dd><p>the invariantly L-presented group <span class="SimpleMath">G</span>.</p>
+<p><a id="X7C82AA387A42DCA0" name="X7C82AA387A42DCA0"></a></p>
 
-</dd>
-<dt><strong class="Mark">Pccol</strong></dt>
-<dd><p>`FromTheLeftCollector' of the nilpotent quotient represented by this quotient system.</p>
+<h5>4.1-1 Subgroup</h5>
 
-</dd>
-<dt><strong class="Mark">Imgs</strong></dt>
-<dd><p>the images of the generators of the L-presented group <span class="SimpleMath">G</span> under the epimorphism onto the nilpotent quotient <var class="Arg">Pccol</var>. For each generator of <span class="SimpleMath">G</span> there is an integer or a generator exponent list. If the image is an integer <var class="Arg">int</var>, the image is a definition of the <var class="Arg">int</var>-th generator of the nilpotent presentation <var class="Arg">Pccol</var>.</p>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Subgroup</code>( <var class="Arg">G</var>, <var class="Arg">gens</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>creates the subgroup <var class="Arg">U</var> of <var class="Arg">G</var> generated by <var class="Arg">gens</var>. The Parent value of <var class="Arg">U</var> will be <var class="Arg">G</var>.</p>
 
-</dd>
-<dt><strong class="Mark">Epimorphism</strong></dt>
-<dd><p>an epimorphism from the L-presented group <span class="SimpleMath">G</span> onto its nilpotent quotient <var class="Arg">Pccol</var> with the images of the generators given by <var class="Arg">Imgs</var>.</p>
-
-</dd>
-<dt><strong class="Mark">Weights</strong></dt>
-<dd><p>a list of the weight of each generator of the nilpotent presentation <var class="Arg">Pccol</var>.</p>
-
-</dd>
-<dt><strong class="Mark">Definitions</strong></dt>
-<dd><p>the definition of each generator of <var class="Arg">Pccol</var>. Each generator in the quotient system has a definition as an image or as a commutator of the form <span class="SimpleMath">[a_j,a_i]</span> where <span class="SimpleMath">a_j</span> and <span class="SimpleMath">a_i</span> are generators of a certain weight. If the <var class="Arg">i</var>-th entry is an integer, the <var class="Arg">i</var>-th generator of <var class="Arg">Pccol</var> has a definition as an image. Otherwise, the <var class="Arg">i</var>-th entry is a <span class="SimpleMath">2</span>-tuple <span class="SimpleMath">[k,l]</span> and the <var class="Arg">i</var>-th generator has a definition as commutator <span class="SimpleMath">[a_k,a_l]</span>.</p>
-
-</dd>
-</dl>
-<p>A weighted nilpotent quotient system of an invariantly L-presented group can be computed with the following functions.</p>
-
-<p><a id="X7E58D47A8729FA8E" name="X7E58D47A8729FA8E"></a></p>
-
-<h5>4.1-1 InitQuotientSystem</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; InitQuotientSystem</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<p>computes a weighted nilpotent quotient system for the abelian quotient of the L-presented group <var class="Arg">lpgroup</var>.</p>
-
-<p><a id="X7910D0698781E02A" name="X7910D0698781E02A"></a></p>
-
-<h5>4.1-2 ExtendQuotientSystem</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ExtendQuotientSystem</code>( <var class="Arg">QS</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<p>extends the weighted nilpotent quotient system <var class="Arg">QS</var> for a class-<span class="SimpleMath">c</span> quotient of an invariantly L-presented group to a weighted nilpotent quotient system of its class-<span class="SimpleMath">c+1</span> quotient.</p>
+<p>For example, the branching subgroup of the Grigorchuk group can be defined as follows:</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := ExamplesOfLPresentations( 1 );</span>
-&lt;L-presented group on the generators [ a, b, c, d ]&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Q := InitQuotientSystem( G );</span>
-rec( Lpres := &lt;L-presented group on the generators [ a, b, c, d ]&gt;, 
-  Pccol := &lt;&lt;from the left collector with 3 generators&gt;&gt;, 
-  Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ], Epimorphism := [ a, b, c, d ] -&gt; 
-    [ g1, g2*g3, g2, g3 ], Weights := [ 1, 1, 1 ], Definitions := [ 1, 3, 4 ] 
- )
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ExtendQuotientSystem( Q );</span>
-rec( Lpres := &lt;L-presented group on the generators [ a, b, c, d ]&gt;, 
-  Pccol := &lt;&lt;from the left collector with 5 generators&gt;&gt;, 
-  Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ], 
-  Definitions := [ 1, 3, 4, [ 2, 1 ], [ 3, 1 ] ], 
-  Weights := [ 1, 1, 1, 2, 2 ], Epimorphism := [ a, b, c, d ] -&gt; 
-    [ g1, g2*g3, g2, g3 ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := ExamplesOfLPresentations(1);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">a := G.1;; b := G.2;; c := G.3;; d := G.4;;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">K := Subgroup( G, [ Comm( a, b ), Comm( b^a, d ), Comm( b, d^a ) ] );</span>
+Group([ a^-1*b^-1*a*b, b^-1*a^-1*d^-1*a*b*a^-1*d*a, a^-1*b^-1*a*d^-1*a^-1*b*a*d ])
 </pre></div>
 
-<p><a id="X87CA2F188762A2B5" name="X87CA2F188762A2B5"></a></p>
+<p><a id="X7FC6C908782DEA48" name="X7FC6C908782DEA48"></a></p>
 
-<h4>4.2 <span class="Heading">Attributes of L-presented groups related with the nilpotent quotient algorithm</span></h4>
+<h5>4.1-2 SubgroupLpGroupByCosetTable</h5>
 
-<p>To avoid repeated extensions of a weighted nilpotent quotient system the largest known quotient system is stored as an attribute of the invariantly L-presented group. For non-invariantly L-presented groups (or groups which are not known to be invariantly L-presented) the known epimorphisms onto the nilpotent quotients are stored as an attribute.</p>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SubgroupLpGroupByCosetTable</code>( <var class="Arg">G</var>, <var class="Arg">Tab</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>creates the subgroup <var class="Arg">U</var> of <var class="Arg">G</var> which is represented by the coset-table <var class="Arg">Tab</var>.</p>
 
-<p><a id="X7CC4586B85C22457" name="X7CC4586B85C22457"></a></p>
-
-<h5>4.2-1 NilpotentQuotientSystem</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NilpotentQuotientSystem</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
-<p>stores the largest known weighted nilpotent quotient system of an invariantly L-presented group.</p>
+<p>For instance, the branching subgroup of the Grigorchuk group can be defined by the following coset-table:</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := ExamplesOfLPresentations( 1 );;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 5 );</span>
-Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotientSystem( G );</span>
-rec( Lpres := &lt;L-presented group on the generators [ a, b, c, d ]&gt;, 
-  Pccol := &lt;&lt;from the left collector with 10 generators&gt;&gt;, 
-  Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ], 
-  Definitions := [ 1, 3, 4, [ 2, 1 ], [ 3, 1 ], [ 4, 2 ], [ 4, 3 ], [ 7, 1 ], 
-      [ 8, 2 ], [ 8, 3 ] ], Weights := [ 1, 1, 1, 2, 2, 3, 3, 4, 5, 5 ], 
-  Epimorphism := [ a, b, c, d ] -&gt; [ g1, g2*g3, g2, g3 ] )
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotencyClassOfGroup( PcpGroupByCollectorNC( last.Pccol ) );</span>
-5
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Tab := [ [ 2, 1, 6, 9, 10, 3, 11, 12, 4, 5, 7, 8, 15, 16, 13, 14 ],</span>
+  [ 2, 1, 6, 9, 10, 3, 11, 12, 4, 5, 7, 8, 15, 16, 13, 14 ],
+  [ 3, 6, 1, 5, 4, 2, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15 ],
+  [ 3, 6, 1, 5, 4, 2, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15 ],
+  [ 4, 7, 5, 1, 3, 8, 2, 6, 13, 14, 15, 16, 9, 10, 11, 12 ],
+  [ 4, 7, 5, 1, 3, 8, 2, 6, 13, 14, 15, 16, 9, 10, 11, 12 ],
+  [ 5, 8, 4, 3, 1, 7, 6, 2, 14, 13, 16, 15, 10, 9, 12, 11 ],
+  [ 5, 8, 4, 3, 1, 7, 6, 2, 14, 13, 16, 15, 10, 9, 12, 11 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := SubgroupLpGroupByCosetTable( G, Tab );</span>
+Group(&lt;A&gt;subgroup of L-presented group, no generators known&lt;/A&gt;)
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U = K;</span>
+true
 </pre></div>
 
-<p><a id="X7D54126783CB7118" name="X7D54126783CB7118"></a></p>
+<p>The generators of <var class="Arg">U</var> can be computed with the Schreier-algorithm which is implemented in the method 'GeneratorsOfGroup'.</p>
 
-<h5>4.2-2 NilpotentQuotients</h5>
+<p><a id="X7ADA10C57EC39C83" name="X7ADA10C57EC39C83"></a></p>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NilpotentQuotients</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
-<p>stores all known epimorphisms onto the nilpotent quotients of <var class="Arg">lpgroup</var>. The nilpotent quotients are accessible by the operation `Range'.</p>
+<h4>4.2 <span class="Heading">Computing the index of finite index subgroups</span></h4>
+
+<p>In principle, it is possible to compute the index of a finite index subgroup of an <var class="Arg">lpgroup</var> <a href="chapBib.html#biBMR2864562">[Har11]</a>. The method reduces the case to certain finitely presented groups by applying only finitely many endomorphisms to the iterated relations. It then uses coset enumeration for finitely presented groups to compute an upper bound on the index of the subgroup. If the coset enumeration for finitely presented groups terminated, the method attempts to prove that the upper bound is sharp. For further details we refer to <a href="chapBib.html#biBMR2864562">[Har11]</a>.</p>
+
+<p><a id="X8014135884DCC53E" name="X8014135884DCC53E"></a></p>
+
+<h5>4.2-1 IndexInWholeGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IndexInWholeGroup</code>( <var class="Arg">H</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>attempts to compute the index of <var class="Arg">H</var> in its parent group.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=ExamplesOfLPresentations( 3 );;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">HasIsInvariantLPresentation( G );</span>
-false
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 3 );</span>
-Pcp-group with orders [ 0, 2, 2, 2 ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotients( G );</span>
-[ [ a, t, u ] -&gt; [ g2, g1, g2 ], [ a, t, u ] -&gt; [ g2, g1, g2 ],
-  [ a, t, u ] -&gt; [ g2, g1, g2 ] ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Range( last[2] );</span>
-Pcp-group with orders [ 0, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=ExamplesOfLPresentations(1);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">a := G.1;; b := G.2;; c := G.3;; d := G.4;;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">K := Subgroup( G, [ Comm(a,b), Comm( b, d^a ), Comm( b^a, d )] );;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IndexInWholeGroup( K );</span>
+16
 </pre></div>
 
-<p>The underlying invariant L-presentation has stored its largest weighted nilpotent quotient system as an attribute.</p>
+<p><a id="X83A0356F839C696F" name="X83A0356F839C696F"></a></p>
+
+<h5>4.2-2 Index</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Index</code>( <var class="Arg">H</var>, <var class="Arg">I</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>attempts to compute the index of <var class="Arg">I</var> in the subgroup <var class="Arg">H</var>. The subgroup <var class="Arg">I</var> must be contained in <var class="Arg">H</var>.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotientSystem( UnderlyingInvariantLPresentation( G ) );</span>
-rec( Lpres := &lt;L-presented group on the generators [ a, t, u ]&gt;,
-  Pccol := &lt;&lt;from the left collector with 9 generators&gt;&gt;, Imgs := [ 1, 2, 3 ],
-  Definitions := [ 1, 2, 3, [ 2, 1 ], [ 3, 2 ], [ 4, 1 ], [ 4, 2 ], [ 5, 2 ],
-      [ 5, 3 ] ], Weights := [ 1, 1, 1, 2, 2, 3, 3, 3, 3 ],
-  Epimorphism := [ a, t, u ] -&gt; [ g1, g2, g3 ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=ExamplesOfLPresentations(1);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">a := G.1;; b := G.2;; c := G.3;; d := G.4;;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">K := Subgroup( G, [ Comm(a,b), Comm( b, d^a ), Comm( b^a, d )] );;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">KxK := Subgroup( G, [ Comm(b,d^a), Comm(b^a,d), Comm(d^a,c^(a*c)),                         </span>
+&lt;/A&gt; Comm( d^(a*c), c^a), Comm( d, c^(a*c*a) ), Comm( d^(a*c*a), c) ] );;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Index( K, KxK );</span>
+4
 </pre></div>
 
-<p><a id="X7BB56B4C7C1EFAB8" name="X7BB56B4C7C1EFAB8"></a></p>
+<p><a id="X846EC8AB7803114D" name="X846EC8AB7803114D"></a></p>
 
-<h4>4.3 <span class="Heading">The Info-Class InfoLPRES</span></h4>
+<h5>4.2-3 CosetTableInWholeGroup</h5>
 
-<p>To get some information about the progress of the algorithm, one can use the info class `InfoLPRES'.</p>
-
-<p><a id="X85F6BC1F8573D710" name="X85F6BC1F8573D710"></a></p>
-
-<h5>4.3-1 InfoLPRES</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; InfoLPRES</code></td><td class="tdright">( info class )</td></tr></table></div>
-<p>is the info class of the <strong class="pkg">lpres</strong>-package. If the info-level is <span class="SimpleMath">1</span>, the info-class gives further information on the progress of the nilpotent quotient algorithm for L-presented groups. The info-level <span class="SimpleMath">2</span> also includes some information on the runtime of our algorithm while the info-level <span class="SimpleMath">3</span> is mainly used for debugging-purposes. An example of such a session for the Grigorchuk group is shown below:</p>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CosetTableInWholeGroup</code>( <var class="Arg">H</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>computes a coset-table for the subgroup <var class="Arg">H</var> in its parent group.</p>
 
 
 <div class="example"><pre>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SetInfoLevel( InfoLPRES, 1 );;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=ExamplesOfLPresentations( 1 );</span>
-#I  The Grigorchuk group on 4 generators
-&lt;L-presented group on the generators [ a, b, c, d ]&gt;
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 3 );</span>
-#I  Class 1: 3 generators with relative orders: [ 2, 2, 2 ]
-#I  Class 2: 2 generators with relative orders: [ 2, 2 ]
-#I  Class 3: 2 generators with relative orders: [ 2, 2 ]
-Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2 ]
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SetInfoLevel( InfoLPRES, 2 );</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 5 );</span>
-#I  Time spent for spinning algo:  0:00:00.004
-#I  Class 4: 1 generators with relative orders: [ 2 ]
-#I  Runtime for this step  0:00:00.028
-#I  Time spent for spinning algo:  0:00:00.008
-#I  Class 5: 2 generators with relative orders: [ 2, 2 ]
-#I  Runtime for this step  0:00:00.036
-Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">CosetTableInWholeGroup( K );</span>
+[ [ 2, 1, 6, 9, 10, 3, 11, 12, 4, 5, 7, 8, 15, 16, 13, 14 ],
+  [ 2, 1, 6, 9, 10, 3, 11, 12, 4, 5, 7, 8, 15, 16, 13, 14 ],
+  [ 3, 6, 1, 5, 4, 2, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15 ],
+  [ 3, 6, 1, 5, 4, 2, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15 ],
+  [ 4, 7, 5, 1, 3, 8, 2, 6, 13, 14, 15, 16, 9, 10, 11, 12 ],
+  [ 4, 7, 5, 1, 3, 8, 2, 6, 13, 14, 15, 16, 9, 10, 11, 12 ],
+  [ 5, 8, 4, 3, 1, 7, 6, 2, 14, 13, 16, 15, 10, 9, 12, 11 ],
+  [ 5, 8, 4, 3, 1, 7, 6, 2, 14, 13, 16, 15, 10, 9, 12, 11 ] ]
 </pre></div>
 
-<p><a id="X80F8139B81D2294E" name="X80F8139B81D2294E"></a></p>
+<p><a id="X87A9EC0A7DF04931" name="X87A9EC0A7DF04931"></a></p>
 
-<h5>4.3-2 InfoLPRES_MAX_GENS</h5>
+<h4>4.3 <span class="Heading">Technical details</span></h4>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; InfoLPRES_MAX_GENS</code></td><td class="tdright">( global variable )</td></tr></table></div>
-<p>this global variable sets the limit of generators whose relative order will be shown on each step of the nilpotent quotient algorithm, if the info-level of `InfoLPRES' is positive.</p>
+<p>For performance issues the following global variables can be used to modify the behaviour of the coset enumeration:</p>
+
+<p><a id="X823EECA37A8EC3FE" name="X823EECA37A8EC3FE"></a></p>
+
+<h5>4.3-1 LPRES_TCSTART</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LPRES_TCSTART</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>defines the maximal word-length of endomorphisms in the free monoid which are applied to the iterated relations.</p>
+
+<p><a id="X7C46A9B57BA4CA84" name="X7C46A9B57BA4CA84"></a></p>
+
+<h5>4.3-2 LPRES_CosetEnumerator</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LPRES_CosetEnumerator</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>defines the coset enumeration process used for finitely presented groups. It should be a function which take as input a subgroup <var class="Arg">h</var> of a finitely presented group and it computes a coset table in the whole group. The default uses the following method of the <strong class="pkg">ACE</strong>-package</p>
+
+
+<div class="example"><pre>
+function ( h )
+    local  f, rels, gens;
+    f := FreeGeneratorsOfFpGroup( Parent( h ) );
+    rels := RelatorsOfFpGroup( Parent( h ) );
+    gens := List( GeneratorsOfGroup( h ), UnderlyingElement );
+    return ACECosetTable( f, rels, gens : silent := true,
+        hard := true,
+        max := 10 ^ 8,
+        Wo := 10 ^ 8 );
+</pre></div>
+
+<p>If the <strong class="pkg">ACE</strong>-package is not available, the library coset enumeration process is used.</p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5.html">[Next Chapter]</a>&nbsp;  </div>
 
 
-<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
 
 <hr />
 <p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>

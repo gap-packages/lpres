@@ -12,12 +12,14 @@ The features of this package include
 
   - creating an L-presented group as new gap object,
 
-  - computing nilpotent quotients of L-presented groups, and
+  - computing nilpotent quotients of L-presented groups and epimorphisms
+    from the L-presented group onto its nilpotent quotients,
 
-  - epimorphisms from the L-presented group onto its
-    nilpotent quotients;
+  - computing the abelian invariants of an L-presented group,
 
-  - computing the abelian invariants of an L-presented group
+  - computing finite-index subgroups and if possible their L-presentation
+
+  - approximating the Schur multiplier of L-presented groups.
 
 There is a manual in the subdirectory 'doc' written in plain TeX which
 describes the functions available.

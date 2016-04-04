@@ -25,9 +25,6 @@
   [[20XCoo04[120X]   [16XCooperman,   G.[116X,   [17XParGAP[117X   (2004),   ((A   {\GAP4}  package,  see
   \cite{GAP4})).
   
-  [[20XEH[120X]  [16XEick,  B. and Hartung, R.[116X, [17X Investigating some self-similar groups via
-  nilpotent quotients [117X, (( Preprint )).
-  
   [[20XFG85[120X]  [16XFabrykowski, J. and Gupta, N.[116X, [17XOn groups with sub-exponential growth
   functions[117X, [18XJ. Indian Math. Soc. (N.S.)[118X, [19X49[119X, 3-4 (1985), 249--256 (1987).
   
@@ -52,11 +49,19 @@
   [[20XHar8   [120X]  [16XHartung,  R.[116X,  [17X  A  nilpotent  quotient  algorithm  for  finitely
   L-presented groups [117X, Diploma thesis , University of Braunschweig ( 2008 ).
   
-  [[20XHara[120X]   [16XHartung,  R.[116X,  [17X  Approximating  the  Schur  multiplier  of  certain
-  infinitely presented groups via nilpotent quotients [117X, (( Preprint )).
+  [[20XHar10[120X]   [16XHartung,   R.[116X,  [17XApproximating  the  Schur  multiplier  of  certain
+  infinitely  presented  groups via nilpotent quotients[117X, [18XLMS J. Comput. Math.[118X,
+  [19X13[119X (2010), 260--271.
   
-  [[20XHarb[120X]  [16XHartung,  R.[116X,  [17X  Coset  enumeration for certain infinitely presented
-  groups[117X, (( Preprint )).
+  [[20XHar11[120X]  [16XHartung,  R.[116X,  [17XCoset  enumeration  for certain infinitely presented
+  groups[117X, [18XInternat. J. Algebra Comput.[118X, [19X21[119X, 8 (2011), 1369--1380.
+  
+  [[20XHar12[120X]   [16XHartung,   R.[116X,   [17XA   Reidemeister-Schreier  theorem  for  finitely
+  L-presented groups[117X, [18XInt. Electron. J. Algebra[118X, [19X11[119X (2012), 125--159.
+  
+  [[20XHar13[120X]  [16XHartung,  R.[116X,  [17XAlgorithms for finitely L-presented groups and their
+  applications  to  some  self-similar  groups[117X,  [18XExpo.  Math.[118X,  [19X31[119X,  4 (2013),
+  368--384.
   
   [[20XLys85[120X]  [16XLysenok,  I.  G.[116X,  [17XA  system of defining relations for a Grigorchuk
   group[117X, [18XMathematical Notes[118X, [19X38[119X (1985), 784-792.

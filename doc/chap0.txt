@@ -6,10 +6,10 @@
                   [1X Nilpotent Quotients of L-Presented Groups [101X
   
   
-                                     0.1.0
+                                     0.1.1
   
   
-                                   09/03/2016
+                                   04/04/2016
   
   
                                   René Hartung
@@ -69,41 +69,37 @@
   3 [33X[0;0YNilpotent Quotients of L-presented groups[133X
     3.1 [33X[0;0YNew methods for L-presented groups[133X
     3.2 [33X[0;0YA brief description of the algorithm[133X
-  4 [33X[0;0YThe underlying functions[133X
-    4.1 [33X[0;0YNilpotent Quotient Systems for invariant L-presentations[133X
-      4.1-1 InitQuotientSystem
-      4.1-2 ExtendQuotientSystem
-    4.2 [33X[0;0YAttributes of L-presented groups related with the nilpotent quotient
+    3.3 [33X[0;0YNilpotent Quotient Systems for invariant L-presentations[133X
+      3.3-1 InitQuotientSystem
+      3.3-2 ExtendQuotientSystem
+    3.4 [33X[0;0YAttributes of L-presented groups related with the nilpotent quotient
     algorithm[133X
-      4.2-1 NilpotentQuotientSystem
-      4.2-2 NilpotentQuotients
-    4.3 [33X[0;0YThe Info-Class InfoLPRES[133X
-      4.3-1 InfoLPRES
-      4.3-2 InfoLPRES_MAX_GENS
-  5 [33X[0;0YSubgroups of L-presented groups[133X
-    5.1 [33X[0;0YCreating a subgroup of an L-presented group[133X
-      5.1-1 Subgroup
-      5.1-2 SubgroupLpGroupByCosetTable
-    5.2 [33X[0;0YComputing the index of finite index subgroups[133X
-      5.2-1 IndexInWholeGroup
-      5.2-2 Index
-      5.2-3 CosetTableInWholeGroup
-    5.3 [33X[0;0YTechnical details[133X
-      5.3-1 LPRES_TCSTART
-      5.3-2 LPRES_CosetEnumerator
-  6 [33X[0;0YApproximating the Schur multiplier[133X
-    6.1 [33X[0;0YMethods[133X
-      6.1-1 GeneratingSetOfMultiplier
-      6.1-2 FiniteRankSchurMultiplier
-      6.1-3 EndomorphismsOfFRSchurMultiplier
-      6.1-4 EpimorphismCoveringGroups
-      6.1-5 EpimorphismFiniteRankSchurMultiplier
-      6.1-6 ImageInFiniteRankSchurMultiplier
-  7 [33X[0;0YInvestigating the automorphism group[133X
-    7.1 [33X[0;0YUsage[133X
-      7.1-1 AutomorphismGroupSequence
-  8 [33X[0;0YOn a parallel nilpotent quotient algorithm[133X
-    8.1 [33X[0;0YUsage[133X
+      3.4-1 NilpotentQuotientSystem
+      3.4-2 NilpotentQuotients
+    3.5 [33X[0;0YThe Info-Class InfoLPRES[133X
+      3.5-1 InfoLPRES
+      3.5-2 InfoLPRES_MAX_GENS
+  4 [33X[0;0YSubgroups of L-presented groups[133X
+    4.1 [33X[0;0YCreating a subgroup of an L-presented group[133X
+      4.1-1 Subgroup
+      4.1-2 SubgroupLpGroupByCosetTable
+    4.2 [33X[0;0YComputing the index of finite index subgroups[133X
+      4.2-1 IndexInWholeGroup
+      4.2-2 Index
+      4.2-3 CosetTableInWholeGroup
+    4.3 [33X[0;0YTechnical details[133X
+      4.3-1 LPRES_TCSTART
+      4.3-2 LPRES_CosetEnumerator
+  5 [33X[0;0YApproximating the Schur multiplier[133X
+    5.1 [33X[0;0YMethods[133X
+      5.1-1 GeneratingSetOfMultiplier
+      5.1-2 FiniteRankSchurMultiplier
+      5.1-3 EndomorphismsOfFRSchurMultiplier
+      5.1-4 EpimorphismCoveringGroups
+      5.1-5 EpimorphismFiniteRankSchurMultiplier
+      5.1-6 ImageInFiniteRankSchurMultiplier
+  6 [33X[0;0YOn a parallel nilpotent quotient algorithm[133X
+    6.1 [33X[0;0YUsage[133X
   
   
   [32X

@@ -9,8 +9,8 @@ SetPackageInfo( rec(
 
 PackageName := "lpres",
 Subtitle := "Nilpotent Quotients of L-Presented Groups",
-Version := "0.1.0",
-Date    := "09/03/2016",
+Version := "0.1.1",
+Date    := "04/04/2016",
 
 Persons := [
   rec(
@@ -54,14 +54,12 @@ ArchiveURL      := Concatenation( ~.SourceRepository.URL,
 
 ArchiveFormats := ".tar.gz",
 
-AbstractHTML   := Concatenation( 
-               "The NQL Package defines new GAP objects to work with ",
-               "L-presented groups. The main part of the package is a ",
-               "nilpotent quotient algorithm for L-presented groups. ",
-               "That is an algorithm which takes as input an L-presented ",
-               "group L and a positive integer c. It computes a polycyclic ",
-               "presentation for the lower central series quotient ",
-               "L/gamma_c(L)."),
+AbstractHTML   := "The LPRES Package defines new GAP objects to work with \
+L-presented groups, namely groups given by a finite generating set and a \
+possibly-infinite set of relations given as iterates of finitely many \
+seed relations by a finite set of endomorphisms. The package implements \
+nilpotent quotient, Todd-Coxeter and Reidemeister-Schreier algorithms \
+for L-presented groups.",
 
 PackageDoc := rec(
   BookName  := ~.PackageName,

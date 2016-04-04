@@ -71,7 +71,16 @@
   [33X[0;0YA  detailed  description  of our algorithm can be found in [BEH08] or in the
   diploma thesis [Har8 ].[133X
   
-  [33X[0;0YFurther  the  [5Xlpres[105X-package  includes  the algorithms of [Hara] and [EH] for
-  approximating  the  Schur  multiplier  and  the  outer  automorphism  group,
-  respectively, of finitely L-presented groups.[133X
+  [33X[0;0YFurthermore  the  [5Xlpres[105X-package  includes  the  algorithms  of  [Har10]  for
+  approximating the Schur multiplier of finitely L-presented groups.[133X
+  
+  [33X[0;0YThe  [5Xlpres[105X-package  also  includes  the Reidemeister-Schreier algorithm from
+  [Har12].  L-presented  groups  were  introduced  as  a  tool  to  understand
+  self-similar  groups  such  as the Grigorchuk group. As such, [5Xlpres[105X works in
+  close contact with the package [5Xfr[105X. See [Har13] for more on the relationships
+  between L-presented groups and self-similar groups.[133X
+  
+  [33X[0;0YFinally,  we note that we use the term "algorithm" somewhat loosely: many of
+  the  algorithms  in  this package are in fact semi-algorithms, guaranteed to
+  give a correct answer but not guaranteed to terminate.[133X
   
