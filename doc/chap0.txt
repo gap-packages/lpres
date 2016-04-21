@@ -6,10 +6,10 @@
                   [1X Nilpotent Quotients of L-Presented Groups [101X
   
   
-                                     0.1.1
+                                     0.2.0
   
   
-                                   04/04/2016
+                                   21/04/2016
   
   
                                   René Hartung
@@ -68,6 +68,10 @@
       2.6-4 IsomorphismLpGroup
   3 [33X[0;0YNilpotent Quotients of L-presented groups[133X
     3.1 [33X[0;0YNew methods for L-presented groups[133X
+      3.1-1 NilpotentQuotient
+      3.1-2 LargestNilpotentQuotient
+      3.1-3 NqEpimorphismNilpotentQuotient
+      3.1-4 AbelianInvariants
     3.2 [33X[0;0YA brief description of the algorithm[133X
     3.3 [33X[0;0YNilpotent Quotient Systems for invariant L-presentations[133X
       3.3-1 InitQuotientSystem
@@ -83,7 +87,7 @@
     4.1 [33X[0;0YCreating a subgroup of an L-presented group[133X
       4.1-1 Subgroup
       4.1-2 SubgroupLpGroupByCosetTable
-    4.2 [33X[0;0YComputing the index of finite index subgroups[133X
+    4.2 [33X[0;0YComputing the index of finite-index subgroups[133X
       4.2-1 IndexInWholeGroup
       4.2-2 Index
       4.2-3 CosetTableInWholeGroup

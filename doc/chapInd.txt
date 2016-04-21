@@ -2,6 +2,7 @@
   
   [1XIndex[101X
   
+  [2XAbelianInvariants[102X  3.1-4
   [2XAsLpGroup[102X  2.6-3
   [2XCosetTableInWholeGroup[102X  4.2-3
   [2XElementOfLpGroup[102X  2.3-5
@@ -13,6 +14,7 @@
   [2XEpimorphismFromFpGroup[102X  2.6-1
   [2XExamplesOfLPresentations[102X  2.2-2
   [2XExtendQuotientSystem[102X  3.3-2
+  [2XFactorCosetAction[102X  4.2-1
   [2XFiniteRankSchurMultiplier[102X  5.1-2
   [2XFixedRelatorsOfLpGroup[102X  2.4-1
   [2XFreeBurnsideGroup[102X  2.2-4
@@ -35,11 +37,14 @@
   [2XIteratedRelatorsOfLpGroup[102X  2.4-2
   [2XLamplighterGroup[102X (llint)  2.2-7
   [2XLamplighterGroup[102X (llpcgroup)  2.2-7
+  [2XLargestNilpotentQuotient[102X  3.1-2
   [2XLPRES_CosetEnumerator[102X  4.3-2
   [2XLPRES_TCSTART[102X  4.3-1
   [2XLPresentedGroup[102X  2.2-1
+  [2XNilpotentQuotient[102X  3.1-1
   [2XNilpotentQuotients[102X  3.4-2
   [2XNilpotentQuotientSystem[102X  3.4-1
+  [2XNqEpimorphismNilpotentQuotient[102X  3.1-3
   [2XSplitExtensionByAutomorphismsLpGroup[102X  2.6-2
   [2XSubgroup[102X  4.1-1
   [2XSubgroupLpGroupByCosetTable[102X  4.1-2

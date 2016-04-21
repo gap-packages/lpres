@@ -64,15 +64,10 @@
   also  applies  to  finitely  presented  groups.  It  coincides with Nickel's
   algorithm in this special case.[133X
   
-  [33X[0;0YOur  algorithm  can  be  readily  modified to determine the [22Xp[122X-quotients of a
-  finitely   L-presented  group.  An  implementation  is  planned  for  future
-  expansions of the package.[133X
-  
   [33X[0;0YA  detailed  description  of our algorithm can be found in [BEH08] or in the
-  diploma thesis [Har8 ].[133X
-  
-  [33X[0;0YFurthermore  the  [5Xlpres[105X-package  includes  the  algorithms  of  [Har10]  for
-  approximating the Schur multiplier of finitely L-presented groups.[133X
+  diploma   thesis   [Har8  ].  Furthermore  the  [5Xlpres[105X-package  includes  the
+  algorithms  of  [Har10]  for  approximating the Schur multiplier of finitely
+  L-presented groups.[133X
   
   [33X[0;0YThe  [5Xlpres[105X-package  also  includes  the Reidemeister-Schreier algorithm from
   [Har12].  L-presented  groups  were  introduced  as  a  tool  to  understand

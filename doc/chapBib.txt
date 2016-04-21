@@ -25,8 +25,9 @@
   [[20XCoo04[120X]   [16XCooperman,   G.[116X,   [17XParGAP[117X   (2004),   ((A   {\GAP4}  package,  see
   \cite{GAP4})).
   
-  [[20XFG85[120X]  [16XFabrykowski, J. and Gupta, N.[116X, [17XOn groups with sub-exponential growth
-  functions[117X, [18XJ. Indian Math. Soc. (N.S.)[118X, [19X49[119X, 3-4 (1985), 249--256 (1987).
+  [[20XFG85[120X]  [16XFabrykowski,  J.  and  Gupta,  N. D.[116X, [17XOn groups with sub-exponential
+  growth  functions[117X,  [18XJ.  Indian  Math.  Soc. (N.S.)[118X, [19X49[119X, 3-4 (1985), 249--256
+  (1987).
   
   [[20XGri80[120X] [16XGrigorchuk, R. I.[116X, [17XBurnside's problem on periodic groups[117X, [18XFunctional
   Analysis and its Applications[118X, [19X14[119X (1980), 41-43.
@@ -42,9 +43,9 @@
   Andrews  1997  in  Bath, I, Cambridge Univ. Press, London Math. Soc. Lecture
   Note Ser., [19X260[119X, Cambridge (1999), 290--317.
   
-  [[20XGZ02[120X]  [16XGrigorchuk,  R.  and  Zuk, A.[116X, [17XOn a torsion-free weakly branch group
-  defined  by  a three state automaton[117X, [18XInternat. J. Algebra Comput.[118X, [19X12[119X, 1--2
-  (2002), 223--246.
+  [[20XGZ02[120X]  [16XGrigorchuk,  R. I. and {\. Z}uk, A.[116X, [17XOn a torsion-free weakly branch
+  group  defined by a three state automaton[117X, [18XInternat. J. Algebra Comput.[118X, [19X12[119X,
+  1--2 (2002), 223--246.
   
   [[20XHar8   [120X]  [16XHartung,  R.[116X,  [17X  A  nilpotent  quotient  algorithm  for  finitely
   L-presented groups [117X, Diploma thesis , University of Braunschweig ( 2008 ).

@@ -289,7 +289,7 @@
   
   [29X[2XUnderlyingInvariantLPresentation[102X( [3Xlpgroup[103X ) [32X attribute
   
-  [33X[0;0Yattempts  to  compute  a  'good'  underlying  invariant  L-presentation  for
+  [33X[0;0Yattempts  to  compute  a  ``good''  underlying  invariant L-presentation for
   [3Xlpgroup[103X; that is, if [3Xlpgroup[103X is finitely L-presented by [22X(S,Q,Φ,R)[122X, then this
   method  seeks  to  find  a subset [22XQ'⊆ Q[122X such that [22X(S,Q',Φ,R)[122X is an invariant
   L-presentation.   Note   that  there  is  always  the  underlying  ascending
@@ -299,8 +299,8 @@
   [33X[0;0YSince  it  is undecidable, in general, whether or not a given L-presentation
   is  invariant,  there  is no algorithm which can determine the best possible
   underlying   invariant  L-presentation.  The  method  implemented  for  this
-  attribute tries to compute a 'good' invariant L-presentation and will return
-  the underlying ascending L-presentation in the worst case.[133X
+  attribute  tries  to  compute  a  ``good'' invariant L-presentation and will
+  return the underlying ascending L-presentation in the worst case.[133X
   
   [33X[0;0YThis       attribute       can       be       set       manually       using
   [10XSetUnderlyingInvariantLPresentation[110X. For instance, the Grigorchuk group[133X
@@ -341,7 +341,7 @@
   [33X[0;0Yattempts  to  check  whether  the L-presentation of [3Xlpgroup[103X is invariant. In
   general,  one  cannot  decide  whether  or  not  a  given  L-presentation is
   invariant.  There  are mainly two methods implemented for this property. The
-  first  method  seeks  to  find  a 'good' underlying invariant L-presentation
+  first  method  seeks  to find a ``good'' underlying invariant L-presentation
   using the operation [2XUnderlyingInvariantLPresentation[102X ([14X2.5-2[114X). If this latter
   L-presentation coincides with the L-presentation of [3Xlpgroup[103X, then [3Xlpgroup[103X is
   invariantly  L-presented.  If this method fails, then the second method uses
@@ -423,7 +423,7 @@
   [29X[2XIsomorphismLpGroup[102X( [3XG[103X ) [32X operation
   
   [33X[0;0Yreturns  an  isomorphism  from  a  finitely presented group [3XG[103X or from a free
-  group [3XG[103X to the L-presented group obtained from the method `AsLpGroup'.[133X
+  group [3XG[103X to the L-presented group obtained from the method [2XAsLpGroup[102X ([14X2.6-3[114X).[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XF:=FreeGroup( 2 );[127X[104X

@@ -340,9 +340,9 @@ true
 <h5>2.5-2 UnderlyingInvariantLPresentation</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnderlyingInvariantLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
-<p>attempts to compute a 'good' underlying invariant L-presentation for <var class="Arg">lpgroup</var>; that is, if <var class="Arg">lpgroup</var> is finitely L-presented by <span class="SimpleMath">(S,Q,Φ,R)</span>, then this method seeks to find a subset <span class="SimpleMath">Q'⊆ Q</span> such that <span class="SimpleMath">(S,Q',Φ,R)</span> is an invariant L-presentation. Note that there is always the underlying ascending L-presentation <span class="SimpleMath">(S,∅,Φ,R)</span>. However, for the efficiency of the nilpotent quotient algorithm it is important that the subset <span class="SimpleMath">Q'</span> is as big as possible.</p>
+<p>attempts to compute a ``good'' underlying invariant L-presentation for <var class="Arg">lpgroup</var>; that is, if <var class="Arg">lpgroup</var> is finitely L-presented by <span class="SimpleMath">(S,Q,Φ,R)</span>, then this method seeks to find a subset <span class="SimpleMath">Q'⊆ Q</span> such that <span class="SimpleMath">(S,Q',Φ,R)</span> is an invariant L-presentation. Note that there is always the underlying ascending L-presentation <span class="SimpleMath">(S,∅,Φ,R)</span>. However, for the efficiency of the nilpotent quotient algorithm it is important that the subset <span class="SimpleMath">Q'</span> is as big as possible.</p>
 
-<p>Since it is undecidable, in general, whether or not a given L-presentation is invariant, there is no algorithm which can determine the best possible underlying invariant L-presentation. The method implemented for this attribute tries to compute a 'good' invariant L-presentation and will return the underlying ascending L-presentation in the worst case.</p>
+<p>Since it is undecidable, in general, whether or not a given L-presentation is invariant, there is no algorithm which can determine the best possible underlying invariant L-presentation. The method implemented for this attribute tries to compute a ``good'' invariant L-presentation and will return the underlying ascending L-presentation in the worst case.</p>
 
 <p>This attribute can be set manually using <code class="code">SetUnderlyingInvariantLPresentation</code>. For instance, the Grigorchuk group</p>
 
@@ -376,7 +376,7 @@ true
 <h5>2.5-4 IsInvariantLPresentation</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsInvariantLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( property )</td></tr></table></div>
-<p>attempts to check whether the L-presentation of <var class="Arg">lpgroup</var> is invariant. In general, one cannot decide whether or not a given L-presentation is invariant. There are mainly two methods implemented for this property. The first method seeks to find a 'good' underlying invariant L-presentation using the operation <code class="func">UnderlyingInvariantLPresentation</code> (<a href="chap2.html#X86F017E085082624"><span class="RefLink">2.5-2</span></a>). If this latter L-presentation coincides with the L-presentation of <var class="Arg">lpgroup</var>, then <var class="Arg">lpgroup</var> is invariantly L-presented. If this method fails, then the second method uses the nilpotent quotient algorithm for L-presented groups which yields a necessary condition for an L-presented group to be invariantly L-presented. Note that the latter method may not terminate. For instance, both methods fail on Baumslag's finitely generated, infinitely related group with trivial multiplier returned by <code class="func">ExamplesOfLPresentations</code> (<a href="chap2.html#X79A034B8851444C9"><span class="RefLink">2.2-2</span></a>).</p>
+<p>attempts to check whether the L-presentation of <var class="Arg">lpgroup</var> is invariant. In general, one cannot decide whether or not a given L-presentation is invariant. There are mainly two methods implemented for this property. The first method seeks to find a ``good'' underlying invariant L-presentation using the operation <code class="func">UnderlyingInvariantLPresentation</code> (<a href="chap2.html#X86F017E085082624"><span class="RefLink">2.5-2</span></a>). If this latter L-presentation coincides with the L-presentation of <var class="Arg">lpgroup</var>, then <var class="Arg">lpgroup</var> is invariantly L-presented. If this method fails, then the second method uses the nilpotent quotient algorithm for L-presented groups which yields a necessary condition for an L-presented group to be invariantly L-presented. Note that the latter method may not terminate. For instance, both methods fail on Baumslag's finitely generated, infinitely related group with trivial multiplier returned by <code class="func">ExamplesOfLPresentations</code> (<a href="chap2.html#X79A034B8851444C9"><span class="RefLink">2.2-2</span></a>).</p>
 
 <p><a id="X783B99E381C5C8BF" name="X783B99E381C5C8BF"></a></p>
 
@@ -433,7 +433,7 @@ true
 <h5>2.6-4 IsomorphismLpGroup</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsomorphismLpGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<p>returns an isomorphism from a finitely presented group <var class="Arg">G</var> or from a free group <var class="Arg">G</var> to the L-presented group obtained from the method `AsLpGroup'.</p>
+<p>returns an isomorphism from a finitely presented group <var class="Arg">G</var> or from a free group <var class="Arg">G</var> to the L-presented group obtained from the method <code class="func">AsLpGroup</code> (<a href="chap2.html#X84F112247DA4037C"><span class="RefLink">2.6-3</span></a>).</p>
 
 
 <div class="example"><pre>

@@ -24,7 +24,12 @@
 <div class="ChapSects"><a href="chap3.html#X824CC9CA824D3F1E">3 <span class="Heading">Nilpotent Quotients of L-presented groups</span></a>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X791C3E5280F38329">3.1 <span class="Heading">New methods for L-presented groups</span></a>
 </span>
-</div>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8216791583DE512C">3.1-1 NilpotentQuotient</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79AC8BE285CBB392">3.1-2 LargestNilpotentQuotient</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8758F663782AE655">3.1-3 NqEpimorphismNilpotentQuotient</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X812827937F403300">3.1-4 AbelianInvariants</a></span>
+</div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X7C529DA9802E603E">3.2 <span class="Heading">A brief description of the algorithm</span></a>
 </span>
 </div>
@@ -50,15 +55,160 @@
 
 <h3>3 <span class="Heading">Nilpotent Quotients of L-presented groups</span></h3>
 
-<p>Our nilpotent quotient algorithm for finitely $L$-presented groups generalizes Nickel's algorithm for finitely presented groups; see~\cite{Nickel96}. It determines a nilpotent presentation for the lower central series quotient of an invariantly $L$-presented group. A nilpotent presentation is a polycyclic presentation whose polycyclic series refines the lower central series of the group (see the description in the {\NQ}-package for further details). In general, our algorithm determines a polycyclic presentation for the nilpotent quotient of an arbitrary finitely $L$-presented group. For further details on our algorithm we refer to~\cite{BEH08} or to the diploma thesis~\cite{H08}.</p>
+<p>Our nilpotent quotient algorithm for finitely L-presented groups generalizes Nickel's algorithm for finitely presented groups; see <a href="chapBib.html#biBNickel96">[Nic96]</a>. It determines a nilpotent presentation for the lower central series quotient of an invariantly L-presented group. A nilpotent presentation is a polycyclic presentation whose polycyclic series refines the lower central series of the group (see the description in the <strong class="pkg">NQ</strong>-package for further details). In general, our algorithm determines a polycyclic presentation for the nilpotent quotient of an arbitrary finitely L-presented group. For further details on our algorithm we refer to <a href="chapBib.html#biBBEH08">[BEH08]</a> or to the diploma thesis <a href="chapBib.html#biBH08">[Har8 ]</a>.</p>
 
 <p><a id="X791C3E5280F38329" name="X791C3E5280F38329"></a></p>
 
 <h4>3.1 <span class="Heading">New methods for L-presented groups</span></h4>
 
+<p><a id="X8216791583DE512C" name="X8216791583DE512C"></a></p>
+
+<h5>3.1-1 NilpotentQuotient</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NilpotentQuotient</code>( <var class="Arg">g</var>[, <var class="Arg">c</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>returns a polycyclic presentation for the class-<var class="Arg">c</var> quotient <span class="SimpleMath">g/γ_c+1(g)</span> of the L-presented group <var class="Arg">g</var> if <var class="Arg">c</var> is specified. If <var class="Arg">c</var> is not given, this method attempts to compute the largest nilpotent quotient of <var class="Arg">g</var> and will terminate only if <var class="Arg">g</var> has a largest nilpotent quotient.</p>
+
+<p>The following example computes the class-5 quotient of the Grigorchuk group.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := ExamplesOfLPresentations( 1 );;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := NilpotentQuotient( G, 5 );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ] 
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">lcs := LowerCentralSeries( H );</span>
+[ Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ], 
+  Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2 ], 
+  Pcp-group with orders [ 2, 2, 2, 2, 2 ], Pcp-group with orders [ 2, 2, 2 ], 
+  Pcp-group with orders [ 2, 2 ], Pcp-group with orders [  ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">List( [ 1..5 ], x -&gt; lcs[ x ] / lcs[ x+1 ] ); </span>
+[ Pcp-group with orders [ 2, 2, 2 ], Pcp-group with orders [ 2, 2 ], 
+  Pcp-group with orders [ 2, 2 ], Pcp-group with orders [ 2 ], 
+  Pcp-group with orders [ 2, 2 ] ]
+</pre></div>
+
+<p><a id="X79AC8BE285CBB392" name="X79AC8BE285CBB392"></a></p>
+
+<h5>3.1-2 LargestNilpotentQuotient</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LargestNilpotentQuotient</code>( <var class="Arg">g</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>returns the largest nilpotent quotient of the L-presented group <var class="Arg">g</var> if it exists. It uses the method <code class="func">NilpotentQuotient</code> (<a href="chap3.html#X8216791583DE512C"><span class="RefLink">3.1-1</span></a>). If <var class="Arg">g</var> has no largest nilpotent quotient, this method will not terminate.</p>
+
+<p><a id="X8758F663782AE655" name="X8758F663782AE655"></a></p>
+
+<h5>3.1-3 NqEpimorphismNilpotentQuotient</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NqEpimorphismNilpotentQuotient</code>( <var class="Arg">g</var>[, <var class="Arg">p/c</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>This method returns an epimorphism from the L-presented group <var class="Arg">g</var> onto a nilpotent quotient. If the optional argument is an integer <var class="Arg">c</var>, the epimorphism is onto the maximal class-<var class="Arg">c</var> quotient <span class="SimpleMath">g//γ_c+1(g)</span>. If no second argument is given, this method attempts to compute an epimorphism onto the largest nilpotent quotient of <var class="Arg">g</var>. If <var class="Arg">g</var> does not have a largest nilpotent quotient, this method will not terminate.</p>
+
+<p>If a pcp-group <var class="Arg">p</var> is given as additional parameter, then <var class="Arg">p</var> has to be a nilpotent quotient of <var class="Arg">g</var>. The method computes an epimorphism from the L-presented group <var class="Arg">g</var> onto <var class="Arg">p</var>.</p>
+
+<p>The following example computes an epimorphism from the Grigorchuk group onto its class-5, class-7, and class-10 quotients.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := ExamplesOfLPresentations( 1 );</span>
+&lt;L-presented group on the generators [ a, b, c, d ]&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">epi := NqEpimorphismNilpotentQuotient( G, 5 );</span>
+[ a, b, c, d ] -&gt; [ g1, g2*g3, g2, g3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := Image( epi );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotencyClassOfGroup( H );</span>
+5
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := NilpotentQuotient( G, 7 );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 10 );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NqEpimorphismNilpotentQuotient( G, H );</span>
+[ a, b, c, d ] -&gt; [ g1, g2*g3, g2, g3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Image( last );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
+</pre></div>
+
+<p><a id="X812827937F403300" name="X812827937F403300"></a></p>
+
+<h5>3.1-4 AbelianInvariants</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AbelianInvariants</code>( <var class="Arg">g</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>computes the abelian invariants of the L-presented group <var class="Arg">g</var>. It uses the operation <code class="func">NilpotentQuotient</code> (<a href="chap3.html#X8216791583DE512C"><span class="RefLink">3.1-1</span></a>).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := ExamplesOfLPresentations( 1 );;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AbelianInvariants( G );</span>
+[ 2, 2, 2 ]
+</pre></div>
+
 <p><a id="X7C529DA9802E603E" name="X7C529DA9802E603E"></a></p>
 
 <h4>3.2 <span class="Heading">A brief description of the algorithm</span></h4>
+
+<p>In the following we give a brief description of the nilpotent quotient algorithm for an arbitrary finitely L-presented group. For further details, we refer to <a href="chapBib.html#biBBEH08">[BEH08]</a> and the diploma thesis <a href="chapBib.html#biBH08">[Har8 ]</a>.</p>
+
+<p>Let <span class="SimpleMath">(S,Q,Φ,R)</span> be a finite L-presentation defining the L-presented group <span class="SimpleMath">G</span> and let <span class="SimpleMath">(S,Q',Φ,R)</span> be an underlying invariant L-presentation. Write <span class="SimpleMath">bar G</span> for the invariantly L-presented group defined by <span class="SimpleMath">(S,Q',Φ,R)</span>.</p>
+
+<p>The first step in computing a polycyclic presentation for <span class="SimpleMath">G/γ_c+1(G)</span> is to determine a nilpotent presentation for <span class="SimpleMath">bar G/γ_c+1(bar G)</span>. This will be done by induction on <span class="SimpleMath">c</span>. The induction step of our algorithm generalizes the induction step of Nickel's algorithm which mainly relies on Hermite normal form computations. In order to use this rather fast linear algebra, we must require the group to be invariantly L-presented. Therefore, the fixed relators must be handled separately by reducing to an underlying invariant L-presentation first.</p>
+
+<p>The induction step of our algorithm then returns a nilpotent presentation <span class="SimpleMath">H</span> for the quotient <span class="SimpleMath">bar G/γ_c+1(bar G)</span> and an epimorphism <span class="SimpleMath">δ:bar G-&gt; H</span>. Both are used to determine a polycyclic presentation for the nilpotent quotient <span class="SimpleMath">G/γ_c+1(G)</span> using an extension <span class="SimpleMath">δ': F_S-&gt; H</span> of the epimorphism <span class="SimpleMath">δ</span>. The quotient <span class="SimpleMath">G/γ_c+1(G)</span> is isomorphic to the factor group <span class="SimpleMath">H/⟨ Q^δ'⟩^H</span>. We use the <strong class="pkg">Polycyclic</strong>-package to compute a polycyclic presentation for <span class="SimpleMath">H/⟨ Q^δ'⟩^H</span>.</p>
+
+<p>The efficiency of this general approach depends on the underlying invariant L-presentation <span class="SimpleMath">(S,Q',Φ,R)</span>. The set of fixed relators <span class="SimpleMath">Q'</span> should be as large as possible. Otherwise, the nilpotent quotient <span class="SimpleMath">H</span> can be large even if the nilpotent quotient <span class="SimpleMath">G/γ_c+1(G)</span> is rather small.</p>
+
+<p>The following example demonstrates the different behavior of our nilpotent quotient algorithm for the Grigorchuk group with its finite L-presentation</p>
+
+<p class="pcenter">\Big(\{a,c,b,d\},\{a^2,b^2,c^2,d^2,bcd\},\{\sigma\},\{[d,d^a],[d,d^{acaca}]\} \Big). </p>
+
+<p>This latter L-presentation is obviously an invariant L-presentation. Hence, we can either use the property <code class="func">IsInvariantLPresentation</code> (<a href="chap2.html#X87F0C52978D99BB5"><span class="RefLink">2.5-4</span></a>) or the attribute <code class="func">UnderlyingInvariantLPresentation</code> (<a href="chap2.html#X86F017E085082624"><span class="RefLink">2.5-2</span></a>). First, one has to construct the group as described in Section <a href="chap2.html#X81065E797A486D0F"><span class="RefLink">2.2</span></a>:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">F := FreeGroup( "a", "b", "c", "d" );</span>
+&lt;free group on the generators [ a, b, c, d ]&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AssignGeneratorVariables( F );</span>
+#I  Assigned the global variables [ a, b, c, d ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">rels := [ a^2, b^2, c^2, d^2, b*d*c ];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">endos := [ GroupHomomorphismByImagesNC( F, F, [ a, b, c, d ], [ c^a, d, b, c ]) ];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">itrels := [ Comm( d, d^a ), Comm( d, d^(a*c*a*c*a) ) ];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G := LPresentedGroup( F, rels, endos, itrels );</span>
+&lt;L-presented group on the generators [ a, b, c, d ]&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">List( rels, x -&gt; x^endos[1] );</span>
+[ a^-1*c^2*a, d^2, b^2, c^2, d*c*b ]
+</pre></div>
+
+<p>The property <code class="func">IsInvariantLPresentation</code> (<a href="chap2.html#X87F0C52978D99BB5"><span class="RefLink">2.5-4</span></a>) can be set manually using <code class="code">SetInvariantLPresentation</code>:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SetIsInvariantLPresentation( G, true );</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 4 );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">StringTime( time );</span>
+" 0:00:00.032"
+</pre></div>
+
+<p>On the other hand, one can use the attribute <code class="func">UnderlyingInvariantLPresentation</code> (<a href="chap2.html#X86F017E085082624"><span class="RefLink">2.5-2</span></a>) as follows:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := LPresentedGroup( F, rels, endos, itrels );</span>
+&lt;L-presented group on the generators [ a, b, c, d ]&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SetUnderlyingInvariantLPresentation( G, U );</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 4 );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">StringTime( time );</span>
+" 0:00:00.028"
+</pre></div>
+
+<p>For saving memory the first method should be preferred in this case. In general, the L-presentation is not invariant (or not known to be invariant) and thus the underlying invariant L-presentation has fewer fixed relators than the group <span class="SimpleMath">G</span> itself. In this case, the second method is the method of choice.</p>
+
+<p>There is a brute-force method implemented for the operation <code class="func">UnderlyingInvariantLPresentation</code> (<a href="chap2.html#X86F017E085082624"><span class="RefLink">2.5-2</span></a>) which works quite well on the <code class="func">ExamplesOfLPresentations</code> (<a href="chap2.html#X79A034B8851444C9"><span class="RefLink">2.2-2</span></a>). However, in the worst case, this method will return the underlying ascending L-presentation. The following example shows the influence of this choice to the runtime of the nilpotent quotient algorithm. After defining the group <span class="SimpleMath">G</span> as above, we set the attribute <code class="func">UnderlyingInvariantLPresentation</code> (<a href="chap2.html#X86F017E085082624"><span class="RefLink">2.5-2</span></a>) as follows:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SetUnderlyingInvariantLPresentation( G, UnderlyingAscendingLPresentation(G) );</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">NilpotentQuotient( G, 4 );</span>
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">StringTime( time );</span>
+" 0:00:02.700"
+</pre></div>
 
 <p><a id="X864A3F6F796E99DF" name="X864A3F6F796E99DF"></a></p>
 
@@ -75,7 +225,7 @@
 
 </dd>
 <dt><strong class="Mark">Pccol</strong></dt>
-<dd><p>`FromTheLeftCollector' of the nilpotent quotient represented by this quotient system.</p>
+<dd><p><code class="func">FromTheLeftCollector</code> (<a href="../../../pkg/polycyclic-2.11/doc/chap3.html#X8382A4E78706DE65"><span class="RefLink">polycyclic: FromTheLeftCollector</span></a>) of the nilpotent quotient represented by this quotient system.</p>
 
 </dd>
 <dt><strong class="Mark">Imgs</strong></dt>
@@ -164,7 +314,7 @@ rec( Lpres := &lt;L-presented group on the generators [ a, b, c, d ]&gt;,
 <h5>3.4-2 NilpotentQuotients</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NilpotentQuotients</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
-<p>stores all known epimorphisms onto the nilpotent quotients of <var class="Arg">lpgroup</var>. The nilpotent quotients are accessible by the operation `Range'.</p>
+<p>stores all known epimorphisms onto the nilpotent quotients of <var class="Arg">lpgroup</var>. The nilpotent quotients are accessible by the operation <code class="func">Range</code> (<a href="../../../doc/ref/chap32.html#X7B6FD7277CDE9FCB"><span class="RefLink">Reference: Range (of a general mapping)</span></a>).</p>
 
 
 <div class="example"><pre>
@@ -196,7 +346,7 @@ rec( Lpres := &lt;L-presented group on the generators [ a, t, u ]&gt;,
 
 <h4>3.5 <span class="Heading">The Info-Class InfoLPRES</span></h4>
 
-<p>To get some information about the progress of the algorithm, one can use the info class `InfoLPRES'.</p>
+<p>To get some information about the progress of the algorithm, one can use the info class <code class="func">InfoLPRES</code> (<a href="chap3.html#X85F6BC1F8573D710"><span class="RefLink">3.5-1</span></a>).</p>
 
 <p><a id="X85F6BC1F8573D710" name="X85F6BC1F8573D710"></a></p>
 
@@ -232,7 +382,7 @@ Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
 <h5>3.5-2 InfoLPRES_MAX_GENS</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; InfoLPRES_MAX_GENS</code></td><td class="tdright">( global variable )</td></tr></table></div>
-<p>this global variable sets the limit of generators whose relative order will be shown on each step of the nilpotent quotient algorithm, if the info-level of `InfoLPRES' is positive.</p>
+<p>this global variable sets the limit of generators whose relative order will be shown on each step of the nilpotent quotient algorithm, if the info-level of <code class="func">InfoLPRES</code> (<a href="chap3.html#X85F6BC1F8573D710"><span class="RefLink">3.5-1</span></a>) is positive.</p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap2.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap4.html">[Next Chapter]</a>&nbsp;  </div>

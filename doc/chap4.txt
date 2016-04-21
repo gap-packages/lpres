@@ -24,13 +24,19 @@
   [3XG[103X.[133X
   
   [33X[0;0YFor  example,  the branching subgroup of the Grigorchuk group can be defined
-  as follows:[133X
+  as  follows,  and  a  presentation  can be computed using [2XIsomorphismLpGroup[102X
+  ([14X2.6-4[114X):[133X
   
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27XG := ExamplesOfLPresentations(1);;[127X[104X
     [4X[25Xgap>[125X [27Xa := G.1;; b := G.2;; c := G.3;; d := G.4;;[127X[104X
     [4X[25Xgap>[125X [27XK := Subgroup( G, [ Comm( a, b ), Comm( b^a, d ), Comm( b, d^a ) ] );[127X[104X
     [4X[28XGroup([ a^-1*b^-1*a*b, b^-1*a^-1*d^-1*a*b*a^-1*d*a, a^-1*b^-1*a*d^-1*a^-1*b*a*d ])[128X[104X
+    [4X[25Xgap>[125X [27Xiso := IsomorphismLpGroup(K);[127X[104X
+    [4X[28X[ a^-1*b^-1*a*b, a^-1*b^-1*a*d^-1*a^-1*b*a*d, b^-1*a^-1*d^-1*a*b*a^-1*d*a ] ->[128X[104X
+    [4X[28X[ x1^-1*x13^-1*x12*x3, x1^-1*x13^-1*x12*x8^-1*x22^-1*x23*x24*x11, x3^-1*x12^-1*x18^-1*x29*x21*x1 ][128X[104X
+    [4X[25Xgap>[125X [27XRange(iso);[127X[104X
+    [4X[28X<LpGroup with 98 generators>[128X[104X
   [4X[32X[104X
   
   [1X4.1-2 SubgroupLpGroupByCosetTable[101X
@@ -58,10 +64,10 @@
   [4X[32X[104X
   
   [33X[0;0YThe  generators  of  [3XU[103X  can be computed with the Schreier-algorithm which is
-  implemented in the method 'GeneratorsOfGroup'.[133X
+  implemented in the method [2XGeneratorsOfGroup[102X ([14XReference: GeneratorsOfGroup[114X).[133X
   
   
-  [1X4.2 [33X[0;0YComputing the index of finite index subgroups[133X[101X
+  [1X4.2 [33X[0;0YComputing the index of finite-index subgroups[133X[101X
   
   [33X[0;0YIn principle, it is possible to compute the index of a finite index subgroup
   of  an  [3Xlpgroup[103X  [Har11].  The  method  reduces the case to certain finitely
@@ -75,15 +81,21 @@
   [1X4.2-1 IndexInWholeGroup[101X
   
   [29X[2XIndexInWholeGroup[102X( [3XH[103X ) [32X method
+  [29X[2XFactorCosetAction[102X( [3XG[103X, [3XH[103X ) [32X method
   
-  [33X[0;0Yattempts to compute the index of [3XH[103X in its parent group.[133X
+  [33X[0;0YThe  first  command  attempts to compute the index of [3XH[103X in its parent group.
+  The second one gives the permutation action of [3XG[103X on the right cosets of [3XH[103X.[133X
   
   [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XG:=ExamplesOfLPresentations(1);;[127X[104X
+    [4X[25Xgap>[125X [27XG := ExamplesOfLPresentations(1);;[127X[104X
     [4X[25Xgap>[125X [27Xa := G.1;; b := G.2;; c := G.3;; d := G.4;;[127X[104X
     [4X[25Xgap>[125X [27XK := Subgroup( G, [ Comm(a,b), Comm( b, d^a ), Comm( b^a, d )] );;[127X[104X
     [4X[25Xgap>[125X [27XIndexInWholeGroup( K );[127X[104X
     [4X[28X16[128X[104X
+    [4X[25Xgap>[125X [27XFactorCosetAction( G, K );[127X[104X
+    [4X[28X[ a, b, c, d ] -> [ (1,2)(3,6)(4,9)(5,10)(7,11)(8,12)(13,15)(14,16),[128X[104X
+    [4X[28X  (1,3)(2,6)(4,5)(7,8)(9,10)(11,12)(13,14)(15,16), (1,4)(2,7)(3,5)(6,8)(9,13)(10,14)(11,15)(12,16),[128X[104X
+    [4X[28X  (1,5)(2,8)(3,4)(6,7)(9,14)(10,13)(11,16)(12,15) ][128X[104X
   [4X[32X[104X
   
   [1X4.2-2 Index[101X
@@ -94,7 +106,7 @@
   contained in [3XH[103X.[133X
   
   [4X[32X  Example  [32X[104X
-    [4X[25Xgap>[125X [27XG:=ExamplesOfLPresentations(1);;[127X[104X
+    [4X[25Xgap>[125X [27XG := ExamplesOfLPresentations(1);;[127X[104X
     [4X[25Xgap>[125X [27Xa := G.1;; b := G.2;; c := G.3;; d := G.4;;[127X[104X
     [4X[25Xgap>[125X [27XK := Subgroup( G, [ Comm(a,b), Comm( b, d^a ), Comm( b^a, d )] );;[127X[104X
     [4X[25Xgap>[125X [27XKxK := Subgroup( G, [ Comm(b,d^a), Comm(b^a,d), Comm(d^a,c^(a*c)),                         [127X[104X
