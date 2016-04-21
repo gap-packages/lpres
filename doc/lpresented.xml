@@ -32,7 +32,7 @@ In the remainder of this manual, an L-presented group is always
 finitely L-presented.<P/>
 </Section>
 
-<Section><Heading>Creating an L-presented group</Heading>
+<Section Label="createlp"><Heading>Creating an L-presented group</Heading>
 
 The construction of an L-presented group is similar to the
 construction of a finitely presented group (see Chapter <Ref
@@ -278,7 +278,7 @@ underlying ascending L-presentation is <M>(S,\emptyset,\Phi,R)</M>.<P/>
 
 <ManSection><Attr Name="UnderlyingInvariantLPresentation" Arg="lpgroup"/>
 <Description>
-attempts to compute a 'good' underlying invariant L-presentation for
+attempts to compute a ``good'' underlying invariant L-presentation for
 <A>lpgroup</A>; that is, if <A>lpgroup</A> is finitely L-presented by
 <M>(S,Q,\Phi,R)</M>, then this method seeks to find a subset
 <M>Q'\subseteq Q</M> such that <M>(S,Q',\Phi,R)</M> is an invariant
@@ -290,7 +290,7 @@ the subset <M>Q'</M> is as big as possible.<P/>
 Since it is undecidable, in general, whether or not a given L-presentation
 is invariant, there is no algorithm which can determine the best
 possible underlying invariant L-presentation. The method implemented for
-this attribute tries to compute a 'good' invariant L-presentation and
+this attribute tries to compute a ``good'' invariant L-presentation and
 will return the underlying ascending L-presentation in the worst case.<P/>
 
 This attribute can be set manually using
@@ -327,7 +327,7 @@ relators using the function <Ref Oper="LPresentedGroup"/>.
 attempts to check whether the L-presentation of <A>lpgroup</A>
 is invariant. In general, one cannot decide whether or not a
 given L-presentation is invariant. There are mainly two methods
-implemented for this property. The first method seeks to find a 'good'
+implemented for this property. The first method seeks to find a ``good''
 underlying invariant L-presentation using the operation
 <Ref Oper="UnderlyingInvariantLPresentation"/>. If this latter L-presentation
 coincides with the L-presentation of <A>lpgroup</A>, then <A>lpgroup</A>
@@ -413,7 +413,7 @@ returns an ascending L-presentation for a finitely presented group
 <Description>
 returns an isomorphism from a finitely presented group <A>G</A> or
 from a free group <A>G</A> to the L-presented group obtained from the
-method `AsLpGroup'.
+method <Ref Oper="AsLpGroup"/>.
 <Example><![CDATA[
 gap> F:=FreeGroup( 2 );
 <free group on the generators [ f1, f2 ]>

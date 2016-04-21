@@ -8,17 +8,15 @@
 #M PermutationRepresentation
 ##
 ############################################################################
-InstallMethod( PermutationRepresentation,
-  "for a subgroup of an LpGroup", true,
-  [ IsSubgroupLpGroup ], 0,
-  function( U )
-  local G,	# the parent of <U>
-	F,	# the underlying free group 
+InstallMethod( FactorCosetAction,
+  "for a group and a subgroup of an LpGroup", true,
+  [ IsLpGroup, IsSubgroupLpGroup ], 0,
+  function( G, U )
+  local F,	# the underlying free group 
 	Tab,	# coset table of <U> in <G>
 	Sym;
 
   # initialization
-  G := Parent( U );;
   F := FreeGroupOfLpGroup( G );
   Tab := CosetTableInWholeGroup( U );
   Sym := Group( List( Tab, PermList ) );
@@ -36,7 +34,8 @@ InstallMethod( PeriodicityOfSubgroupPres,
   "for a subgroup of an LpGroup", true,
   [ IsSubgroupLpGroup ], 0,
   function( U )
-  local sig,  	# the iterating endomorphism 
+  local G,      # the parent
+        sig,  	# the iterating endomorphism 
  	Tab,	# coset table in whole group
 	phi,	# the permutation representation given by <Tab>
 	i,j, 	# periodicities
@@ -46,18 +45,20 @@ InstallMethod( PeriodicityOfSubgroupPres,
 	map, 	# a group homomorphism
 	u,v;	# subgroups of the symmetric group
   
+  G := Parent( U );
+
   # catch the non-trivial case
-  if Length( EndomorphismsOfLpGroup( Parent( U ) ) ) <> 1 then 
+  if Length( EndomorphismsOfLpGroup( G ) ) <> 1 then 
     Error("this won't do currently");
   fi;
 
   # initialization
-  sig := EndomorphismsOfLpGroup( Parent( U ) )[1];
+  sig := EndomorphismsOfLpGroup( G )[1];
   Tab := CosetTableInWholeGroup( U );
-  phi := PermutationRepresentation( U );
+  phi := FactorCosetAction( G, U );
 
   # check for 'reduction' as in [Har10b]
-  img := FreeGeneratorsOfLpGroup( Parent( U ) );
+  img := FreeGeneratorsOfLpGroup( G );
   Maps := [ phi ];
   j := 1;;
   prd := 0;;
@@ -65,9 +66,9 @@ InstallMethod( PeriodicityOfSubgroupPres,
     img := List( img, x -> Image( sig, x ) );
     j := j+1;
 
-    Add( Maps, GroupHomomorphismByImagesNC( FreeGroupOfLpGroup( Parent( U ) ),
+    Add( Maps, GroupHomomorphismByImagesNC( FreeGroupOfLpGroup( G ),
                                 SymmetricGroup( IndexInWholeGroup( U ) ), 
-                                FreeGeneratorsOfLpGroup( Parent( U ) ), 
+                                FreeGeneratorsOfLpGroup( G ), 
                                 List( img, x -> Image( phi, x ) ) ) );
 
     for i in [ 1 .. j-1 ] do 
@@ -457,12 +458,14 @@ InstallMethod( IsomorphismLpGroup,
 	t,
 	Ut, Ft, fam, 
 	k,l,m;	# loop variables
-
+  
+  G   := Parent( U );
+  
   # catch the trivial case
-  if IndexInWholeGroup( U ) = 1 then return( IdentityMapping( Parent( U ) ) ); fi;
+  if IndexInWholeGroup( U ) = 1 then return( IdentityMapping( G ) ); fi;
 
   # catch the non-trivial case :)
-  if Length( EndomorphismsOfLpGroup( Parent( U ) ) ) > 1 then
+  if Length( EndomorphismsOfLpGroup( G ) ) > 1 then
     TryNextMethod( );
   fi;
 
@@ -470,10 +473,9 @@ InstallMethod( IsomorphismLpGroup,
   i   := PeriodicityOfSubgroupPres( U )[1];;
   j   := PeriodicityOfSubgroupPres( U )[2];;
   ell := j-i;;
-  sig := EndomorphismsOfLpGroup( Parent( U ) )[1];;
+  sig := EndomorphismsOfLpGroup( G )[1];;
   F   := FreeGroupOfWholeGroup( U );
-  G   := Parent( U );
-  phi := PermutationRepresentation( U );
+  phi := FactorCosetAction( G, U );
   RW  := ReidemeisterMap( U );
   Trans := SchreierData( U ).trans;
 
