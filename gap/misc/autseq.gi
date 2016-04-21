@@ -1,12 +1,8 @@
 ############################################################################
 ##
-#W  autseq.gi			NQL				René Hartung
+#W  autseq.gi			LPRES				René Hartung
 ## 								Bettina Eick
 ##
-#H   @(#)$Id: autseq.gi,v 1.3 2010/03/17 12:48:31 gap Exp $
-##
-Revision.("nql/misc/autseq_gi"):=
-  "@(#)$Id: autseq.gi,v 1.3 2010/03/17 12:48:31 gap Exp $";
 
 ############################################################################
 ##

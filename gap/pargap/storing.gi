@@ -1,11 +1,7 @@
 ############################################################################
 ##
-#W storing.gi			NQL				René Hartung
+#W storing.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: storing.gi,v 1.2 2010/03/17 12:47:34 gap Exp $
-##
-Revision.("nql/gap/pargap/storing_gi"):=
-  "@(#)$Id: storing.gi,v 1.2 2010/03/17 12:47:34 gap Exp $";
 
 ############################################################################
 ##
@@ -38,13 +34,13 @@ InstallMethod( ExtendQuotientSystem,
 	dir,file,	# for storing the results
 	time;
 
-  if not NQLPar_StoreResults or not IsMaster() then
+  if not LPRESPar_StoreResults or not IsMaster() then
     TryNextMethod();
   fi;
 
   # storing the result
   dir  := DirectoryTemporary();
-  file := Filename( dir, "NQLPar.g" );
+  file := Filename( dir, "LPRESPar.g" );
   Info( InfoLPRES, 1, "Storing results in \"", file, "\"" );
 
   # enable/disable tracing in ParGap w.r.t. InfoLPRES
@@ -73,7 +69,7 @@ InstallMethod( ExtendQuotientSystem,
   UpdateNilpotentCollector( ftl, weights, Defs );
 
   # store the completed collector (incl. weights etc.)
-  AppendTo( file, "func := ", NQLPar_CollectorToFunction( ftl ), ";\n");
+  AppendTo( file, "func := ", LPRESPar_CollectorToFunction( ftl ), ";\n");
   AppendTo( file, "weights := ", weights, ";\n" );
   AppendTo( file, "Defs := ", Defs, ";\n" );
   AppendTo( file, "Imgs := ", Imgs, ";\n" );
@@ -84,7 +80,7 @@ InstallMethod( ExtendQuotientSystem,
   
   # Check the consisistency relations
   Info( InfoLPRES, 1, "Checking the consistency relations..." );
-  HNF := NQLPar_CheckConsistencyRelations( ftl, weights );
+  HNF := LPRESPar_CheckConsistencyRelations( ftl, weights );
  
   # store the HNF of the consistency-checks...
   AppendTo( file, "HNF := rec( Heads := ", HNF.Heads, ", mat := ", 
@@ -100,7 +96,7 @@ InstallMethod( ExtendQuotientSystem,
   Mats  := [];
   AppendTo( file, "Mats := [];;\n");
   for endo in EndomorphismsOfLpGroup( Q.Lpres ) do
-    Endo := NQLPar_InduceEndomorphism( 
+    Endo := LPRESPar_InduceEndomorphism( 
                        List( FreeGeneratorsOfLpGroup( Q.Lpres ), 
 	                     x -> ExtRepOfObj( Image( endo, x ) ) ),
                        Defs, Imgs, weights );
@@ -128,7 +124,7 @@ InstallMethod( ExtendQuotientSystem,
   ParTrace:=true;
   Info( InfoLPRES, 1, "Mapping the relations..." );
   AppendTo( file, "Rels := [];;\n" );
-  Rels := NQLPar_MapRelationsStoring( Imgs, 
+  Rels := LPRESPar_MapRelationsStoring( Imgs, 
           Concatenation( List( FixedRelatorsOfLpGroup( Q.Lpres ), ExtRepOfObj ),
           List( IteratedRelatorsOfLpGroup( Q.Lpres ), ExtRepOfObj ) ), file );
 
@@ -240,7 +236,7 @@ InstallOtherMethod( ExtendQuotientSystem,
 
   # storing the results
   dir  := DirectoryTemporary();
-  file := Filename( dir, "NQLPar.g" );
+  file := Filename( dir, "LPRESPar.g" );
   Info( InfoLPRES, 1, "Storing results in \"", file, "\"" );
 
   # enable/disable tracing in ParGap w.r.t. InfoLPRES
@@ -277,7 +273,7 @@ InstallOtherMethod( ExtendQuotientSystem,
 # fi;
 
   # store the completed collector
-# AppendTo( file, "func := ", NQLPar_CollectorToFunction( ftl ), ";\n");
+# AppendTo( file, "func := ", LPRESPar_CollectorToFunction( ftl ), ";\n");
 
   # further initializations
   b := Position( weights, Maximum( weights ) );
@@ -286,10 +282,10 @@ InstallOtherMethod( ExtendQuotientSystem,
   # Check the consisistency relations
   if Length( HNF.Heads ) = 0 then 
     Info( InfoLPRES, 1, "Checking the consistency relations..." );
-    HNF := NQLPar_CheckConsistencyRelations( ftl, weights );
+    HNF := LPRESPar_CheckConsistencyRelations( ftl, weights );
   else 
     # broadcast the collector...
-    ParEval( PrintToString( "fnc:=", NQLPar_CollectorToFunction( ftl ) ) );
+    ParEval( PrintToString( "fnc:=", LPRESPar_CollectorToFunction( ftl ) ) );
     ParEval( "ftl := fnc();");
     ParEval( "Unbind( fnc );" );
   fi;
@@ -313,7 +309,7 @@ InstallOtherMethod( ExtendQuotientSystem,
   if Length( Mats ) <> Length( EndomorphismsOfLpGroup( Q.Lpres ) ) then 
     Info( InfoLPRES, 1, "Inducing the endomorphisms..." );
     for endo in EndomorphismsOfLpGroup( Q.Lpres ){[ Length( Mats ) + 1 .. Length( EndomorphismsOfLpGroup( Q.Lpres ) )]} do
-      Endo := NQLPar_InduceEndomorphism( 
+      Endo := LPRESPar_InduceEndomorphism( 
                          List( FreeGeneratorsOfLpGroup( Q.Lpres ), 
 	                       x -> ExtRepOfObj( Image( endo, x ) ) ),
                          Defs, Imgs, weights );
@@ -359,7 +355,7 @@ InstallOtherMethod( ExtendQuotientSystem,
   Info( InfoLPRES, 1, "Mapping the relations..." );
  
   # fill up the mapped relations <Rels>
-  defects := NQLPar_MapRelationsStoring( Imgs, Defects, file );
+  defects := LPRESPar_MapRelationsStoring( Imgs, Defects, file );
   for i in [ 1 .. Length( Defects ) ] do
     if IsBound( Defects[i] ) then 
       Rels[i] := defects[i];
@@ -437,9 +433,9 @@ InstallOtherMethod( ExtendQuotientSystem,
 
 ############################################################################
 ##
-#F  NQLPar_MapRelationsStoring
+#F  LPRESPar_MapRelationsStoring
 ##
-ParInstallTOPCGlobalFunction( "NQLPar_MapRelationsStoring",
+ParInstallTOPCGlobalFunction( "LPRESPar_MapRelationsStoring",
   function( Imgs, Rels, file )
   local F,	# the free group
 	fam,	# elements family of the free group <F>

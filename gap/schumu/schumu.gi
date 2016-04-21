@@ -1,11 +1,7 @@
 ############################################################################
 ##
-#W  schumu.gi			NQL				René Hartung
+#W  schumu.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: schumu.gi,v 1.2 2009/08/31 07:55:23 gap Exp $
-##
-Revision.("nql/gap/schumu_gi"):=
-  "@(#)$Id: schumu.gi,v 1.2 2009/08/31 07:55:23 gap Exp $";
 
 # TODO: inducing endomorphisms of the group to endomorphisms of the Schur
 # multiplier (Psi!)

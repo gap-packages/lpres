@@ -1,19 +1,15 @@
 ############################################################################
 ##
-#W pargap/consist.gi		NQL				René Hartung
+#W pargap/consist.gi		LPRES				René Hartung
 ##
-#H   @(#)$Id: consist.gi,v 1.1 2009/05/06 13:12:56 gap Exp $
-##
-Revision.("nql/gap/pargap/pargap_gi"):=
-  "@(#)$Id: consist.gi,v 1.1 2009/05/06 13:12:56 gap Exp $";
 
 ############################################################################
 ##
-#F  NQLPar_ListOfConsistencyChecks( <coll>, <weights> )
+#F  LPRESPar_ListOfConsistencyChecks( <coll>, <weights> )
 ##
 ## parallel version for consistency-checks.
 ##
-InstallGlobalFunction( NQLPar_ListOfConsistencyChecks,
+InstallGlobalFunction( LPRESPar_ListOfConsistencyChecks,
   function( coll, weights )
   local Checks, # list of consistency checks
 	n,	# number of generators
@@ -115,11 +111,11 @@ InstallGlobalFunction( NQLPar_ListOfConsistencyChecks,
 
 ############################################################################
 ##
-#F  NQLPar_CheckConsRel( <coll>, <job> )
+#F  LPRESPar_CheckConsRel( <coll>, <job> )
 ##
 ## function for checking overlaps on the slaves.
 ##
-InstallGlobalFunction( NQLPar_CheckConsRel,
+InstallGlobalFunction( LPRESPar_CheckConsRel,
   function( coll, job )
   local ev1,ev2,# exponent vectors
 	w,	# ExtRepOfObj of a PcpElement
@@ -214,7 +210,7 @@ InstallGlobalFunction( NQLPar_CheckConsRel,
   
         return( ev1 - ExponentsByObj( coll, [ i, 1 ] ) );
       else
-        Error("in NQLPar_CheckConsistencyRelations");
+        Error("in LPRESPar_CheckConsistencyRelations");
       fi; 
     elif IsPosInt( job[1] ) and IsPosInt( job[2] ) then
       #  i ^ -1 = j ^ -1 ( j i ^-1 )
@@ -257,9 +253,9 @@ InstallGlobalFunction( NQLPar_CheckConsRel,
 
 ############################################################################,
 ##
-#F  NQLPar_MSCheckConsistencyRelations( <weights> )
+#F  LPRESPar_MSCheckConsistencyRelations( <weights> )
 ##
-ParInstallTOPCGlobalFunction( "NQLPar_MSCheckConsistencyRelations",
+ParInstallTOPCGlobalFunction( "LPRESPar_MSCheckConsistencyRelations",
   function( weights )
   local	HNF,	# the Hermite normal form
   	Checks,	# a list of consistency checks
@@ -272,12 +268,12 @@ ParInstallTOPCGlobalFunction( "NQLPar_MSCheckConsistencyRelations",
   n := ReadEvalFromString( "ftl" )![ PC_NUMBER_OF_GENERATORS ];
   b := Position( weights, Maximum( weights ));
 
-  Checks := NQLPar_ListOfConsistencyChecks( ReadEvalFromString("ftl"), 
+  Checks := LPRESPar_ListOfConsistencyChecks( ReadEvalFromString("ftl"), 
                                             weights ); 
 
   SubmitTaskInput := TaskInputIterator( Checks );
 
-  DoTask := x -> NQLPar_CheckConsRel( ReadEvalFromString("ftl"), x ){[b..n]};
+  DoTask := x -> LPRESPar_CheckConsRel( ReadEvalFromString("ftl"), x ){[b..n]};
 
   CheckTaskResult := function( input, output )
     local ev;
@@ -293,19 +289,19 @@ ParInstallTOPCGlobalFunction( "NQLPar_MSCheckConsistencyRelations",
 
 ############################################################################
 ##
-#F NQLPar_CheckConsistencyRelations( <coll>, <weights> )
+#F LPRESPar_CheckConsistencyRelations( <coll>, <weights> )
 ##
-InstallGlobalFunction( NQLPar_CheckConsistencyRelations,
+InstallGlobalFunction( LPRESPar_CheckConsistencyRelations,
   function( ftl, weights )
   local HNF;
 
   # define the collector on the slaves
-  ParEval( PrintToString( "fnc:=", NQLPar_CollectorToFunction( ftl ) ) );
+  ParEval( PrintToString( "fnc:=", LPRESPar_CollectorToFunction( ftl ) ) );
   ParEval( "ftl := fnc();");
   ParEval( "Unbind( fnc );" );
   
   # parallel consistency checks
-  HNF := NQLPar_MSCheckConsistencyRelations( weights );
+  HNF := LPRESPar_MSCheckConsistencyRelations( weights );
 
   return( HNF );
   end);

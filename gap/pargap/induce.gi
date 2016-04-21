@@ -1,17 +1,13 @@
 ############################################################################
 ##
-#W pargap/induce.gi		NQL				René Hartung
+#W pargap/induce.gi		LPRES				René Hartung
 ##
-#H   @(#)$Id: induce.gi,v 1.1 2009/05/06 13:12:56 gap Exp $
-##
-Revision.("nql/gap/pargap/induce_gi"):=
-  "@(#)$Id: induce.gi,v 1.1 2009/05/06 13:12:56 gap Exp $";
 
 ############################################################################
 ##
-#F  NQLPar_InduceEndomorphism( <EndoImgs>, <Defs>, <Imgs>, <weights> )
+#F  LPRESPar_InduceEndomorphism( <EndoImgs>, <Defs>, <Imgs>, <weights> )
 ##
-ParInstallTOPCGlobalFunction( "NQLPar_InduceEndomorphism", 
+ParInstallTOPCGlobalFunction( "LPRESPar_InduceEndomorphism", 
   function( EndoImgs, Defs, Imgs, weights )
   local F, 	# free group
 	fam, 	# elements family of <F>

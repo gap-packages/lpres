@@ -1,17 +1,13 @@
 ############################################################################
 ##
-#W pargap/misc.gi		NQL				René Hartung
+#W pargap/misc.gi		LPRES				René Hartung
 ##
-#H   @(#)$Id: misc.gi,v 1.1 2009/05/06 13:12:56 gap Exp $
-##
-Revision.("nql/gap/pargap/pargap_gi"):=
-  "@(#)$Id: misc.gi,v 1.1 2009/05/06 13:12:56 gap Exp $";
 
 ############################################################################
 ##
-#F NQLPar_CollectorToFunction( <coll> )
+#F LPRESPar_CollectorToFunction( <coll> )
 ##
-InstallGlobalFunction( NQLPar_CollectorToFunction,
+InstallGlobalFunction( LPRESPar_CollectorToFunction,
   function( coll )
   local file,	# temporary file to store the collector <coll>
 	orders,	# relative orders of <coll>
@@ -68,9 +64,9 @@ InstallGlobalFunction( NQLPar_CollectorToFunction,
 
 ############################################################################
 ##
-#F  NQLPar_MapRelations
+#F  LPRESPar_MapRelations
 ##
-ParInstallTOPCGlobalFunction( "NQLPar_MapRelations",
+ParInstallTOPCGlobalFunction( "LPRESPar_MapRelations",
   function( Imgs, frels, irels )
   local F,	# the free group
 	fam,	# elements family of the free group <F>

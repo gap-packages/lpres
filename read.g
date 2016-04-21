@@ -47,11 +47,6 @@ ReadPackage( LPRESPkgName, "gap/examples.gi");
 # approximating the Schur multiplier
 ReadPackage( LPRESPkgName, "gap/schumu/schumu.gi" );
 
-# approximating the outer automorphism group
-if TestPackageAvailability( "AutPGrp", "1.4" ) <> fail then 
-  ReadPackage( LPRESPkgName, "gap/misc/autseq.gi" );
-fi;
-
 # parallel version of LPRES's nilpotent quotient algorithm
 if TestPackageAvailability( "ParGap", "1.1.2" ) <> fail then
   LPRESPar_StoreResults := true;

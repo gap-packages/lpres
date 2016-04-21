@@ -1,11 +1,7 @@
 ############################################################################
 ##
-#W pargap.gi			NQL				René Hartung
+#W pargap.gi			LPRES				René Hartung
 ##
-#H   @(#)$Id: pargap.gi,v 1.5 2010/03/17 12:47:34 gap Exp $
-##
-Revision.("nql/gap/pargap/pargap_gi"):=
-  "@(#)$Id: pargap.gi,v 1.5 2010/03/17 12:47:34 gap Exp $";
 
 ############################################################################
 ##
@@ -72,7 +68,7 @@ InstallMethod( ExtendQuotientSystem,
   
   # Check the consisistency relations
   Info( InfoLPRES, 1, "Checking the consistency relations..." );
-  HNF := NQLPar_CheckConsistencyRelations( ftl, weights );
+  HNF := LPRESPar_CheckConsistencyRelations( ftl, weights );
 
   Info( InfoLPRES, 1, "Broadcasting the slaves...");
   for i in [1..MPI_Comm_size()-1] do
@@ -85,7 +81,7 @@ InstallMethod( ExtendQuotientSystem,
   Info( InfoLPRES, 1, "Inducing the endomorphisms..." );
   Endos := [];
   for endo in EndomorphismsOfLpGroup( Q.Lpres ) do
-    Add( Endos, NQLPar_InduceEndomorphism( 
+    Add( Endos, LPRESPar_InduceEndomorphism( 
                        List( FreeGeneratorsOfLpGroup( Q.Lpres ), 
 	                     x -> ExtRepOfObj( Image( endo, x ) ) ),
                        Defs, Imgs, weights ) );
@@ -115,7 +111,7 @@ InstallMethod( ExtendQuotientSystem,
 
   ParTrace:=true;
   Info( InfoLPRES, 1, "Mapping the relations..." );
-  Rels := NQLPar_MapRelations( Imgs, 
+  Rels := LPRESPar_MapRelations( Imgs, 
           List( FixedRelatorsOfLpGroup( Q.Lpres ), ExtRepOfObj ),
           List( IteratedRelatorsOfLpGroup( Q.Lpres ), ExtRepOfObj ) );
 
