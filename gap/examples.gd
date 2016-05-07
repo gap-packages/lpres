@@ -60,3 +60,14 @@ DeclareOperation( "GeneralizedFabrykowskiGuptaLpGroup", [ IsPosInt ] );
 ############################################################################
 DeclareConstructor( "LamplighterGroup", [ IsLpGroup, IsGroup ]);
 DeclareConstructor( "LamplighterGroup", [ IsLpGroup, IsPosInt ]);
+
+############################################################################
+##
+#C  IASubgroup( <automorphism group of free group> )
+##
+## returns an L-presentation for the IA subgroup of the automorphism group
+## of a free group, i.e. the group of automorphism that act trivially on
+## the abelianization.
+##
+############################################################################
+DeclareOperation("EmbeddingOfIASubgroup", [IsAutomorphismGroup] );

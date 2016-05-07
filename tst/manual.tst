@@ -249,4 +249,21 @@ gap> NilpotentQuotient( G, 3 );
 Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2 ]
 gap> SetInfoLevel(InfoLPRES, IL);
 
+################################################################
+# L-presentation of IA subgroup
+gap> f := FreeGroup(3);
+<free group on the generators [ f1, f2, f3 ]>
+gap> a := AutomorphismGroup(f);
+<group of size infinity with 3 generators>
+gap> map := EmbeddingOfIASubgroup(a);;
+gap> ia := Source(map);
+<invariant LpGroup on the generators [ C(1,2), C(1,3), C(2,1), C(2,3), C(3,1), C(3,2), M(1,[2,3]),
+  M(2,[1,3]), M(3,[1,2]) ]>
+gap> freemap := GroupHomomorphismByFunction(FreeGroupOfLpGroup(ia),a,x->ElementOfLpGroup(FamilyObj(One(ia)),x)^map);;
+gap> ForAll(IteratedRelatorsOfLpGroup(ia),x->IsOne(x^freemap));
+true
+gap> endos := EndomorphismsOfLpGroup(ia);;
+gap> ForAll([1..Length(endos)],i->ForAll(GeneratorsOfGroup(FreeGroupOfLpGroup(ia)),x->(x^endos[i])^freemap=(x^freemap)^ia!.Gendos[i]));
+true
+
 gap> STOP_TEST( "ManualExamples.tst", 100000);

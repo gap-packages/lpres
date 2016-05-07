@@ -105,14 +105,6 @@ gap> AbelianInvariants( G );
 
 <Section><Heading>A brief description of the algorithm</Heading>
 
-<!--!!!<ManSection><Oper Name="" Arg=""/>
-<Description>
-<Example><![CDATA[
-]]></Example>
-</Description>
-</ManSection>
--->
-
 In the following we give a brief description of the nilpotent quotient
 algorithm for an arbitrary finitely L-presented group. For further
 details, we refer to <Cite Key="BEH08"/> and the diploma thesis
