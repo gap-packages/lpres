@@ -527,14 +527,14 @@ InstallMethod( NilpotentQuotients,
 ##
 InstallOtherMethod( NilpotentQuotient,
   "for an FpGroup using the LPRES-package", true,
-  [ IsFpGroup, IsPosInt ], 0, 
+  [ IsFpGroup, IsPosInt ], -1, # give priority to NQ package
   function( G, c )
   return( NilpotentQuotient( Range( IsomorphismLpGroup( G ) ), c ) );
   end);
 
 InstallOtherMethod( NilpotentQuotient,
   "for an FpGroup using the LPRES-package", true,
-  [ IsFpGroup ], 0, 
+  [ IsFpGroup ], -1, # give priority to NQ package
   G -> NilpotentQuotient( Range( IsomorphismLpGroup( G ) ) ) );
 
 ############################################################################
