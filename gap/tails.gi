@@ -102,7 +102,10 @@ InstallMethod( UpdateNilpotentCollector,
   local rhs,		# rhs of the relations
 	orders,		# relative order of <coll>
 	i,j,k,a,b,	# loop variables
-	c;		# nilpotency class
+	c,# nilpotency class
+ time;		
+
+  time:=Runtime();
 
   # relative order of <coll>
   orders:=RelativeOrders(coll);
@@ -200,4 +203,5 @@ InstallMethod( UpdateNilpotentCollector,
     b:=b-1;
   od;
   
+  Info(InfoLPRES,2,"Time spent for tails routine: ", StringTime(Runtime()-time));
   end);

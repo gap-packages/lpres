@@ -19,13 +19,16 @@
 ## 
 InstallGlobalFunction( LPRES_CheckConsistencyRelations,
   function( coll, weights )
-  local   HNF,		# Hermite normal form of the inconsistencies
+  local   HNF, myHNF,		# Hermite normal form of the inconsistencies
    	  n, 		# number of generators of coll
 	  k,j,i, 	# loop variables 
 	  ev1, ev2,	# exponent vectors (rhs and lhs)
 	  c,		# nilpotency class
   	  w,		# loop variable (object representation) 
-	  I;		# set of indices of generators with power relation
+	  I,		# set of indices of generators with power relation
+   time; 
+
+  time:=Runtime();
 
   # number of generators    
   n := coll![ PC_NUMBER_OF_GENERATORS ];
@@ -37,7 +40,7 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
   c:=Maximum(weights);
 
   # initialize the Hermite normal form
-  HNF:=rec(mat:=[],Heads:=[]);
+  HNF:= [];
 
   # k (j i) = (k j) i
   for k in [n,n-1..1] do
@@ -57,7 +60,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
             ev2 := ListWithIdenticalEntries( n, 0 );
           until CollectWordOrFail( coll, ev2, [k,1,j,1,i,1] )<>fail;
               
-          LPRES_AddRow(HNF,ev1-ev2);
+          if not IsZero( ev1-ev2 ) then 
+            Add(HNF,ev1-ev2);
+          fi;
         else 
           # the weight function is an increasing function! 
           break;
@@ -86,7 +91,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
             ev2 := ExponentsByObj( coll, [j,coll![ PC_EXPONENTS ][j]-1] );
           until CollectWordOrFail( coll, ev2, w )<>fail;
   
-          LPRES_AddRow(HNF,ev1-ev2);
+          if not IsZero( ev1-ev2) then 
+            Add(HNF,ev1-ev2);
+          fi;
         else 
           break;
         fi;
@@ -113,7 +120,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           until CollectWordOrFail(coll,ev2,[j,1,i,coll![PC_EXPONENTS][i]] )
 		 <>fail;
         
-          LPRES_AddRow(HNF,ev1-ev2);
+          if not IsZero( ev1-ev2) then 
+          Add(HNF,ev1-ev2);
+          fi;
         else 
           break;
         fi;
@@ -137,7 +146,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           ev2 := ExponentsByObj( coll, [i,1] );
         fi;
             
-        LPRES_AddRow(HNF,ev1-ev2);
+          if not IsZero( ev1-ev2) then 
+        Add(HNF,ev1-ev2);
+        fi;
       else 
         break;
       fi;
@@ -154,7 +165,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           until CollectWordOrFail( coll, ev1, [j,1,i,-1,i,1] )<>fail;
   
           ev1[j] := ev1[j] - 1;
-          LPRES_AddRow(HNF,ev1);
+          if not IsZero( ev1) then 
+          Add(HNF,ev1);
+          fi;
         else 
           break;
         fi;
@@ -176,7 +189,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
             ev1 := ExponentsByObj( coll, [j,-1] );
           until CollectWordOrFail( coll, ev1, w )<>fail;
               
-          LPRES_AddRow(HNF, ev1 - ExponentsByObj( coll, [i,1] ));
+          if not IsZero( ev1 - ExponentsByObj( coll, [i,1] )) then 
+          Add(HNF, ev1 - ExponentsByObj( coll, [i,1] ));
+          fi;
             
           # -i = -j (j -i)
           if not IsBound( coll![ PC_EXPONENTS ][i] ) then
@@ -189,7 +204,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
               ev1 := ExponentsByObj( coll, [j,-1] );
             until CollectWordOrFail( coll, ev1, w )<>fail;
                   
-            LPRES_AddRow( HNF, ExponentsByObj( coll, [i,-1] ) - ev1);
+          if not IsZero( ExponentsByObj( coll, [i,-1] ) - ev1) then 
+            Add( HNF, ExponentsByObj( coll, [i,-1] ) - ev1);
+            fi;
           fi;
         else 
           break;
@@ -198,5 +215,12 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
     fi;
   od;
 
-  return(HNF);
+  myHNF := rec( mat := HermiteNormalFormIntegerMat( HNF ), Heads := [] );
+  myHNF.mat := Filtered( myHNF.mat, x -> not IsZero( x ) );
+  myHNF.Heads := List( myHNF.mat, PositionNonZero );
+
+  Info( InfoLPRES, 2, "Number of rows in Hermite normal form: ", Size( myHNF.mat ), "\n" );
+  Info( InfoLPRES, 2, "Time spent for consistency checks: ", StringTime(Runtime()-time));
+
+  return(myHNF);
   end);

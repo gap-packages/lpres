@@ -46,182 +46,48 @@ InstallGlobalFunction( LPRES_PowerRelationsOfHNF,
 
 ############################################################################
 ##
-#F  LPRES_ReduceHNF ( <mat> , <int> )
-##
-## if a new reduced row is added to the Hermite normal form, it has to be 
-## reduced again.
-##
-InstallGlobalFunction( LPRES_ReduceHNF,
-  function(HNF,n)
-  local corner,	# corner entries in HNF
-	column,	# corresponding column in HNF
-  	row,	# corresponding row in HNF
-	q;	# quotient of 
- 
-  # after adding a row to the HNF we have to reduce the 
-  # old HNF
-  for corner in [n..Length(HNF.Heads)] do
-    column:=HNF.Heads[corner];
-    for row in [1..corner-1] do
-      if IsInt(HNF.mat[row][column]/HNF.mat[corner][column]) then 
-        q:=HNF.mat[row][column]/HNF.mat[corner][column];
-        HNF.mat[row]:=HNF.mat[row]-q*HNF.mat[corner];
-      elif HNF.mat[row][column]<0 then 
-        q:=-QuoInt(HNF.mat[row][column],HNF.mat[corner][column])+1;
-        HNF.mat[row]:=HNF.mat[row]+q*HNF.mat[corner];
-      elif HNF.mat[row][column]>=HNF.mat[corner][column] then
-        q:=QuoInt(HNF.mat[row][column],HNF.mat[corner][column]);
-        HNF.mat[row]:=HNF.mat[row]-q*HNF.mat[corner];
-      fi;
-    od;
-  od;
-
-  end);
-
-############################################################################
-##
 #F  LPRES_AddRow ( <mat> , <evec> )
 ##
 ## adds the row <evec> to the Hermite normal form <mat> and returns
 ## whether <mat> has changed.
 ##
 InstallGlobalFunction( LPRES_AddRow,
-  function(HNF,ev)
-  local evn,		# reduced <ev>
-	lcm,		# least common multiple
-	i,j,k,l,q,	# loop variables
-	Changed,	# did <ev> changed the HNF?
-	B,b;		# check variables
+  function( HNF, ev )
+  local i, val, l;
 
-  if LPRES_TEST_ALL then 
-    B:=ShallowCopy(HNF.mat);
-    b:=ShallowCopy(ev);
+  if Size( HNF.mat ) = 0 and not IsZero( ev ) then 
+    Add( HNF.mat, ev );
+    Add( HNF.Heads, PositionNonZero( ev ) );
+    return( true );
   fi;
-  
-  Changed:=false;
-  
-  if IsZero(ev) then 
-    return(false);
-  fi;
-  
-  # the HNF does not contain any row
-  if HNF.mat=[] then 
-    if ev[PositionNonZero(ev)]>0 then 
-      Add(HNF.mat,ev);
-    else
-      Add(HNF.mat,-ev);
-    fi;
-    Add(HNF.Heads,PositionNonZero(ev));
-    return(true);
-  fi;
-  
-  # reduce <ev> and the HNF
-  i:=1;
-  while i<=Length(ev) do 
-    if ev[i]<>0 then 
-      if not i in HNF.Heads then 
-        # new corner-entry
-  
-        # Determine the entry in which <ev> will be added
-        j:=Length(HNF.Heads)+1;
-        for k in [1..Length(HNF.Heads)] do 
-          if i<HNF.Heads[k] then 
-            j:=k; 
-            break;
-          fi; 
-        od;   
-  
-        if j>Length(HNF.Heads) then 
-          # new position at the end
-          Append(HNF.Heads,[i]);
-          if ev[i]>0 then 
-            Append(HNF.mat,[ev]);
-          else 
-            Append(HNF.mat,[-ev]);
-          fi;  
-        else 
-          # at before the j-th element
-  
-          # move the element behind the j-th position
-          for k in [Length(HNF.Heads),Length(HNF.Heads)-1..j] do
-            HNF.mat[k+1]:=HNF.mat[k];
-            HNF.Heads[k+1]:=HNF.Heads[k];
-          od;
-           
-          # add the row in the j-th position
-          if ev[i]>0 then 
-            HNF.mat[j]:=ev;
-          else
-            HNF.mat[j]:=-ev;
-          fi;
-          HNF.Heads[j]:=i;
-        fi;
-        
-        # since we have changed the HNF we have to reduce the remaining part
-        LPRES_ReduceHNF(HNF,j);  
-  
-        Changed:=true;
-        break;
-      else
-        # there is a row with the same first non-zero entry
-        l:=Position(HNF.Heads,i);
-  
-        # reduce the given vector or the HNF
-        if IsInt(ev[i]/HNF.mat[l][i]) then 
-          # reduce the given vector
-          ev:=ev-ev[i]/HNF.mat[l][i] * HNF.mat[l];
-        elif IsInt(HNF.mat[l][i]/ev[i]) then 
-          # reduce the HNF
-          evn:=ShallowCopy(HNF.mat[l]);
-          if ev[i]>0 then 
-            HNF.mat[l]:=ev;
-          else
-            HNF.mat[l]:=-ev;
-          fi;
-          ev:=evn;
-         
-          LPRES_ReduceHNF(HNF,l);
-       
-          Changed:=true;
-        else
-          # both can be reduce
-          q:=GcdRepresentation(HNF.mat[l][i],ev[i]);
-          lcm:=Lcm(HNF.mat[l][i],ev[i]);
-          if q[1]=0 then
-            Error("strange GcdRepresentation in hnf.gi\n");
-          fi;
-          evn:=lcm/HNF.mat[l][i] *  HNF.mat[l]-lcm/ev[i] * ev;
-  
-          HNF.mat[l]:=q[1]*HNF.mat[l]+q[2]*ev;
-  
-          LPRES_ReduceHNF(HNF,l);
-  
-          k:=PositionNonZero(evn);
-          if IsBound(evn[k]) and evn[k]<0 then 
-            ev:=-evn;
-          else 
-            ev:=evn;
-          fi;
-  
-          Changed:=true;
-        fi;
-      fi;
-    else
-      i:=i+1;
-    fi;
+
+  # reduce a vector with the HNF
+  for i in [1..Length(ev)] do
+   if ev[i]<>0 then 
+     l:=Position(HNF.Heads,i);
+     if l<>fail then 
+       val := ev[i]/HNF.mat[l][i];
+       if IsInt(val) then 
+         ev := ev - val*HNF.mat[l];
+       else 
+         break;
+       fi;
+     else
+       break;
+     fi;
+   fi;
   od;
-  
-  if LPRES_TEST_ALL then 
-    if not Filtered(HermiteNormalFormIntegerMat(Concatenation(B,[b])),
-                    x->not IsZero(x))=HNF.mat then 
-      Error("in LPRES_AddRow: wrong Hermite normal form!");
-    fi;
-    if not List(HNF.mat,x->PositionNonZero(x))=HNF.Heads then 
-      Error("in LPRES_AddRow: wrong heads");
-    fi;
+   
+  if IsZero( ev ) then 
+    return( false );
   fi;
-  
-  return(Changed);
+
+  Add( HNF.mat, ev );
+  HNF.mat := HermiteNormalFormIntegerMat( HNF.mat );
+  HNF.mat := Filtered( HNF.mat, x -> not IsZero( x ) );
+  HNF.Heads := List( HNF.mat, PositionNonZero );
+   
+  return( true );
   end);
 
 ############################################################################

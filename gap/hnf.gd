@@ -11,12 +11,6 @@ DeclareGlobalFunction( "LPRES_PowerRelationsOfHNF" );
 
 ############################################################################
 ##
-#F  LPRES_ReduceHNF ( <mat> , <int> )
-##
-DeclareGlobalFunction( "LPRES_ReduceHNF" );
-
-############################################################################
-##
 #F  LPRES_AddRow ( <mat> , <evec> )
 ##
 DeclareGlobalFunction( "LPRES_AddRow" );

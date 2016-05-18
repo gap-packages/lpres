@@ -119,6 +119,7 @@ InstallGlobalFunction( LPRES_QSystemOfCoveringGroupByQSystem,
       fi;
     od;
   od;
+  Info( InfoLPRES, 2, "Weights of the extended quotient system: ", Collected( weights ), "\n" );
   return(ftl);
   end);
 
