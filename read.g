@@ -25,24 +25,31 @@ else
   LPRES_CosetEnumerator := CosetTableInWholeGroup;
 fi;
 
-
-ReadPackage( LPRESPkgName, "gap/misc.gi");
-ReadPackage( LPRESPkgName, "gap/hnf.gi");
-ReadPackage( LPRESPkgName, "gap/initqs.gi");
-ReadPackage( LPRESPkgName, "gap/homs.gi");
-ReadPackage( LPRESPkgName, "gap/tails.gi");
-ReadPackage( LPRESPkgName, "gap/consist.gi");
-ReadPackage( LPRESPkgName, "gap/cover.gi");
-ReadPackage( LPRESPkgName, "gap/endos.gi");
-ReadPackage( LPRESPkgName, "gap/buildnew.gi");
-ReadPackage( LPRESPkgName, "gap/extqs.gi");
-ReadPackage( LPRESPkgName, "gap/quotsys.gi");
-ReadPackage( LPRESPkgName, "gap/nq.gi");
-ReadPackage( LPRESPkgName, "gap/nq_non.gi");
+# L-presentations in GAP
 ReadPackage( LPRESPkgName, "gap/lpres.gi");
+ReadPackage( LPRESPkgName, "gap/homs.gi");
+ReadPackage( LPRESPkgName, "gap/examples.gi");
+
+# nilpotent quotient algorithm as in NQL
+ReadPackage( LPRESPkgName, "gap/nql/misc.gi");
+ReadPackage( LPRESPkgName, "gap/nql/hnf.gi");
+ReadPackage( LPRESPkgName, "gap/nql/initqs.gi");
+ReadPackage( LPRESPkgName, "gap/nql/tails.gi");
+ReadPackage( LPRESPkgName, "gap/nql/consist.gi");
+ReadPackage( LPRESPkgName, "gap/nql/cover.gi");
+ReadPackage( LPRESPkgName, "gap/nql/endos.gi");
+ReadPackage( LPRESPkgName, "gap/nql/buildnew.gi");
+ReadPackage( LPRESPkgName, "gap/nql/extqs.gi");
+ReadPackage( LPRESPkgName, "gap/nql/quotsys.gi");
+ReadPackage( LPRESPkgName, "gap/nql/nq.gi");
+ReadPackage( LPRESPkgName, "gap/nql/nq_non.gi");
+
+# p-quotient algorithm
+ReadPackage( LPRESPkgName, "gap/pql/initqs.gi" );
+
+# subgroup methods
 ReadPackage( LPRESPkgName, "gap/subgrps.gi" );
 ReadPackage( LPRESPkgName, "gap/reidschr.gi" );
-ReadPackage( LPRESPkgName, "gap/examples.gi");
 
 # approximating the Schur multiplier
 ReadPackage( LPRESPkgName, "gap/schumu/schumu.gi" );

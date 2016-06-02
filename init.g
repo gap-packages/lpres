@@ -47,21 +47,29 @@ fi;
 ##
 #D Read .gd files
 ##
+# L-presentations in GAP
 ReadPackage( LPRESPkgName, "gap/lpres.gd");
-ReadPackage( LPRESPkgName, "gap/hnf.gd");
-ReadPackage( LPRESPkgName, "gap/initqs.gd");
 ReadPackage( LPRESPkgName, "gap/homs.gd");
-ReadPackage( LPRESPkgName, "gap/tails.gd");
-ReadPackage( LPRESPkgName, "gap/consist.gd");
-ReadPackage( LPRESPkgName, "gap/cover.gd");
-ReadPackage( LPRESPkgName, "gap/endos.gd");
-ReadPackage( LPRESPkgName, "gap/buildnew.gd");
-ReadPackage( LPRESPkgName, "gap/extqs.gd");
-ReadPackage( LPRESPkgName, "gap/misc.gd");
-ReadPackage( LPRESPkgName, "gap/quotsys.gd");
-ReadPackage( LPRESPkgName, "gap/nq.gd");
-ReadPackage( LPRESPkgName, "gap/nq_non.gd");
 ReadPackage( LPRESPkgName, "gap/examples.gd");
+
+# nilpotent quotient algorithm
+ReadPackage( LPRESPkgName, "gap/nql/hnf.gd");
+ReadPackage( LPRESPkgName, "gap/nql/initqs.gd");
+ReadPackage( LPRESPkgName, "gap/nql/tails.gd");
+ReadPackage( LPRESPkgName, "gap/nql/consist.gd");
+ReadPackage( LPRESPkgName, "gap/nql/cover.gd");
+ReadPackage( LPRESPkgName, "gap/nql/endos.gd");
+ReadPackage( LPRESPkgName, "gap/nql/buildnew.gd");
+ReadPackage( LPRESPkgName, "gap/nql/extqs.gd");
+ReadPackage( LPRESPkgName, "gap/nql/misc.gd");
+ReadPackage( LPRESPkgName, "gap/nql/quotsys.gd");
+ReadPackage( LPRESPkgName, "gap/nql/nq.gd");
+ReadPackage( LPRESPkgName, "gap/nql/nq_non.gd");
+
+# p-quotient algorithm
+ReadPackage( LPRESPkgName, "gap/pql/initqs.gd" );
+
+# subgroup methods
 ReadPackage( LPRESPkgName, "gap/subgrps.gd" );
 ReadPackage( LPRESPkgName, "gap/reidschr.gd" );
 
