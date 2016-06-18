@@ -29,6 +29,7 @@ suggested-pkgs:
       url: "http://www.icm.tu-bs.de/~beick/so.html"
     - name: "ACE"
       version: ">= 5.0"
+      url: "https://gap-packages.github.io/ace"
 
 www: https://laurentbartholdi.github.io/lpres
 readme: https://laurentbartholdi.github.io/lpres/README
