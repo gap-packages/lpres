@@ -194,28 +194,28 @@ gap> Unbind(a); Unbind(b); Unbind(c); Unbind(d);
 gap> G := ExamplesOfLPresentations( 1 );
 <invariant LpGroup of size infinity on the generators [ a, b, c, d ]>
 gap> Q := InitQuotientSystem( G );
-rec( Lpres := <invariant LpGroup of size infinity on the generators
+rec( Definitions := [ 1, 3, 4 ], Epimorphism := [ a, b, c, d ] ->
+    [ g1, g2*g3, g2, g3 ], Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ],
+  Lpres := <invariant LpGroup of size infinity on the generators
     [ a, b, c, d ]>, Pccol := <<from the left collector with 3 generators>>,
-  Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ], Weights := [ 1, 1, 1 ],
-  Definitions := [ 1, 3, 4 ], Epimorphism := [ a, b, c, d ] ->
-    [ g1, g2*g3, g2, g3 ] )
+  Weights := [ 1, 1, 1 ] )
 gap> ExtendQuotientSystem( Q );
-rec( Lpres := <invariant LpGroup of size infinity on the generators
+rec( Definitions := [ 1, 3, 4, [ 2, 1 ], [ 3, 1 ] ],
+  Epimorphism := [ a, b, c, d ] -> [ g1, g2*g3, g2, g3 ],
+  Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ],
+  Lpres := <invariant LpGroup of size infinity on the generators
     [ a, b, c, d ]>, Pccol := <<from the left collector with 5 generators>>,
-  Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ], Weights := [ 1, 1, 1, 2, 2 ],
-  Definitions := [ 1, 3, 4, [ 2, 1 ], [ 3, 1 ] ],
-  Epimorphism := [ a, b, c, d ] -> [ g1, g2*g3, g2, g3 ] )
+  Weights := [ 1, 1, 1, 2, 2 ] )
 gap> G := ExamplesOfLPresentations( 1 );;
 gap> NilpotentQuotient( G, 5 );
 Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
 gap> NilpotentQuotientSystem( G );
-rec( Lpres := <invariant LpGroup of size infinity on the generators
+rec( Definitions := [ 1, 3, 4, [ 2, 1 ], [ 3, 1 ], [ 4, 2 ], [ 4, 3 ],
+      [ 7, 1 ], [ 8, 2 ], [ 8, 3 ] ], Epimorphism := [ a, b, c, d ] ->
+    [ g1, g2*g3, g2, g3 ], Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ],
+  Lpres := <invariant LpGroup of size infinity on the generators
     [ a, b, c, d ]>, Pccol := <<from the left collector with 10 generators>>,
-  Imgs := [ 1, [ 2, 1, 3, 1 ], 2, 3 ],
-  Weights := [ 1, 1, 1, 2, 2, 3, 3, 4, 5, 5 ],
-  Definitions := [ 1, 3, 4, [ 2, 1 ], [ 3, 1 ], [ 4, 2 ], [ 4, 3 ], [ 7, 1 ],
-      [ 8, 2 ], [ 8, 3 ] ], Epimorphism := [ a, b, c, d ] ->
-    [ g1, g2*g3, g2, g3 ] )
+  Weights := [ 1, 1, 1, 2, 2, 3, 3, 4, 5, 5 ] )
 gap> NilpotencyClassOfGroup( PcpGroupByCollectorNC( last.Pccol ) );
 5
 
@@ -231,11 +231,11 @@ gap> Range( last[2] );
 Pcp-group with orders [ 0, 2, 2 ]
 
 gap> NilpotentQuotientSystem( UnderlyingInvariantLPresentation( G ) );
-rec( Lpres := <invariant LpGroup on the generators [ a, t, u ]>,
-  Pccol := <<from the left collector with 9 generators>>, Imgs := [ 1, 2, 3 ],
-  Weights := [ 1, 1, 1, 2, 2, 3, 3, 3, 3 ],
-  Definitions := [ 1, 2, 3, [ 2, 1 ], [ 3, 2 ], [ 4, 1 ], [ 4, 2 ], [ 5, 2 ],
-      [ 5, 3 ] ], Epimorphism := [ a, t, u ] -> [ g1, g2, g3 ] )
+rec( Definitions := [ 1, 2, 3, [ 2, 1 ], [ 3, 2 ], [ 4, 1 ], [ 4, 2 ],
+      [ 5, 2 ], [ 5, 3 ] ], Epimorphism := [ a, t, u ] -> [ g1, g2, g3 ],
+  Imgs := [ 1, 2, 3 ], Lpres := <invariant LpGroup on the generators
+    [ a, t, u ]>, Pccol := <<from the left collector with 9 generators>>,
+  Weights := [ 1, 1, 1, 2, 2, 3, 3, 3, 3 ] )
 
 gap> IL := InfoLevel(InfoLPRES);;
 gap> SetInfoLevel( InfoLPRES, 1 );;
@@ -266,4 +266,4 @@ gap> endos := EndomorphismsOfLpGroup(ia);;
 gap> ForAll([1..Length(endos)],i->ForAll(GeneratorsOfGroup(FreeGroupOfLpGroup(ia)),x->(x^endos[i])^freemap=(x^freemap)^ia!.Gendos[i]));
 true
 
-gap> STOP_TEST( "ManualExamples.tst", 100000);
+gap> STOP_TEST( "manual.tst", 60 );
