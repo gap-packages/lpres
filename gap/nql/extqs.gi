@@ -11,22 +11,23 @@
 ## system for G/gamma_{i+1}(G).
 ##
 InstallMethod( ExtendQuotientSystem,
-  "using a single-core machine", true,
+  "using a single-core machine",
+  true,
   [ IsObject ], 0, 
-  function(Q)
-  local c,		# nilpotency class 
-	weights,	# weight of the generators 
-	Defs,		# definitions of each (pseudo) generator and tail
-	Imgs,		# images of the generators of the LpGroup 
-	ftl,		# collector of the covering group
-	b,		# number of "old" generators + 1 
-	HNF,		# Hermite normal form of the consistency rels/relators
-        A,		# record: endos as matrices and (it.) rels as exp.vecs
-	i,		# loop variable
-	stack,		# stack for the spinning algorithm
-	ev,evn,		# exponent vectors for the spinning algorithm
-	QS,		# (confluent) quotient system for G/\gamma_i+1(G)
-	time;
+  function( Q )
+  local c,	     	# nilpotency class 
+        weights,	# weight of the generators 
+        Defs,		  # definitions of each (pseudo) generator and tail
+        Imgs,	  	# images of the generators of the LpGroup 
+        ftl,  	 	# collector of the covering group
+        b,	      # number of "old" generators + 1 
+        HNF,	    # Hermite normal form of the consistency rels/relators
+        A,	      # record: endos as matrices and (it.) rels as exp.vecs
+        i,	      # loop variable
+        stack,		 # stack for the spinning algorithm
+        ev,evn,	 # exponent vectors for the spinning algorithm
+        QS,		    # (confluent) quotient system for G/\gamma_i+1(G)
+        time;
 
 
   # nilpotency class
@@ -41,10 +42,14 @@ InstallMethod( ExtendQuotientSystem,
   
   # build a (possibly inconsistent) nilpotent presentation for the 
   # covering group of Q
+  time := Runtime();
   ftl:=LPRES_QSystemOfCoveringGroupByQSystem(Q.Pccol,weights,Defs,Imgs);
 
   # complete the nilpotent presentation using the tails routine
   UpdateNilpotentCollector(ftl,weights,Defs);
+  Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( time-Runtime() ) );
+  Info( InfoLPRES, 2, "Tails introduced in the covering quotient system: ",
+        Length( Filtered( weights, x -> x = c+1 ) ) );
   
   # position of the first new (pseudo) generator/tail
   b:=Position(weights,Maximum(weights));
@@ -61,7 +66,9 @@ InstallMethod( ExtendQuotientSystem,
   od;
   
   # build the endomorphisms
+  time := Runtime();
   A:=LPRES_EndomorphismsOfCover( Q.Lpres, ftl, Imgs, Defs, weights );
+  Info( InfoLPRES, 3, "Time spent to induce the endomorphisms: ", StringTime( Runtime()-time ) );
 
   # if the endomorphisms do not induces endomorphisms of the multiplier
   if A = fail then 
@@ -76,7 +83,7 @@ InstallMethod( ExtendQuotientSystem,
     LPRES_AddRow(HNF,stack[i]);
   od;
   while not Length(stack)=0 do
-    Info(InfoLPRES,3,"Spinning stack has size ",Length(stack));
+    Info(InfoLPRES,4,"Spinning stack has size ",Length(stack));
     ev:=stack[1];
     Remove( stack, 1 );
     if not IsZero(ev) then 
@@ -94,8 +101,7 @@ InstallMethod( ExtendQuotientSystem,
     LPRES_AddRow(HNF,A.Relations[i]);
   od;
   
-  Info(InfoLPRES,2,"Time spent for spinning algorithm: ",
-			StringTime(Runtime()-time));
+  Info(InfoLPRES,2,"Time spent for spinning algorithm: ", StringTime(Runtime()-time));
   
   if Length(HNF.mat)=0 then 
     # the presentation ftl satisfy the relations and is consistent
