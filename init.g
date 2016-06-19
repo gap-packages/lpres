@@ -72,6 +72,8 @@ if TestPackageAvailability( "polycyclic", "2.5" ) <> fail then
   
   # p-quotient algorithm
   ReadPackage( LPRESPkgName, "gap/pql/initqs.gd" );
+  ReadPackage( LPRESPkgName, "gap/pql/extqs.gd" );
+  ReadPackage( LPRESPkgName, "gap/pql/pq.gd" );
 
   # approximating the Schur multiplier
   ReadPackage( LPRESPkgName, "gap/schumu/schumu.gd" );
