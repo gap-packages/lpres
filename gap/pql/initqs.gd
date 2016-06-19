@@ -11,6 +11,6 @@ DeclareOperation( "InitPQuotientSystem", [ IsLpGroup, IsPosInt ] );
 
 ############################################################################
 ##
-#F  LPRES_AddRow ( <mat> , <evec> )
+#F  LPRES_AddPRow ( <mat> , <evec> )
 ##
 DeclareGlobalFunction( "LPRES_AddPRow" );

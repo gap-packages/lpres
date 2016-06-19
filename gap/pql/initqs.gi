@@ -53,7 +53,7 @@ InstallMethod( InitPQuotientSystem,
 #   Print( List( ev, Int ), "\n" );
     if not IsZero( ev ) then 
       Add( stack, ShallowCopy(ev) );
-      Add( Basis, ev );
+      Add( Basis.mat, ev );
     fi;
   od;
 
@@ -130,6 +130,7 @@ InstallMethod( InitPQuotientSystem,
   # build quotient system
   Q := rec( Lpres := G,
             Pccol := FromTheLeftCollector( Length(Gens) ),
+            Prime := prime,
             Imgs  := [],
             Weights := ListWithIdenticalEntries( Length(Gens), 1 )
           );
@@ -174,18 +175,7 @@ InstallMethod( InitPQuotientSystem,
 
 ############################################################################
 ##
-#M  AbelianInvariants ( <LpGroup> )
-##
-## computes the abelian invariants of <LpGroup>.
-##
-InstallMethod( AbelianInvariants,
-  "for an L-presented group",
-  [ IsLpGroup ],0,
-  G -> AbelianInvariants( NilpotentQuotient(G,1) ) );
-
-############################################################################
-##
-#F  LPRES_AddRow ( <mat> , <evec> )
+#F  LPRES_AddPRow ( <mat> , <evec> )
 ##
 ## adds the row <evec> to the Hermite normal form <mat> and returns
 ## whether <mat> has changed.
