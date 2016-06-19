@@ -8,4 +8,3 @@
 #O  InitQuotientSystem ( <LpGroup> )
 ##
 DeclareOperation( "InitQuotientSystem", [ IsLpGroup ] );
-# DeclareOperation( "InitQuotientSystem", [ IsObject ] );

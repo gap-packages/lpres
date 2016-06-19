@@ -15,20 +15,20 @@ InstallMethod( InitQuotientSystem,
   true,
   [ IsLpGroup ], 0,
   function(G)
-  local ftl,		# FromTheLeftCollector for G/G'
-          A,		# power relations from Hermite normal form
-          Q,		# new quotient system
-          n,		# number of generators of L
-          ev,evn,	# exponent vectors for spinning algorithm
-          rel,		# loop variable for (iterated) relators 
-          map,		# loop variable for endomorphisms 
-          i,j,k,	# loop variables
-          HNF,		# Hermite normal form of the relations
-          stack,	# stack for the spinning algorithm
-          endos,	# endomorphisms as matrices 
-          obj, mat,	# loop variables to determine the matrices
-	  Gens,		# position of new gens in the HNF
-	  Imgs;		# loop variable to build the endomorphism
+  local ftl,	     # FromTheLeftCollector for G/G'
+        A,	      	# power relations from Hermite normal form
+        Q,	      	# new quotient system
+        n,	      	# number of generators of L
+        ev,evn,	  # exponent vectors for spinning algorithm
+        rel,		    # loop variable for (iterated) relators 
+        map,		    # loop variable for endomorphisms 
+        i,j,k,	   # loop variables
+        HNF,		    # Hermite normal form of the relations
+        stack,	   # stack for the spinning algorithm
+        endos,	   # endomorphisms as matrices 
+        obj, mat,	# loop variables to determine the matrices
+        Gens,	   	# position of new gens in the HNF
+        Imgs;	   	# loop variable to build the endomorphism
 
   # number of new generators
   n:=Length(GeneratorsOfGroup(G));
@@ -42,7 +42,7 @@ InstallMethod( InitQuotientSystem,
     for i in [1,3..Length(obj)-1] do 
       ev[obj[i]]:=ev[obj[i]]+obj[i+1];
     od;
-    Add(stack,ShallowCopy(ev));
+    Add( stack, ShallowCopy(ev) );
     LPRES_AddRow(HNF,ev);
   od;
   
@@ -90,8 +90,7 @@ InstallMethod( InitQuotientSystem,
   A:=LPRES_PowerRelationsOfHNF(HNF);
   
   # generators with power relation
-  Gens:=HNF.Heads{Filtered([1..Length(HNF.Heads)],
-                           x->HNF.mat[x][HNF.Heads[x]]<>1)};
+  Gens:=HNF.Heads{Filtered([1..Length(HNF.Heads)], x->HNF.mat[x][HNF.Heads[x]]<>1)};
   
   # infinite generators;
   Append(Gens,Filtered([1..n],x->not x in HNF.Heads));
