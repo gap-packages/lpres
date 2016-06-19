@@ -26,7 +26,12 @@ InstallOtherMethod( NilpotentQuotient,
   # known quotient system of <G>
   Q:=NilpotentQuotientSystem(G);
  
-  # nilpotency class
+  # for a perfect group
+  if IsEmpty( Q.Weights ) then 
+    return( PcpGroupByCollectorNC( Q.Pccol ) );
+  fi; 
+
+  # nilpotency class 
   j:=Maximum(Q.Weights);
  
   if c=j then 

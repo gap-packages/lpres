@@ -76,10 +76,9 @@ BannerString := Concatenation("Loading ", ~.PackageName, " ", String( ~.Version 
 
 Dependencies := rec(
   GAP                    := ">= 4.4",
-  NeededOtherPackages    := [ ["polycyclic", ">= 2.5"], 
-                              ["FGA", ">= 1.1.0.1"] ], 
-  SuggestedOtherPackages := [ ["ParGAP", ">= 1.1.2" ],
-                              ["AutPGrp", ">= 1.4"],
+  NeededOtherPackages    := [ ["FGA", ">= 1.1.0.1"] ], 
+  SuggestedOtherPackages := [ ["polycyclic", ">= 2.5"],
+                              ["ParGAP", ">= 1.1.2" ],
                               ["ACE", ">= 5.0" ] ],
   ExternalConditions     := [ ]
 ),
@@ -87,6 +86,7 @@ Dependencies := rec(
 Autoload := false,
 
 Keywords := [ "nilpotent quotient algorithm",
+              "p quotient algorithm",
               "nilpotent presentations",
               "finitely generated groups",
               "Grigorchuk group",
@@ -94,10 +94,13 @@ Keywords := [ "nilpotent quotient algorithm",
               "L-presented groups",
               "finite index subgroup of L-presented groups", 
               "coset enumeration",
+              "Reidemeister Schreier methods",
               "recursively presented groups",
               "infinite presentations",
               "commutators",
               "lower central series",
-              "Free Engel groups", "Free Burnside groups",
-              "computational", "parallel computing" ]
+              "Free Engel groups",
+              "Free Burnside groups",
+              "computational",
+              "parallel computing" ]
 ));

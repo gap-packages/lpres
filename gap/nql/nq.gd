@@ -5,12 +5,6 @@
 
 ############################################################################
 ##
-#I InfoClass
-##
-DeclareInfoClass( "InfoLPRES" );
-
-############################################################################
-##
 #O  NilpotentQuotient( <LpGroup>, <c> )
 ##
 DeclareOperation( "NilpotentQuotient", [ IsLpGroup, IsPosInt ] );
