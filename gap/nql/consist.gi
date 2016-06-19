@@ -11,7 +11,7 @@
 ## nilpotent presentation. It implements the check from Nickel: "Computing 
 ## nilpotent quotients of finitely presented groups"
 ##
-##	k ( j i ) = ( k j ) i,	          i < j < k, w_i=1, w_i+w_j+w_k <= c
+##     	k ( j i ) = ( k j ) i,	           i < j < k, w_i+w_j+w_k <= c
 ##          j^m i = j^(m-1) ( j i ),      i < j, j in I,   w_j+w_i <= c
 ##          j i^m = ( j i ) i^(m-1),      i < j, i in I,   w_j+w_i <= c
 ##          i i^m = i^m i,                i in I, 2 w_i <= c
@@ -19,16 +19,18 @@
 ## 
 InstallGlobalFunction( LPRES_CheckConsistencyRelations,
   function( coll, weights )
-  local   HNF, myHNF,		# Hermite normal form of the inconsistencies
-   	  n, 		# number of generators of coll
-	  k,j,i, 	# loop variables 
-	  ev1, ev2,	# exponent vectors (rhs and lhs)
-	  c,		# nilpotency class
-  	  w,		# loop variable (object representation) 
-	  I,		# set of indices of generators with power relation
-   time; 
+  local HNF, myHNF,		# Hermite normal form of the inconsistencies
+     	  n,         		# number of generators of coll
+	       k,j,i,      	# loop variables 
+	       ev1, ev2,   	# exponent vectors (rhs and lhs)
+	       c,	         	# nilpotency class
+  	     w,	         	# loop variable (object representation) 
+	       I,	         	# set of indices of generators with power relation
+        num,
+        time; 
 
   time:=Runtime();
+  num := 0;
 
   # number of generators    
   n := coll![ PC_NUMBER_OF_GENERATORS ];
@@ -63,6 +65,7 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           if not IsZero( ev1-ev2 ) then 
             Add(HNF,ev1-ev2);
           fi;
+          num := num + 1;
         else 
           # the weight function is an increasing function! 
           break;
@@ -72,8 +75,6 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
   od;
   
   # j^m i = j^(m-1) (j i)
-# for j in [n,n-1..1] do
-#   if IsBound(coll![ PC_EXPONENTS ][j]) then
   for j in Reversed( I ) do 
       for i in [1..j-1] do
         if weights[j]+weights[i]<=c then 
@@ -94,16 +95,14 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           if not IsZero( ev1-ev2) then 
             Add(HNF,ev1-ev2);
           fi;
+          num := num + 1;
         else 
           break;
         fi;
       od;
-#   fi;
   od;
   
   # j i^m = (j i) i^(m-1)
-# for i in [1..n] do
-#   if IsBound(coll![ PC_EXPONENTS ][i]) then
   for i in I do 
       for j in [i+1..n] do
         if weights[i]+weights[j]<=c then 
@@ -117,17 +116,16 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           
           repeat
             ev2 := ListWithIdenticalEntries( n, 0 );
-          until CollectWordOrFail(coll,ev2,[j,1,i,coll![PC_EXPONENTS][i]] )
-		 <>fail;
+          until CollectWordOrFail(coll,ev2,[j,1,i,coll![PC_EXPONENTS][i]] ) <>fail;
         
           if not IsZero( ev1-ev2) then 
-          Add(HNF,ev1-ev2);
+            Add(HNF,ev1-ev2);
           fi;
+          num := num + 1;
         else 
           break;
         fi;
       od;
-#   fi;
   od;
   
   # i^m i = i i^m
@@ -146,9 +144,10 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           ev2 := ExponentsByObj( coll, [i,1] );
         fi;
             
-          if not IsZero( ev1-ev2) then 
-        Add(HNF,ev1-ev2);
+        if not IsZero( ev1-ev2) then 
+          Add(HNF,ev1-ev2);
         fi;
+        num := num + 1;
       else 
         break;
       fi;
@@ -166,8 +165,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
   
           ev1[j] := ev1[j] - 1;
           if not IsZero( ev1) then 
-          Add(HNF,ev1);
+            Add(HNF,ev1);
           fi;
+          num := num + 1;
         else 
           break;
         fi;
@@ -190,8 +190,9 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
           until CollectWordOrFail( coll, ev1, w )<>fail;
               
           if not IsZero( ev1 - ExponentsByObj( coll, [i,1] )) then 
-          Add(HNF, ev1 - ExponentsByObj( coll, [i,1] ));
+            Add(HNF, ev1 - ExponentsByObj( coll, [i,1] ));
           fi;
+          num := num + 1;
             
           # -i = -j (j -i)
           if not IsBound( coll![ PC_EXPONENTS ][i] ) then
@@ -204,9 +205,10 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
               ev1 := ExponentsByObj( coll, [j,-1] );
             until CollectWordOrFail( coll, ev1, w )<>fail;
                   
-          if not IsZero( ExponentsByObj( coll, [i,-1] ) - ev1) then 
-            Add( HNF, ExponentsByObj( coll, [i,-1] ) - ev1);
+            if not IsZero( ExponentsByObj( coll, [i,-1] ) - ev1) then 
+              Add( HNF, ExponentsByObj( coll, [i,-1] ) - ev1);
             fi;
+            num := num + 1;
           fi;
         else 
           break;
@@ -219,8 +221,8 @@ InstallGlobalFunction( LPRES_CheckConsistencyRelations,
   myHNF.mat := Filtered( myHNF.mat, x -> not IsZero( x ) );
   myHNF.Heads := List( myHNF.mat, PositionNonZero );
 
-  Info( InfoLPRES, 2, "Number of rows in Hermite normal form: ", Size( myHNF.mat ), "\n" );
-  Info( InfoLPRES, 2, "Time spent for consistency checks: ", StringTime(Runtime()-time));
+  Info( InfoLPRES, 2, "Number of rows in Hermite normal form: ", Size( myHNF.mat ) );
+  Info( InfoLPRES, 2, "Time spent for ", num, " consistency checks: ", StringTime(Runtime()-time));
 
   return(myHNF);
   end);
