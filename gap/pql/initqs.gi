@@ -5,14 +5,13 @@
 
 ############################################################################
 ##
-#M  InitPQuotientSystem ( <LpGroup> )
+#M  InitPQuotientSystem ( <LpGroup>, <prime> )
 ##
-## computes a weighted nilpotent quotient system for the abelian quotient 
-## of <LpGroup>.
+## computes a weighted nilpotent quotient system for the <prime>-Frattini
+## quotient of <LpGroup>.
 ##
 InstallMethod( InitPQuotientSystem,
-  "for an L-presented group and a prime number", 
-  true,
+  "For an L-presented group and a prime number", true,
   [ IsLpGroup, IsPosInt ], 0,
   function( G, prime )
   local ftl,		# FromTheLeftCollector for G/G'G^p
@@ -29,6 +28,7 @@ InstallMethod( InitPQuotientSystem,
           obj, mat,	# loop variables to determine the matrices
 	         Gens,		# position of new gens in the HNF
 	         Imgs,		# loop variable to build the endomorphism
+          H,
           F;     # finite field
 
   if not IsPrime( prime ) then
@@ -40,7 +40,7 @@ InstallMethod( InitPQuotientSystem,
   # number of generators
   n := Length( GeneratorsOfGroup(G) );
   
-  # determine the iterated relators
+  # exponent vectors of the iterated relators 
   stack:=[];
   Basis := rec( mat := [], Heads := [] );
   for rel in IteratedRelatorsOfLpGroup( G ) do 
@@ -50,7 +50,6 @@ InstallMethod( InitPQuotientSystem,
       ev[obj[i]] := ev[obj[i]] + obj[i+1] * One( F );
     od;
 
-#   Print( List( ev, Int ), "\n" );
     if not IsZero( ev ) then 
       Add( stack, ShallowCopy(ev) );
       Add( Basis.mat, ev );
@@ -62,7 +61,7 @@ InstallMethod( InitPQuotientSystem,
   Basis.mat := Filtered( Basis.mat, x -> not IsZero( x ) );
   Basis.Heads := List( Basis.mat, PositionNonZero );
 
-  # determine the endomorphisms
+  # map the endomorphisms to endomorphisms of the elementary abelian group
   endos:=[];
   for map in EndomorphismsOfLpGroup(G) do
     mat := NullMat( n, n, F );
@@ -75,19 +74,17 @@ InstallMethod( InitPQuotientSystem,
       od;
     od;
     Add(endos,mat);
-#   Print( List( mat, x->List( x, Int) ), "\n" );
   od;
   
   # spinning algorithm
   while not Length(stack)=0 do
-    ev:=stack[1];
-    Remove( stack, 1);
+#   ev:=stack[1];
+    ev := Remove( stack, 1);
     if not IsZero(ev) then 
       for i in [1..Length(endos)] do 
         evn := ev * endos[i];
         if LPRES_AddPRow( Basis, evn ) then 
           Add( stack, evn );
-          Print( List( evn, Int ), "\n" );
         fi;
       od;
     fi;
@@ -100,14 +97,13 @@ InstallMethod( InitPQuotientSystem,
     for i in [1,3..Length(obj)-1] do 
       ev[obj[i]] := ev[obj[i]] + obj[i+1] * One( F );
     od;
-#   Print( List( ev, Int ), "\n" );
     LPRES_AddPRow(Basis,ev);
   od;
   
   # surviving pseudo generators
   Gens := Filtered( [1..n], x -> not x in Basis.Heads );
   
-  # if the p-Frattini quotient is trivial
+  # the p-Frattini quotient is trivial
   if Length( Gens ) = 0 then 
     Q := rec( Lpres       := G, 
               Pccol       := FromTheLeftCollector( 0 ),
@@ -119,10 +115,11 @@ InstallMethod( InitPQuotientSystem,
 
     Imgs := List( Q.Imgs, x -> PcpElementByGenExpList( Q.Pccol, x ) );
 
-    Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres, 
-                                                  PcpGroupByCollectorNC( Q.Pccol), 
-                                                  GeneratorsOfGroup( Q.Lpres),
-                                                  Imgs );
+    H := PcpGroupByCollectorNC( Q.Pccol); 
+    SetPClassPGroup( H, 0 );
+    SetExponentPCentralSeries( H, LPRES_ExponentPCentralSeries( Q ) );
+    Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres, H,
+                                                  GeneratorsOfGroup( Q.Lpres), Imgs );
                                         
     return( Q );
   fi;
@@ -153,7 +150,7 @@ InstallMethod( InitPQuotientSystem,
     fi;
   od;
   
-  # the epimorphism into the new presentation
+  # the epimorphism onto the new presentation
   Imgs:=[];
   for i in [1..Length(Q.Imgs)] do
     if IsInt(Q.Imgs[i]) then 
@@ -162,23 +159,27 @@ InstallMethod( InitPQuotientSystem,
       Add( Imgs, PcpElementByGenExpList( Q.Pccol, Q.Imgs[i] ) );
     fi;
   od;
-  Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres,
-                                                PcpGroupByCollectorNC(Q.Pccol),
-                                                GeneratorsOfGroup(Q.Lpres),
-                                                Imgs);
   
-  Q.Definitions := Filtered( [1..Length(Q.Imgs)],
-                             x->not IsList(Q.Imgs[x]));
+  # set of definitions
+  Q.Definitions := Filtered( [1..Length(Q.Imgs)], x->not IsList(Q.Imgs[x]));
+
+  # the p-quotient (with its attributes PClassPGroup and ExponentPCentralSeries)
+  H := PcpGroupByCollectorNC(Q.Pccol);
+  SetPClassPGroup( H, 1 );
+  SetExponentPCentralSeries( H, LPRES_ExponentPCentralSeries( Q ) );
   
+  # the natural homomorphism
+  Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres, H,
+                                                GeneratorsOfGroup(Q.Lpres), Imgs);
   return(Q);
   end);
 
 ############################################################################
 ##
-#F  LPRES_AddPRow ( <mat> , <evec> )
+#F  LPRES_AddPRow ( <basis> , <evec> )
 ##
-## adds the row <evec> to the Hermite normal form <mat> and returns
-## whether <mat> has changed.
+## adds the row <evec> to the basis a return whether or not <evec> has 
+## enlarged the submodule.
 ##
 InstallGlobalFunction( LPRES_AddPRow,
   function( Basis, ev )

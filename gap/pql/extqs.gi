@@ -3,7 +3,10 @@
 #W extqs.gi			LPRES				René Hartung
 ##
 
-# help function
+############################################################################
+##
+#F  internal function
+##
 LPRES_PrintPcp := function( ftl ) 
   local i,j,k,n,ev,H,gens;
 
@@ -29,14 +32,54 @@ LPRES_PrintPcp := function( ftl )
 
 ############################################################################
 ##
-#M  ExtendPQuotientSystem ( <quo> )
+#F  LPRES_ExponentPCentralSeries( <QS> )
 ##
-## Extends the quotient system for G/gamma_i(G) to a consistent quotient
-## system for G/gamma_{i+1}(G).
+## computes the p-central series of a p-quotient given by the 
+## quotient system <QS>.
+##
+InstallGlobalFunction( LPRES_ExponentPCentralSeries,
+  function(Q)
+  local weights,	# weights-function of <Q>
+       	i,		     # loop variable
+       	c, 		    # nilpotency class of <Q>
+       	H,		     # nilpotent presentation corr. to <Q>
+       	gens,	   # generators of <H>
+        pcs;		   # lower central series of <H>
+
+  # the p-quotient
+  H := PcpGroupByCollectorNC( Q.Pccol );
+
+  # generators of <H>
+  gens := GeneratorsOfGroup( H );
+
+  # weights function of the given quotient system
+  weights := Q.Weights;
+
+  # nilpotency class of <Q>
+  c := Maximum(weights);
+
+  # build the exponent-p central series
+  pcs:=[];
+  pcs[c+1] := SubgroupByIgs(H,[]);
+  pcs[1]   := H;
+ 
+  for i in [2..c] do
+    # the exponent-p central series as subgroups by an induced generating system
+    # with weights at least <i>
+    pcs[i] := SubgroupByIgs( H, gens{Filtered([1..Length(gens)],x->weights[x]>=i)} );
+  od;
+
+  return( pcs );
+  end );
+
+############################################################################
+##
+#M  ExtendPQuotientSystem ( <QS> )
+##
+## extends the quotient system for G/phi_i(G) to a consistent quotient
+## system for G/phi_{i+1}(G).
 ##
 InstallGlobalFunction( ExtendPQuotientSystem,
-# "using a single-core machine", true,
-# [ IsObject ], 0, 
   function( Q )
   local c,       # nilpotency class 
        	weights,	# weight of the generators
@@ -50,6 +93,7 @@ InstallGlobalFunction( ExtendPQuotientSystem,
         stack,		 # stack for the spinning algorithm
         ev,evn,		# exponent vectors for the spinning algorithm
         QS,		    # (confluent) quotient system for G/\gamma_i+1(G)
+        QSnew,
         mat, 
         rel,
         Qnew,
@@ -58,8 +102,6 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   # p-class
   c := Maximum( Q.Weights );
 
-# Print( "Prev Defs: ", Q.Definitions, "\n" );
-
   # weights, definitions and images of the quotient system
   QS := rec( Lpres       := Q.Lpres,
              Prime       := Q.Prime,
@@ -67,7 +109,7 @@ InstallGlobalFunction( ExtendPQuotientSystem,
              Definitions := ShallowCopy( Q.Definitions ),
              Imgs        := ShallowCopy( Q.Imgs ) );
 
-  # make definitions images mutable lists (in case we reuse a quotient system from 
+  # make definitions/images mutable lists (in case we reuse a quotient system from 
   # a stored attribute)
   for i in [1..Length(QS.Definitions)] do
     if IsList( QS.Definitions[i] ) then 
@@ -87,16 +129,13 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   time := Runtime();
   LPRES_PCoveringGroupByQSystem( Q, QS );
   Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( time-Runtime() ) );
-  Info( InfoLPRES, 2, "Tails introduced in the covering quotient system: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
+  Info( InfoLPRES, 2, "Tails introduced in the tails routine: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
 
-  # position of the first new (pseudo) generator/tail
+  # position of the first pseudo generator/tail
   b := Position( QS.Weights, Maximum( QS.Weights ) );
   
   # enforce consistency
   Basis := LPRES_ConsistencyChecks( QS );
-
-# Print( "Definitions: ", QS.Definitions, "\n" );
-# Print( "Images: ", QS.Imgs, "\n" );
 
   # throw away the zero entries not in the module
   for i in [1..Length(Basis.mat)] do
@@ -110,17 +149,15 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   od;
     
   # induce the substitutions of the L-presentation to the module
+  time := Runtime();
   A := rec( Relations := [],
             Substitutions := [],
             IteratedRelations := [] );
-
-  time := Runtime();
   LPRES_InduceSpinning( QS, A );
   Info( InfoLPRES, 3, "Time spent to induce the endomorphisms and relations: ", StringTime( Runtime()-time ) );
 
-  time:=Runtime();
-    
   # run the spinning algorithm
+  time:=Runtime();
   stack:=A.IteratedRelations;
   for i in [1..Length(stack)] do 
     if not IsZero( stack[i] ) then 
@@ -129,9 +166,9 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   od;
 
   while not IsEmpty(stack) do
-    Info(InfoLPRES,4,"Spinning stack has size ",Length(stack));
-    ev:=stack[1];
-    Remove( stack, 1 );
+    Info( InfoLPRES, 4, "Spinning stack has size ", Length(stack) );
+#   ev:=stack[1];
+    ev := Remove( stack, 1 );
     if not IsZero(ev) then 
       for mat in A.Substitutions do 
         evn := ev * mat;
@@ -142,42 +179,21 @@ InstallGlobalFunction( ExtendPQuotientSystem,
     fi;
   od;
 
-  # add the non-iterated relations
+  # add the fixed relations
   for rel in A.Relations do
     LPRES_AddPRow( Basis, rel );
   od;
-  
   Info(InfoLPRES,2,"Time spent for spinning algorithm: ", StringTime(Runtime()-time));
 
-# Display( Basis.mat );
-
-# Error();
-  return( LPRES_CreateNewQuotientSystem( QS, Basis ) );
-#   if Length(HNF.mat)=0 then 
-#     # the presentation ftl satisfy the relations and is consistent
-#     QS:=rec();
-#     QS.Lpres:=Q.Lpres;
-#     QS.Weights:=weights;
-#     QS.Definitions:=Defs;
-#     QS.Pccol:=ftl;
-#     QS.Imgs:=ShallowCopy(Imgs);
-#     Imgs:=[];
-#     for i in [1..Length(QS.Imgs)] do 
-#       if IsInt(QS.Imgs[i]) then 
-#         Add(Imgs,PcpElementByGenExpList(QS.Pccol,[QS.Imgs[i],1]));
-#       else
-#         Add(Imgs,PcpElementByGenExpList(QS.Pccol,QS.Imgs[i]));
-#       fi;
-#     od;
-#     QS.Epimorphism:=GroupHomomorphismByImagesNC(Q.Lpres,
-#                                 PcpGroupByCollectorNC(QS.Pccol),
-# 				  GeneratorsOfGroup(Q.Lpres),Imgs);
-#     return(QS);
-#   else 
-#     # use the Hermite normal form to compute a consistent presentation 
-#     # that satisfy the relations
-#     return(LPRES_BuildNewCollector(Q,ftl,HNF,weights,Defs,Imgs));
-#   fi;
+  # use the basis to create the new quotient system
+  QSnew := LPRES_CreateNewQuotientSystem( QS, Basis );
+  if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
+    Info( InfoLPRES, 1, "Class ", Maximum(QSnew.Weights), ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
+  else
+    Info( InfoLPRES, 1, "Class ", Maximum(QSnew.Weights), ": ", Length(QSnew.Weights)-Length(Q.Weights),
+  	       " generators with relative orders: ", RelativeOrders(QSnew.Pccol){[Length(Q.Weights)+1..Length(QSnew.Weights)]});
+  fi;
+  return( QSnew );
   end );
 
 ############################################################################
@@ -247,12 +263,14 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
   # number of generators of the group
   n := Q.Pccol![ PC_NUMBER_OF_GENERATORS ];
   if n = 0 then 
-    Error( "do not call this function with trivial quotient system" );
+    Error( "Do not call this function with trivial quotient system" );
   fi;
 
   # Note that the order is important here - e.g. we wish to 
   # remove the tail which stems from an image using the 
-  # TriangulizeMat function
+  # TriangulizeMat function, so these generators need to show 
+  # up earlier than those which we wish to survive (e.g. generators
+  # of the form [a_j,a_i] with w(a_j) = c and w(a_i) = 1)
 
   # start with the non-defining images
   for i in Filtered( [1..Length(Q.Imgs)], x->IsList(Q.Imgs[x]) ) do
@@ -309,9 +327,6 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
     od;
   od;
 
-# Print( "Definitions: ", QS.Definitions, "\n" );
-# Print( "Weights: ", QS.Weights, "\n" );
-
   # FromTheLeftCollector for the extended quotient system
   QS.Pccol := FromTheLeftCollector( Length( QS.Definitions ) );
 
@@ -325,8 +340,6 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
     od;
   od;
 
-
-# Print( "Set up the definitions...\n" );
   # set up the definitions as defined above in QS.Definitions
   for i in [1..Length(QS.Definitions)] do
     # each generator has relative order <Q.Prime>
@@ -345,14 +358,12 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
         # this was already a definition (don't modify this one)
         SetConjugate( QS.Pccol, j, k, GetConjugate( Q.Pccol, j, k ) );
       fi;
-# Print( j, "^", k, " = ", GetConjugate( QS.Pccol, j, k ), "\n" );
     elif IsPosInt( QS.Definitions[i] ) then 
       # we add the i-th tail to the image of the
       # QS.Definitions[i]-th generator
       if IsList( QS.Imgs[ QS.Definitions[i] ] ) then 
         Append( QS.Imgs[ QS.Definitions[i] ], [i,1] );
       fi;
-# Print( QS.Definitions[i], "^\pi = ", QS.Imgs[ QS.Definitions[i] ], "\n" );
     else
       # negative integer - a power relation
       if QS.Weights[i] = c+1 then 
@@ -367,10 +378,8 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
         SetPower( QS.Pccol, -QS.Definitions[i],
                     GetPower( Q.Pccol, -QS.Definitions[i] ) );
       fi;
-# Print( -QS.Definitions[i], "^{p} = ", GetPower( QS.Pccol, -QS.Definitions[i] ), "\n" );
     fi;
   od;
-# Print( "Imgs: ", QS.Imgs, "\n" );
   SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
 # SetFeatureObj( QS.Pccol, UseLibraryCollector, true );
   FromTheLeftCollector_SetCommute( QS.Pccol );
@@ -378,12 +387,7 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
 
   # run the tails routine ALGORITHM 3 in NNN98
   for b in [c+1,c..2] do
-# Print( "b = ", b, "\n" );
-    # [i..j] should be the generators of pseudo weigth b-1
-#   i := Position( QS.Weights, b-1 );
-#   j := Position( QS.Weights, b )-1;
 
-# Display( Filtered( [1..n], x-> QS.Weights[x] = b-1 ) );
     for u in Filtered( [1..n], x-> QS.Weights[x] = b-1 )  do
       # Compute tails for p-th powers u^p with w(u) = b-1 and 
       # u is defined as a commutator [z,y] =: u
@@ -402,7 +406,6 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
         # z^p y
         repeat 
           ev2 := ExponentsByObj( QS.Pccol, GetPower( Q.Pccol, z ) );
-#         Display( ev2 );
         until CollectWordOrFail( QS.Pccol, ev2, [ y, 1 ] ) <> fail;
 
         # t := ( z^{p-1} (zy))^{-1} ((z^p)y )
@@ -410,8 +413,6 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
 
         # Add to \hat R the relation u^p = v_{u^p} t
         SetPower( QS.Pccol, u, Concatenation( GetPower( Q.Pccol, u ), ObjByExponents( QS.Pccol, ev1 ) ) );
-# Print( "TAIL ", u, "^{p} = ", GetPower( QS.Pccol, u ), "\t", List( [1,3..Length(GetPower(QS.Pccol,u))-1], x->QS.Definitions[ GetPower( QS.Pccol, u )[x] ] ), "\n" );
-
         SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
         FromTheLeftCollector_SetCommute( QS.Pccol );
       fi;
@@ -422,7 +423,6 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
       # [i..j] should be the generators of pseudo weigth m+1
       i := Position( QS.Weights, m+1 );
       j := Position( QS.Weights, m+2 )-1;
-# Print( "m = ", m, "  b = ", b, "  c = ", Maximum( QS.Weights ), "  " , [i..j], "  ", QS.Weights{[i..j]}, "\n" );
 
       # Compute tails for commutators [z,u] with w(z) = b-m and w(u) = m+1
       for u in [i..j] do 
@@ -431,14 +431,8 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
           y := QS.Definitions[u][1];
           x := QS.Definitions[u][2];
 
-
           # for each z of w(z) = b-m with z>u
-#         Display( Filtered( [u+1..n], x -> QS.Weights[x] = b-(m+1) ) );
           for z in Filtered( [u+1..n], x -> QS.Weights[x] = b-(m+1) ) do
-# Display( [ z, u, [ y, x ] ] );
-            if z = 3 and y = 2 and x = 1 then
-              Error( "foo" );
-            fi;
             # z (yx) 
             repeat 
               repeat 
@@ -446,7 +440,6 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
               until CollectWordOrFail( QS.Pccol, ev2, [ x, 1 ] ) <> fail;
               ev1 := ExponentsByObj( QS.Pccol, [ z, 1 ] );
             until CollectWordOrFail( QS.Pccol, ev1, ObjByExponents( QS.Pccol, ev2 ) ) <> fail;
-#           Display( ev1 );
 
             # (zy)x
             repeat 
@@ -454,15 +447,12 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
                 ev2 := ExponentsByObj( QS.Pccol, [ z, 1 ] );
               until CollectWordOrFail( QS.Pccol, ev2, [ y, 1 ] ) <> fail;
             until CollectWordOrFail( QS.Pccol, ev2, [ x, 1 ] ) <> fail;
-#           Display( ev2 );
 
             # t := ((z(yx))^{-1} ((zy)x)
             ev1 := ( ev2 - ev1 ) mod Q.Prime;
 
             # Add to \hat R the relation [z,u] = v_[z,u] t
             SetConjugate( QS.Pccol, z, u, Concatenation( GetConjugate( Q.Pccol, z, u ), ObjByExponents( QS.Pccol, ev1 ) ) );
-# Print( "TAIL ", z, "^", u, " = ", GetConjugate( QS.Pccol, z, u ), "\t", List( [1,3..Length(GetConjugate(QS.Pccol,z,u))-1], x->QS.Definitions[ GetConjugate( QS.Pccol,z,u )[x] ] ), "\n" );
-
             SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
             FromTheLeftCollector_SetCommute( QS.Pccol );
           od;
@@ -470,36 +460,27 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
           y := -QS.Definitions[u];
 
           # for each z of w(z) = b-m with z>u
-#         Display( Filtered( [u+1..n], x -> QS.Weights[x] = b-(m+1) ) );
           for z in Filtered( [u+1..n], x -> QS.Weights[x] = b-(m+1) ) do
-#         for z in Filtered( [j+1..n], x -> QS.Weights[x] = b-m ) do
-# Display( [ z, u, [ y ] ] );
-
             # z(y^p)
             repeat 
               ev1 := ExponentsByObj( QS.Pccol, [ z, 1 ] );
             until CollectWordOrFail( QS.Pccol, ev1, GetPower( QS.Pccol, y ) ) <> fail; 
-#           Display( ev1 );
 
             # (zy) y^{p-1}
             repeat
               ev2 := ExponentsByObj( QS.Pccol, [ z, 1 ] );
             until CollectWordOrFail( QS.Pccol, ev2, [ y, 1, y, Q.Prime-1 ] ) <> fail;
-#           Display( ev2 );
 
             # t := ( z(y^p) )^-1 ( (zy)y^{p-1} )
             ev1 := ( ev2 - ev1 ) mod Q.Prime;
-#           Display( ev1 );
 
             # Add to \hat R the relation [z,u] = v_{[z,u]} t
             SetConjugate( QS.Pccol, z, u, Concatenation( GetConjugate( Q.Pccol, z, u ), ObjByExponents( QS.Pccol, ev1 ) ) );
-# Print( "TAIL ", z, "^", u, " = ", GetConjugate( QS.Pccol, z, u ), "\t", List( [1,3..Length(GetConjugate(QS.Pccol,z,u))-1], x->QS.Definitions[ GetConjugate( QS.Pccol,z,u )[x] ] ), "\n" );
-
             SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
             FromTheLeftCollector_SetCommute( QS.Pccol );
           od;
         else 
-          Error();
+          Error( "wrong definition" );
         fi;
       od;
       m := m + 1;
@@ -511,9 +492,6 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
   FromTheLeftCollector_CompletePowers( QS.Pccol );
   FromTheLeftCollector_CompleteConjugate( QS.Pccol );
   SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
-
-  # Dump the covering group to some file
-  FTLCollectorPrintTo( "/tmp/coll.g", "FTL", QS.Pccol );
   end );
 
 ############################################################################
@@ -570,10 +548,6 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
     for j in [k-1,k-2..1] do
       for i in [1..j-1] do
         if QS.Weights[i] + QS.Weights[j] + QS.Weights[k] <= c then 
-# TODO: This should be equivalent to
-#         repeat 
-#           ev1 := ExponentsByObj( QS.Pccol, [k,1] );
-#         until CollectWordOrFail( QS.Pccol, ev1, GetConjugateNC( QS.Pccol, j, i ) ) <> fail;
           repeat
             ev1 := ListWithIdenticalEntries( n, 0 );
           until CollectWordOrFail( QS.Pccol, ev1, [j,1,i,1] ) <> fail;
@@ -586,15 +560,7 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
           repeat 
             ev2 := ExponentsByObj( QS.Pccol, [ k, 1 ] );
           until CollectWordOrFail( QS.Pccol, ev2, [j,1,i,1] )<>fail;
-#           ev2 := ListWithIdenticalEntries( n, 0 );
-#         until CollectWordOrFail( QS.Pccol, ev2, [k,1,j,1,i,1] )<>fail;
               
-#         if k = 3 and j = 2 and i = 1 then 
-#           Print( "ev1 = ", ev1, "\n" );
-#           Print( "ev2 = ", ev2, "\n" );
-#           Display( (ev1-ev2 ) );
-#           Error();
-#         fi;
           if not IsZero( ev1-ev2 ) then 
             Add( mat, One(F) * ( ev1-ev2 ) );
           fi;
@@ -609,7 +575,7 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
 
   # j^m i = j^(m-1) (j i)
   for j in [n,n-1..1] do
-    if IsBound(QS.Pccol![ PC_EXPONENTS ][j]) then # not needed everything's finite
+#   if IsBound(QS.Pccol![ PC_EXPONENTS ][j]) then # not needed everything's finite
       for i in [1..j-1] do
         if QS.Weights[j]+QS.Weights[i]<=c then 
           repeat 
@@ -633,12 +599,12 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
           break;
         fi;
       od;
-    fi;
+#   fi;
   od;
 
   # j i^m = (j i) i^(m-1)
   for i in [1..n] do
-    if IsBound(QS.Pccol![ PC_EXPONENTS ][i]) then # not needed everything's finite
+#   if IsBound(QS.Pccol![ PC_EXPONENTS ][i]) then # not needed everything's finite
       for j in [i+1..n] do
         if QS.Weights[i]+QS.Weights[j]<=c then 
           if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
@@ -661,12 +627,12 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
           break;
         fi;
       od;
-    fi;
+#   fi;
   od;
 
   # i^m i = i i^m
   for i in [1..n] do
-    if IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then # not needed everything's finite
+#   if IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then # not needed everything's finite
       if 2*QS.Weights[i]<=c then
         repeat
           ev1 := ListWithIdenticalEntries( n, 0 );
@@ -687,7 +653,7 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
       else 
         break;
       fi;
-    fi;
+#   fi;
   od;
 
   # only finite quotients turn up
@@ -761,7 +727,10 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
   return( Basis );
   end );
 
-# help function
+############################################################################
+##
+#F internal function
+##
 LPRES_MapGenExpList := function( imgs, obj, res ) 
   local i;
 
@@ -775,15 +744,20 @@ end;
 ##
 #F  LPRES_InduceSpinning
 ##
+## induces the endomorphism of the <LpGroup> to an endomorphism of the 
+## quotient given by the quotient system <QS>; translates the 
+## relations of the <LpGroup> to elements of the p-covering group.
+## TODO: try to use a recursive method for the endomorphisms
+##
 InstallGlobalFunction( LPRES_InduceSpinning,
   function( QS, A ) 
   local imgs, hom, F, sub, obj, i, j, k, b, mat, myField, H, G, c, fam, time;
 
+  # the prime field
   myField := GF( QS.Prime );
 
   F := FreeGroupOfLpGroup( QS.Lpres );
 
-# 
   fam := FamilyObj( GeneratorsOfGroup( QS.Lpres )[1] );
 
   c := Maximum( QS.Weights )-1;
@@ -798,6 +772,7 @@ InstallGlobalFunction( LPRES_InduceSpinning,
     fi;
   od;
 
+  # beware: the presentation is possibly inconsistent
   H := PcpGroupByCollectorNC( QS.Pccol );
 
   # use the latter endomorphism as this seems to be faster (polycyclic issue?)
@@ -816,26 +791,22 @@ InstallGlobalFunction( LPRES_InduceSpinning,
                                x -> One(myField)*Exponents( ElementOfLpGroup( fam, x ) ^ hom ){ [b..Length(QS.Weights) ]} );
   Info( InfoLPRES, 3, "Time spent to map the iterated relations: ", StringTime( Runtime()-time ) );
  
+  # map the endomorphisms to endomorphisms of the tails-module
   for sub in EndomorphismsOfLpGroup( QS.Lpres ) do
     imgs := [];
     mat := [];
     for i in [1..Length(QS.Definitions)] do
-#     Display( QS.Definitions[i] );
       if IsPosInt( QS.Definitions[i] ) then
         # generator defined as an image of a generator of the LpGroup
         if IsList( QS.Imgs[QS.Definitions[i]] ) then 
           # tail added to an image x_i^\pi = w_i t <-> t = w_i^-1 * x_i^\pi
           obj := QS.Imgs[ QS.Definitions[i] ]{ [1..Length(QS.Imgs[ QS.Definitions[i] ])-2] }; # cut the tail
-# Display( obj );
           imgs[i] := LPRES_MapGenExpList( imgs, obj, One(H) );
-# Display( imgs[i] );
-# Display( imgs[ QS.Definitions[i] ] );
           imgs[i] := imgs[i]^-1 * ElementOfLpGroup( fam, GeneratorsOfGroup( F )[ QS.Definitions[i] ]^sub ) ^hom;
         else 
           # one-to-one with the generator
           imgs[i] := ElementOfLpGroup( fam, GeneratorsOfGroup( F )[ QS.Definitions[i] ] ^ sub ) ^ hom;
         fi;
-#       Display( imgs[i] );
       elif IsInt( QS.Definitions[i] ) then
         # power relation a_i^p = v_ii t <-> t = v_ii^-1 a_i^p 
         obj := GetPower( QS.Pccol, -QS.Definitions[i] );
@@ -851,21 +822,22 @@ InstallGlobalFunction( LPRES_InduceSpinning,
         imgs[i] := LPRES_MapGenExpList( imgs, obj, One(H) );
         imgs[i] := imgs[i]^-1 * imgs[j]^-1 * imgs[k] * imgs[j];
       fi;
-#     Print( imgs, "\n" );
       if QS.Weights[i] = c+1 then
         if not IsZero( Exponents( imgs[i] ){ [1..b-1] } ) then
-          Error( "The L-presentation seems to be non-invariant @ i = ", i , "\n" );
+          Error( "The L-presentation is not invariant @ i = ", i , "\n" );
         fi;
         Add( mat, One( myField ) * Exponents( imgs[i] ){[b..Length(QS.Weights)]} );
       fi;
     od;
-#   Display( mat );
     Add( A.Substitutions, mat );
   od;
 
   end );
 
-# help function
+############################################################################
+##
+#F  internal function
+##
 LPRES_AdjustObject := function( obj, b, n, Basis, Gens, F, QSPccol, QPccol )
   local i,j,ev,ev1;
 
@@ -891,6 +863,8 @@ end;
 ##
 #F  LPRES_CreateNewQuotientSystem
 ##
+## with respect to the old quotient systems QS and the basis of the submodule
+##
 InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
   function( QS, Basis ) 
   local Q,
@@ -901,7 +875,8 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
         obj,
         F,
         Imgs,
-        Gens;
+        Gens,
+        H;
 
   # position of the first tail
   b := Position( QS.Weights, Maximum( QS.Weights ) );
@@ -920,6 +895,7 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
             Weights     := Concatenation( QS.Weights{[1..b-1]}, QS.Weights{List(Gens,x->b-1+x)} )
             );
 
+  # add the definitions of the surviving generators
   for i in Gens do 
     Add( Q.Definitions, QS.Definitions[b+i-1] );
   od;
@@ -928,10 +904,8 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
   for i in [1..Length(Q.Imgs)] do
     if IsList( Q.Imgs[i] ) then 
       Q.Imgs[i] := LPRES_AdjustObject( QS.Imgs[i], b, n, Basis, Gens, F, QS.Pccol, Q.Pccol );
-#     Display( Q.Imgs[i] );
     fi;
   od;
-# Print( "Images: ", Q.Imgs, "\n" );
 
   m := Q.Pccol![ PC_NUMBER_OF_GENERATORS ];
 
@@ -963,12 +937,11 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
   SetFeatureObj( Q.Pccol, IsUpToDatePolycyclicCollector, true );
 # UpdatePolycyclicCollector( Q.Pccol );
 
-# if LPRES_TEST_ALL then
+  if LPRES_TEST_ALL then
     if not IsConfluent( Q.Pccol ) then 
       Error( "Inconsistent presentation" );
     fi;
-# fi;
-
+  fi;
 
   # the epimorphism into the new presentation
   Imgs:=[];
@@ -979,9 +952,11 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
       Add( Imgs, PcpElementByGenExpList( Q.Pccol, Q.Imgs[i] ) );
     fi;
   od;
-  Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres,
-                                                PcpGroupByCollectorNC(Q.Pccol),
-                                                GeneratorsOfGroup(Q.Lpres),
-                                                Imgs);
+  H := PcpGroupByCollectorNC(Q.Pccol);
+  SetExponentPCentralSeries( H, LPRES_ExponentPCentralSeries( Q ) );
+  SetPClassPGroup( H, Maximum( Q.Weights ) );
+
+  Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres, H, 
+                                                GeneratorsOfGroup(Q.Lpres), Imgs);
   return( Q );
   end );

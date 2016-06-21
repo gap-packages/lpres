@@ -1,273 +1,260 @@
 ############################################################################
 ##
-#W nq.gi			LPRES				René Hartung
+#W gap/pql/pq.gi			LPRES				René Hartung
 ##
 
 ############################################################################
 ##
-#M  NqPQuotient ( <LpGroup>, <int> ) . . for invariant LpGroups
+#F  internal function
 ##
-## computes a weighted nilpotent presentation for the class-<int> quotient
-## of the invariant <LpGroup> if it already has a nilpotent quotient system.
+## stores the largest p-quotient as an attribute of the <LpGroup>
 ##
-InstallOtherMethod( NqPQuotient,
-  "for invariantly L-presented groups (with qs) and positive integer",
+LPRES_StoreLargestPQuotient := function( G, prime, Q ) 
+  local largestQuot, i;
+
+  largestQuot := [ [], [] ];
+  if HasLargestPQuotients( G ) then 
+    Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
+    Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
+  fi;
+    
+  i := Position( largestQuot[1], prime ); 
+  if i <> fail then 
+    largestQuot[2][i] := Q;
+  else 
+    Add( largestQuot[1], prime );
+    Add( largestQuot[2], Q );
+  fi;
+  ResetFilterObj( G, LargestPQuotients );
+  SetLargestPQuotients( G, largestQuot );
+end;
+
+############################################################################
+##
+#F  internal function
+##
+## stores the quotient system as an attribute of the <LpGroup>
+##
+LPRES_StoreQuotientSystems := function( G, prime, Q ) 
+  local QS, i;
+
+  # store the quotient systems
+  QS := [ [], [] ];
+  if HasPQuotientSystems( G ) then 
+    Append( QS[1], ShallowCopy( PQuotientSystems(G)[1] ) );
+    Append( QS[2], ShallowCopy( PQuotientSystems(G)[2] ) );
+  fi;
+
+  i := Position( QS[1], prime );
+  if i = fail then
+    Add( QS[1], prime );
+    Add( QS[2], Q );
+  else 
+    # replace
+    QS[2][i] := Q;
+  fi;
+  ResetFilterObj( G, PQuotientSystems );
+  SetPQuotientSystems( G, QS );
+end;
+
+############################################################################
+##
+#M  NqEpimorphismPQuotient( <LpGroup>, <prime>, <class> ) . . .
+## 
+## computes the natural homomorphism on the <class> p-quotient of the 
+## invariant <LpGroup>.
+##
+InstallOtherMethod( NqEpimorphismPQuotient,
+  "For an invariant LpGroup, a prime number, and a positive integer",
+  true,
+  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
+    IsPosInt,
+    IsPosInt ], 0,
+  function( G, prime, c )
+  local Q,           # current quotient system
+	       H,           # the nilpotent quotient of <G>
+	       weights, 	# old weights quotient system
+	       i,	          # loop variable
+	       time;	       # runtime
+
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
+  fi;
+
+  # Compute a weighted nilpotent presentation for the Frattini quotient G/G'G^p
+  time := Runtime();
+  Q := InitPQuotientSystem( G, prime );
+  Info( InfoLPRES, 2, "Runtime for this step ",  StringTime(Runtime()-time));
+
+  # store the largest quotient and its quotient sysstem if it's trivial
+  if Length( Q.Weights ) = 0 then 
+    LPRES_StoreLargestPQuotient( G, prime, Q );
+    LPRES_StoreQuotientSystems( G, prime, Q );
+
+    return( Q.Epimorphism );
+  fi;
+  
+  for i in [2..c] do 
+    # copy the old quotient system to compare with the extended qs.
+    weights := ShallowCopy(Q.Weights);
+
+    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
+    time:=Runtime();
+    Q := ExtendPQuotientSystem( Q );
+    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
+   
+    # if we couldn't extend the quotient system any more, we're finished
+    if weights = Q.Weights then 
+      LPRES_StoreLargestPQuotient( G, prime, Q );
+      Info(InfoLPRES,1,"The group has a maximal p-quotient of p-class ", Maximum(Q.Weights) );
+      break;
+    fi;
+  od;
+  
+  # store the largest known nilpotent quotient of <G>
+  LPRES_StoreQuotientSystems( G, prime, Q );
+  return( Q.Epimorphism );
+  end );
+
+############################################################################
+##
+#M  NqEpimorphismPQuotient ( <LpGroup>, <prime>, <class> ) . . . . . . 
+## 
+## computes the natural homomorphism on the <class> p-quotient of the 
+## invariant <LpGroup>, if the latter has already some quotient system
+## stored as attribute.
+##
+InstallOtherMethod( NqEpimorphismPQuotient,
+  "For an invariant LpGroup with quotient system, a prime number, and a positive integer",
   true,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasPQuotientSystems,
     IsPosInt,
     IsPosInt ], 0,
   function( G, prime, c )
   local Q,    # current quotient system
-        QS,   # old quotient system
         H,    # the nilpotent quotient of <G>
         i,    # loop variable
         weights, 
-        largestQuot,
         time,	# runtime
         j;    # nilpotency class
 
-  Print( "Running method with a qsystem 1... \n" );
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
+  fi;
+
+  # check if there's already a quotient system w.r.t. this prime number
   i := Position( PQuotientSystems( G )[1], prime );
   if i = fail then
-    Print( "Try next method...\n" );
     TryNextMethod();
   fi;
 
   # known quotient system of <G>
   Q := PQuotientSystems( G )[2][i];
  
-  # p-class
+  # p-class of the quotient system
   j := Maximum( Q.Weights );
  
-  if c = j then 
-    # the given nilpotency class <j> is already known
-    H := PcpGroupByCollectorNC( Q.Pccol );
-    SetExponentPCentralSeries( H, LPRES_ExponentPCentralSeries( Q ) );
-
-    return( H );
-  elif c<j then
-    # the given nilpotency class <c> is already computed 
-    QS := SmallerPQuotientSystem( Q, c );
-
-    # build the nilpotent quotient with lcs
-    H := PcpGroupByCollectorNC( QS.Pccol );
-    SetExponentPCentralSeries( H, LPRES_ExponentPCentralSeries(QS) );
-
-    return(H);
-  else
-    # check if there's already a largest p-quotient
-    if HasLargestPQuotients(G) then
-      j := Position( LargestPQuotients(G)[1], prime );
-      if j <> fail then 
-        return( LargestPQuotients(G)[2][j] );
-      fi;
-    fi;
-
-    # extend the largest known quotient system
-    for i in [j+1..c] do
-      weights := ShallowCopy( Q.Weights );
-
-      time := Runtime();
-
-      # extend the quotient system of G/\gamma_i to G/\gamma_{i+1}
-      Q := ExtendPQuotientSystem( Q );
-
-      if Length( Q.Weights ) - Length( weights ) > InfoLPRES_MAX_GENS then 
-        Info( InfoLPRES, 1, "Class ", Maximum(Q.Weights), ": ", Length(Q.Weights)-Length(weights), " generators");
-      else
-        Info( InfoLPRES, 1, "Class ", Maximum(Q.Weights), ": ", Length(Q.Weights)-Length(weights),
-      	       " generators with relative orders: ", RelativeOrders(Q.Pccol){[Length(weights)+1..Length(Q.Weights)]});
-      fi;
-      Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
-
-      # if we couldn't extend the quotient system any more, we're finished
-      if weights = Q.Weights then 
-        largestQuot := [ [], [] ];
-        if HasLargestPQuotients( G ) then 
-          Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
-          Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
-        fi;
-    
-        i := Position( largestQuot[1], prime ); 
-        if i <> fail then 
-          largestQuot[2][i] := PcpGroupByCollectorNC( Q.Pccol );
-        else 
-          Add( largestQuot[1], prime );
-          Add( largestQuot[2], PcpGroupByCollectorNC( Q.Pccol ) );
-        fi;
-        ResetFilterObj( G, LargestPQuotients );
-        SetLargestPQuotients( G, largestQuot );
-
-        break;
-      fi;
-    od;
-
-    # store the quotient systems
-    QS := [ [], [] ];
-    if HasPQuotientSystems( G ) then 
-      Append( QS[1], ShallowCopy( PQuotientSystems(G)[1] ) );
-      Append( QS[2], ShallowCopy( PQuotientSystems(G)[2] ) );
-    fi;
-
-    i := Position( QS[1], prime );
-    if i = fail then
-      Add( QS[1], prime );
-      Add( QS[2], Q );
-    else
-      QS[2][i] := Q;
-    fi;
-    ResetFilterObj( G, PQuotientSystems );
-    SetPQuotientSystems( G, QS );
-
-    # build the nilpotent quotient with its lower central series attribute
-    H := PcpGroupByCollectorNC( Q.Pccol );
-    SetExponentPCentralSeries(H,LPRES_ExponentPCentralSeries(Q));
-
-    return( H );
+  if c = j then  
+    # requested this quotient system
+    return( Q.Epimorphism );
+  elif c<j then 
+    # the quotient system is already there
+    return( SmallerPQuotientSystem( Q, c ).Epimorphism );
   fi;
+
+  # check if there's already a largest p-quotient
+  if HasLargestPQuotients(G) then
+    i := Position( LargestPQuotients(G)[1], prime );
+    if i <> fail then 
+      return( LargestPQuotients(G)[2][i].Epimorphism );
+    fi;
+  fi;
+
+  # extend the largest known quotient system
+  for i in [j+1..c] do
+    weights := ShallowCopy( Q.Weights );
+
+    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
+    time := Runtime();
+    Q := ExtendPQuotientSystem( Q );
+    Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
+
+    # if we couldn't extend the quotient system any more, we're finished
+    if weights = Q.Weights then 
+      LPRES_StoreLargestPQuotient( G, prime, Q );
+      Info(InfoLPRES,1,"The group has a maximal p-quotient of p-class ", Maximum(Q.Weights) );
+      break;
+    fi;
+  od;
+
+  # store this quotient system as an attribute of the group G
+  LPRES_StoreQuotientSystems( G, prime, Q );
+  return( Q.Epimorphism );
   end );
 
 ############################################################################
 ##
-#M  NqPQuotient ( <LpGroup>, <int>, <int> ) . . for invariant LpGroups 
-##
-## computes a weighted nilpotent presentation for the p-class-<int> quotient
+#M  NqEpimorphismPQuotient ( <LpGroup>, <prime> ) . . . . . . . . . .
+## 
+## attempts to compute the natural homomorphism onto the largest p-quotient
 ## of the invariant <LpGroup>.
+## This method only terminates if <LpGroup> has a largest p-quotient.
 ##
-InstallOtherMethod( NqPQuotient,
-  "for an invariantly L-presented group and a positive integer",
+InstallOtherMethod( NqEpimorphismPQuotient,
+  "For an invariant LpGroup and a prime number",
   true,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
-    IsPosInt,
     IsPosInt ], 0,
-  function( G, prime, class )
-  local Q,           # current quotient system
-	       H,           # the nilpotent quotient of <G>
-	       OldWeights, 	# old weights quotient system
-	       i,	          # loop variable
-        QS,          # quotient systems
-        largestQuot, # largest quotient 
-	       time;	       # runtime
+  function( G, prime )
+  local Q,	   # current quotient system
+        H,    # largest nilpotent quotient of <G>
+        QS,   # old quotient system
+        i,	   # loop variable
+        weights,
+        time;	# runtime
 
-  Print( "Simple version...\n" );
   if not IsPrime( prime ) then
     Error( "<prime> should be a prime number" );
   fi;
 
-  time := Runtime();
-
   # Compute a confluent nilpotent presentation for G/G'
+  time:=Runtime();
   Q := InitPQuotientSystem( G, prime );
+  Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
 
-  # store the largest quotient and its quotient sysstem if it's trivial
+  # store the largest quotient if this one is trivial
   if Length( Q.Weights ) = 0 then 
-    largestQuot := [ [], [] ];
-    if HasLargestPQuotients( G ) then 
-      Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
-      Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
-    fi;
-
-    i := Position( largestQuot[1], prime ); 
-    if i <> fail then 
-      largestQuot[2][i] := PcpGroupByCollectorNC( Q.Pccol );
-    else 
-      Add( largestQuot[1], prime );
-      Add( largestQuot[2], PcpGroupByCollectorNC( Q.Pccol ) );
-    fi;
-    ResetFilterObj( G, LargestPQuotients );
-    SetLargestPQuotients( G, largestQuot );
-
-    # store the quotient systems
-    QS := [ [], [] ];
-    if HasPQuotientSystems( G ) then 
-      Append( QS[1], ShallowCopy( PQuotientSystems(G)[1] ) );
-      Append( QS[2], ShallowCopy( PQuotientSystems(G)[2] ) );
-    fi;
-
-    i := Position( QS[1], prime );
-    if i = fail then
-      Add( QS[1], prime );
-      Add( QS[2], Q );
-    else
-      QS[2][i] := Q;
-    fi;
-    ResetFilterObj( G, PQuotientSystems );
-    SetPQuotientSystems( G, QS );
+    LPRES_StoreLargestPQuotient( G, prime, Q );
+    LPRES_StoreQuotientSystems( G, prime, Q );
+    return( Q.Epimorphism );
+  fi;
+  
+  repeat
+    weights := ShallowCopy(Q.Weights);
     
-    return( PcpGroupByCollectorNC( Q.Pccol ) );
-  fi;
-
-  if Length( Q.Weights ) > InfoLPRES_MAX_GENS then
-    Info( InfoLPRES, 1, "Class ", 1, ": ", Length( Q.Weights ), " generators" );
-  else
-    Info( InfoLPRES, 1, "Class ", 1, ": ", Length(Q.Weights),
-          " generators with relative orders: ", RelativeOrders( Q.Pccol ) );
-  fi;
-  Info( InfoLPRES, 2, "Runtime for this step ",  StringTime(Runtime()-time));
-  
-  for i in [1..class-1] do 
-    # copy the old quotient system to compare with the extended qs.
-    OldWeights := ShallowCopy(Q.Weights);
-
-    # runtime
-    time:=Runtime();
-
     # extend the quotient system of G/\gamma_i to G/\gamma_{i+1}
-    Q := ExtendPQuotientSystem( Q );
-    if Q = fail then 
-      return(fail);
-    fi;
-   
-    # if we couldn't extend the quotient system any more, we're finished
-    if OldWeights = Q.Weights then 
-      Info( InfoLPRES, 1, "Found a maximal ", prime, "-quotient of the group" );
-      Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
-      break;
-    fi;
-
-    if Length(Q.Weights)-Length(OldWeights) > InfoLPRES_MAX_GENS then 
-      Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(OldWeights), " generators");
-    else
-      Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(OldWeights),
-           " generators with relative orders: ", RelativeOrders(Q.Pccol){[Length(OldWeights)+1..Length(Q.Weights)]});
-    fi;
+    time := Runtime();
+    Q:=ExtendPQuotientSystem(Q);
     Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-  od;
-  
-  # store the largest known nilpotent quotient of <G>
-  QS := [ [], [] ];
-  if HasPQuotientSystems( G ) then 
-    Append( QS[1], ShallowCopy( PQuotientSystems( G )[1] ) );
-    Append( QS[2], ShallowCopy( PQuotientSystems( G )[2] ) );
-  fi;
-  ResetFilterObj( G, PQuotientSystems );
 
-  i := Position( QS[1], prime ); 
-  if i <> fail then 
-    QS[2][i] := Q;
-  else 
-    Add( QS[1], prime );
-    Add( QS[2], Q );
-  fi;
-  SetPQuotientSystems( G, QS );
+  until weights = Q.Weights;
+  Info(InfoLPRES,1,"The group has a maximal p-quotient of p-class ", Maximum(Q.Weights) );
 
-  # build the nilpotent quotient with lcs
-  H := PcpGroupByCollectorNC( Q.Pccol );
-  SetExponentPCentralSeries(H,LPRES_ExponentPCentralSeries(Q));
-
-  return( H );
-  end);
+  LPRES_StoreLargestPQuotient( G, prime, Q );
+  LPRES_StoreQuotientSystems( G, prime, Q );
+  return( Q.Epimorphism );
+  end );
 
 ############################################################################
 ##
-#M  NqPQuotient ( <LpGroup> ) . . . . . . for invariant LpGroups
+#M  NqEpimorphismPQuotient ( <LpGroup>, <int p>, <int c> ) . . for invariant LpGroups
+## 
+## attempts to compute the natural homomorphism onto the largest p-quotient
+## of the invariant <LpGroup> if the latter has a quotient system as attribute.
+## This method only terminates if <LpGroup> has a largest p-quotient. 
 ##
-## attempts to compute the largest nilpotent quotient of <LpGroup>.
-## Note that this method only terminates if <LpGroup> has a largest 
-## nilpotent quotient.
-##
-InstallOtherMethod( NqPQuotient,
-  "for an invariantly L-presented group with a quotient system",
+InstallOtherMethod( NqEpimorphismPQuotient,
+  "For an invariant Lpgroup with a quotient system and a prime number",
   true,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasPQuotientSystems,
     IsPosInt ], 0,
@@ -277,7 +264,6 @@ InstallOtherMethod( NqPQuotient,
         QS,   # old quotient system
         time,	# runtime
         weights,
-        largestQuot,
         i;	   # loop variable
 
   if not IsPrime( prime ) then
@@ -288,14 +274,13 @@ InstallOtherMethod( NqPQuotient,
   if HasLargestPQuotients(G) then 
     i := Position( LargestPQuotients(G)[1], prime );
     if i <> fail then 
-      return( LargestPQuotients(G)[2][i] );
+      return( LargestPQuotients(G)[2][i].Epimorphism );
     fi;
   fi;
 
-  Print( "Running method with a qsystem 2... \n" );
+  # check if we already have a quotient system w.r.t. this prime number
   i := Position( PQuotientSystems( G )[1], prime );
   if i = fail then
-    Print( "Try next method...\n" );
     TryNextMethod();
   fi;
 
@@ -303,218 +288,40 @@ InstallOtherMethod( NqPQuotient,
   Q := PQuotientSystems( G )[2][i];
   
   repeat
-    weights:=ShallowCopy(Q.Weights);
+    weights := ShallowCopy(Q.Weights);
     
-    time := Runtime();
-
     # extend the quotient system of G/\gamma_i to G/\gamma_{i+1}
+    time := Runtime();
     Q := ExtendPQuotientSystem(Q);
-  
-    if weights <> Q.Weights then 
-      if Length( Q.Weights ) - Length( weights ) > InfoLPRES_MAX_GENS then
-        Info( InfoLPRES, 1, "Class ", Maximum(Q.Weights), ": ", Length(Q.Weights)-Length(weights), " generators");
-      else
-        Info( InfoLPRES, 1, "Class ", Maximum(Q.Weights), ": ", Length(Q.Weights)-Length(weights),
-             " generators with relative orders: ", RelativeOrders(Q.Pccol){[Length(weights)+1..Length(Q.Weights)]});
-      fi; 
-    else 
-      Info(InfoLPRES,1,"The group has a maximal nilpotent quotient of class ", Maximum(Q.Weights) );
-    fi;
     Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-
+  
   until weights = Q.Weights;
+  Info(InfoLPRES,1,"The group has a maximal p-quotient of p-class ", Maximum(Q.Weights) );
 
-  largestQuot := [ [], [] ];
-  if HasLargestPQuotients( G ) then 
-    Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
-    Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
-  fi;
-
-  i := Position( largestQuot[1], prime ); 
-  if i <> fail then 
-    largestQuot[2][i] := PcpGroupByCollectorNC( Q.Pccol );
-  else 
-    Add( largestQuot[1], prime );
-    Add( largestQuot[2], PcpGroupByCollectorNC( Q.Pccol ) );
-  fi;
-  ResetFilterObj( G, LargestPQuotients );
-  SetLargestPQuotients( G, largestQuot );
-
-  # store the quotient systems
-  QS := [ [], [] ];
-  if HasPQuotientSystems( G ) then 
-    Append( QS[1], ShallowCopy( PQuotientSystems(G)[1] ) );
-    Append( QS[2], ShallowCopy( PQuotientSystems(G)[2] ) );
-  fi;
-
-  i := Position( QS[1], prime );
-  if i = fail then
-    Add( QS[1], prime );
-    Add( QS[2], Q );
-  else
-    QS[2][i] := Q;
-  fi;
-  ResetFilterObj( G, PQuotientSystems );
-  SetPQuotientSystems( G, QS );
-
-  # build the nilpotent quotient with lcs
-  H:=PcpGroupByCollectorNC(Q.Pccol);
-  SetExponentPCentralSeries(H,LPRES_ExponentPCentralSeries(Q));
-
-  return(H);
-  end);
+  LPRES_StoreLargestPQuotient( G, prime, Q );
+  LPRES_StoreQuotientSystems( G, prime, Q );
+  return( Q.Epimorphism );
+  end );
 
 ############################################################################
 ##
-#M  PQuotient( <LpGroup> ) . . . . . . for invariant LpGroups
-##
-## determines the largest nilpotent quotient of <LpGroup> if it 
-## has a nilpotent quotient system as an attribute.
-## Note that this method only terminates if <LpGroup> has a largest 
-## nilpotent quotient.
-##
-InstallOtherMethod( NqPQuotient,
-  "for an invariantly L-presented group",
-  true,
-  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
-    IsPosInt ], 0,
-  function( G, prime )
-  local Q,	   # current quotient system
-        H,    # largest nilpotent quotient of <G>
-        QS,   # old quotient system
-        i,	   # loop variable
-        weights,
-        largestQuot,
-        time;	# runtime
-
-  if not IsPrime( prime ) then
-    Error( "<prime> should be a prime number" );
-  fi;
-
-  time:=Runtime();
-
-  # Compute a confluent nilpotent presentation for G/G'
-  Q := InitPQuotientSystem( G, prime );
-
-  # store the largest quotient if this one is trivial
-  if Length( Q.Weights ) = 0 then 
-    largestQuot := [ [], [] ];
-    if HasLargestPQuotients( G ) then 
-      Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
-      Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
-    fi;
-    ResetFilterObj( G, LargestPQuotients );
-
-    i := Position( largestQuot[1], prime ); 
-    if i <> fail then 
-      largestQuot[2][i] := PcpGroupByCollectorNC( Q.Pccol );
-    else 
-      Add( largestQuot[1], prime );
-      Add( largestQuot[2], PcpGroupByCollectorNC( Q.Pccol ) );
-    fi;
-    SetLargestPQuotients( G, largestQuot );
-
-    # reset the quotient system
-    QS := [ [], [] ];
-    if HasPQuotientSystems( G ) then 
-      Append( QS[1], ShallowCopy( PQuotientSystems( G )[1] ) );
-      Append( QS[2], ShallowCopy( PQuotientSystems( G )[2] ) );
-    fi;
-    ResetFilterObj( G, PQuotientSystems );
-
-    i := Position( QS[1], prime ); 
-    if i <> fail then 
-      QS[2][i] := Q;
-    else 
-      Add( QS[1], prime );
-      Add( QS[2], Q );
-    fi;
-    SetPQuotientSystems( G, QS );
-   
-    return( PcpGroupByCollectorNC( Q.Pccol ) );
-  fi;
-
-  if Length(Q.Weights) > InfoLPRES_MAX_GENS then 
-    Info(InfoLPRES,1,"Class ",1,": ", Length(Q.Weights), " generators");
-  else
-    Info(InfoLPRES,1,"Class ",1,": ", Length(Q.Weights),
-               " generators with relative orders: ", RelativeOrders(Q.Pccol));
-  fi;
-  Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-  
-  repeat
-    weights:=ShallowCopy(Q.Weights);
-    
-    time := Runtime();
-    # extend the quotient system of G/\gamma_i to G/\gamma_{i+1}
-    Q:=ExtendPQuotientSystem(Q);
-  
-    if weights <> Q.Weights then 
-      if Length(Q.Weights)-Length(weights) > InfoLPRES_MAX_GENS then
-        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(weights), " generators");
-      else
-        Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(weights),
-             " generators with relative orders: ", RelativeOrders(Q.Pccol){[Length(weights)+1..Length(Q.Weights)]});
-      fi;
-    fi;
-    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-
-  until weights = Q.Weights;
-
-  # store the largest quotient if this one is trivial
-  largestQuot := [ [], [] ];
-  if HasLargestPQuotients( G ) then 
-    Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
-    Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
-  fi;
-  ResetFilterObj( G, LargestPQuotients );
-
-  i := Position( largestQuot[1], prime ); 
-  if i <> fail then 
-    largestQuot[2][i] := PcpGroupByCollectorNC( Q.Pccol );
-  else 
-    Add( largestQuot[1], prime );
-    Add( largestQuot[2], PcpGroupByCollectorNC( Q.Pccol ) );
-  fi;
-  SetLargestPQuotients( G, largestQuot );
-
-  # store the quotient systems
-  QS := [ [], [] ];
-  if HasPQuotientSystems( G ) then 
-    Append( QS[1], ShallowCopy( PQuotientSystems(G)[1] ) );
-    Append( QS[2], ShallowCopy( PQuotientSystems(G)[2] ) );
-  fi;
-
-  i := Position( QS[1], prime );
-  if i = fail then
-    Add( QS[1], prime );
-    Add( QS[2], Q );
-  else
-    QS[2][i] := Q;
-  fi;
-  ResetFilterObj( G, PQuotientSystems );
-  SetPQuotientSystems( G, QS );
-
-  # build the nilpotent quotient with lcs
-  H:=PcpGroupByCollectorNC(Q.Pccol);
-  SetExponentPCentralSeries(H,LPRES_ExponentPCentralSeries(Q));
-
-  return(H);
-  end);
-
-############################################################################
-##
-#M  NqEpimorphismPQuotient( <LpGroup>, <int>, <int> ) . . . . . . for invariant LpGroups
-##
+#M  NqEpimorphismPQuotient( <LpGroup>, <prime>, <class> ) . . . . . .
+## 
+## computes the natural homomorphism on the <class> p-quotient of  
+## <LpGroup>.
 ##
 InstallOtherMethod( NqEpimorphismPQuotient,
-  "for an L-presented group",
+  "For an (arbitrary) LpGroup, a prime number, and a positive integer",
   true,
   [ IsLpGroup,
     IsPosInt,
     IsPosInt ], 0,
   function( G, prime, c )
   local Grp, epi, pi, H, N, hom;
+
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
+  fi;
 
   # work with the underlying invariant LpGroup which maps onto G
   Grp := UnderlyingInvariantLPresentation( G );
@@ -530,8 +337,7 @@ InstallOtherMethod( NqEpimorphismPQuotient,
   H := Range( epi );
 
   # natural homomorphisms from the free group onto the LpGroup
-  pi := GroupHomomorphismByImages( FreeGroupOfLpGroup( Grp ),
-                                   Grp,
+  pi := GroupHomomorphismByImages( FreeGroupOfLpGroup( Grp ), Grp,
                                    GeneratorsOfGroup( FreeGroupOfLpGroup( Grp ) ),
                                    GeneratorsOfGroup( Grp ) );
   
@@ -541,431 +347,190 @@ InstallOtherMethod( NqEpimorphismPQuotient,
   hom := NaturalHomomorphismByNormalSubgroup( H, N );
 
   # return the factor group
-  return( GroupHomomorphismByImagesNC( G, 
-                                       Range( hom ),
+  return( GroupHomomorphismByImagesNC( G, Range( hom ),
                                        GeneratorsOfGroup( G ), 
                                        List( GeneratorsOfGroup( G ), x -> ( ( UnderlyingElement( x )^pi ) ^ epi ) ^ hom ) ) );
   end);
 
 ############################################################################
 ##
-#M  NqEpimorphismPQuotient( <LpGroup>, <int>, <int> ) . . . . . . for invariant LpGroups
+#M  NqPQuotient ( <LpGroup>, <prime>, <class> ) . . . . . . . . . . .
+##
+## computes the <class> p-quotient of <LpGroup>.
 ##
 InstallOtherMethod( NqPQuotient,
-  "for an L-presented group",
+  "For an LpGroup, a prime number, and a positive integer",
   true,
   [ IsLpGroup,
     IsPosInt,
     IsPosInt ], 0,
   function( G, prime, c )
   return( Range( NqEpimorphismPQuotient( G, prime, c ) ) );
+  end);
+
+############################################################################
+##
+#M  NqPQuotient( <LpGroup>, <prime> ) . . . . . . 
+## 
+## attempts to compute the largest p-quotient of <LpGroup>.
+## This method terminates if and only if <LpGroup> admits such largest 
+## p-quotient.
+##
+InstallOtherMethod( NqPQuotient,
+  "For an LpGroup and a prime number",
+  true,
+  [ IsLpGroup,
+    IsPosInt ], 0,
+  function( G, prime )
+  return( Range( NqEpimorphismPQuotient( G, prime ) ) );
+  end);
+
+############################################################################
+##
+#M  NqPQuotient( <FpGroup>, <prime>, <class> )
+## 
+## computes the <class> p-quotient of <FpGroup>.
+##
+InstallOtherMethod( NqPQuotient,
+  "For an FpGroup, a prime number, and a positive integer (using the LPRES-package)", true,
+  [ IsFpGroup, IsPosInt, IsPosInt ], -1, # give priority to ANUPQ package
+  function( G, prime, c )
+
+  if not IsPrime( prime ) then 
+    Error( "<prime> must be a prime number" );
+  fi;
+
+  return( Range( NqEpimorphismPQuotient( G, prime, c ) ) );
+  end);
+
+############################################################################
+##
+#M  NqPQuotient( <PcpGroup>, <prime>, <class> )
+## 
+## computes the <class> p-quotient of <PcpGroup>.
+##
+InstallOtherMethod( NqPQuotient,
+  "For a PcpGroup, a prime number, and a positive integer (using the LPRES-package)", true,
+  [ IsPcpGroup, IsPosInt, IsPosInt ], -1, # give priority to ANUPQ package
+  function( G, prime, c )
+  local iso;
+
+  if not IsPrime( prime ) then 
+    Error( "<prime> must be a prime number" );
+  fi;
+
+  iso := IsomorphismFpGroup( G );
+  return( Range( NqEpimorphismPQuotient( Range( iso ), prime, c ) ) );
+  end);
+
+############################################################################
+##
+#M  NqPQuotient( <FpGroup>, <prime> )
+##
+## attempts to compute the largest p-quotient of <FpGroup>.
+## This method terminates if and only if <FpGroup> admits such largest 
+## p-quotient.
+##
+InstallOtherMethod( NqPQuotient,
+  "For an FpGroup and a prime number (using the LPRES-package)", true,
+  [ IsFpGroup, IsPosInt ], -1,           # give priority to ANUPQ package
+  function( G, prime )
+
+  if not IsPrime( prime ) then 
+    Error( "<prime> must be a prime number" );
+  fi;
+
+  return( Range( NqEpimorphismPQuotient( G, prime ) ) );
   end );
 
 ############################################################################
 ##
-#M  NqEpimorphismPQuotient ( <LpGroup>, <int>, <int> )
+#M  NqPQuotient( <PcpGroup>, <prime> )
 ##
-## computes an epimorphism from <LpGroup> onto its p-class-<int> quotient 
-## if a nilpotent quotient system of <LpGroup> is already known.
+## attempts to compute the largest p-quotient of <PcPGroup>.
+## This method terminates if and only if <FpGroup> admits such largest 
+## p-quotient.
 ##
-InstallOtherMethod( NqEpimorphismPQuotient,
-  "for an invariantly L-presented group with a quotient system and an integer",
-  true,
-  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasPQuotientSystems,
-    IsPosInt,
-    IsPosInt], 0,
-  function( G, prime, c )
-  local Q,    # current quotient system
-        QS,   # old quotient system
-      	 i,    # loop variable
-        weights,
-        largestQuot,
-        time,	# runtime
-        n;    # nilpotency class
-
-  i := Position( PQuotientSystems( G )[1], prime );
-  if i = fail then 
-    Print( "Try Next Method...\n" );
-    TryNextMethod();
-  fi;
-
-  # known quotient system of <G>
-  Q := PQuotientSystems( G )[2][i];
- 
-  # if the Frattini quotient is trivial
-  if IsEmpty( Q.Weights ) then 
-    return( Q.Epimorphism );
-  fi;
-
-  # p class of <Q>
-  n := Maximum( Q.Weights );
- 
-  if c = n then 
-    # the given nilpotency class <n> is already known
-    return( Q.Epimorphism );
-  elif c<n then
-    # the given nilpotency class <c> is already computed 
-    QS := SmallerPQuotientSystem(Q,c);
-    return( QS.Epimorphism );
-  else
-    if HasLargestPQuotients(G) then 
-      i := Position( LargestPQuotient( G ), prime );
-      if i <> fail then
-        Info( InfoLPRES, 1, "Largest nilpotent quotient of class ", NilpotencyClassOfGroup(LargestPQuotient(G)[2][i]));
-        return(Q.Epimorphism);
-      fi;
-    fi;
-
-    # extend the largest known quotient system
-    for i in [n+1..c] do
-      weights:=ShallowCopy(Q.Weights);
-
-      time := Runtime();
-      # extend the quotient system of G/\gamma_i to G/\gamma_{i+1}
-      Q:=ExtendPQuotientSystem(Q);
-  
-      # if we couldn't extend the quotient system any more, we're finished
-      if weights = Q.Weights then 
-        # store the largest quotient if this one is trivial
-        largestQuot := [ [], [] ];
-        if HasLargestPQuotients( G ) then 
-          Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
-          Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
-        fi;
-        ResetFilterObj( G, LargestPQuotients );
-      
-        i := Position( largestQuot[1], prime ); 
-        if i <> fail then 
-          largestQuot[2][i] := PcpGroupByCollectorNC( Q.Pccol );
-        else 
-          Add( largestQuot[1], prime );
-          Add( largestQuot[2], PcpGroupByCollectorNC( Q.Pccol ) );
-        fi;
-        SetLargestPQuotients( G, largestQuot );
-
-        Info(InfoLPRES,1,"Largest nilpotent quotient of class ", Maximum(Q.Weights)); 
-        break;
-      else 
-        if Length(Q.Weights)-Length(weights) > InfoLPRES_MAX_GENS then 
-          Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(weights), " generators");
-        else
-          Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(weights),
-               " generators with relative orders: ", RelativeOrders(Q.Pccol){[Length(weights)+1..Length(Q.Weights)]});
-        fi;
-      fi;
-      Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-    od;
-
-    # store the quotient systems
-    QS := [ [], [] ];
-    if HasPQuotientSystems( G ) then 
-      Append( QS[1], ShallowCopy( PQuotientSystems(G)[1] ) );
-      Append( QS[2], ShallowCopy( PQuotientSystems(G)[2] ) );
-    fi;
-  
-    i := Position( QS[1], prime );
-    if i = fail then
-      Add( QS[1], prime );
-      Add( QS[2], Q );
-    else
-      QS[2][i] := Q;
-    fi;
-    ResetFilterObj( G, PQuotientSystems );
-    SetPQuotientSystems( G, QS );
-
-    return(Q.Epimorphism); 
-  fi;
-  end);
-
-############################################################################
-##
-#M  NqEpimorphismPQuotient ( <LpGroup>, <int> )
-##
-## computes an epimorphism from <LpGroup> onto its class-<int> quotient.
-##
-InstallOtherMethod( NqEpimorphismPQuotient,
-  "for an invariantly L-presented group",
-  true,
-  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
-    IsPosInt ], 0,
+InstallOtherMethod( NqPQuotient,
+  "For a PcpGroup and a prime number (using the LPRES-package)", true,
+  [ IsPcpGroup, IsPosInt ], -1,           # give priority to ANUPQ package
   function( G, prime )
-  local i,  # loop variable
-        H; 	# nilpotent quotient <G>/gamma_<c>(<G>)
-  
-  Print( "NqEpimorphismsPQuotient - version\n" );
+  local iso;
+
   if not IsPrime( prime ) then 
-    Error( "<prime> should be a prime number\n" );
+    Error( "<prime> must be a prime number" );
   fi;
 
-  # compute the nilpotent quotient of <G>
-  H := NqPQuotient( G, prime );
-   
-  i := Position( PQuotientSystems( G )[1], prime );
-  if i = fail then 
-    Error( "Should not happen?" );
-  fi;
-
-  return( PQuotientSystems( G )[2][i].Epimorphism );
-  end);
-
-############################################################################
-##
-#M  NqEpimorphismPQuotient ( <LpGroup>, <int>, <int> )
-##
-## computes an epimorphism from <LpGroup> onto its p-class-<int> quotient 
-## if a nilpotent quotient system of <LpGroup> is already known.
-##
-InstallOtherMethod( NqEpimorphismPQuotient,
-  "for an invariantly L-presented group with a quotient system and an integer",
-  true,
-  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasPQuotientSystems,
-    IsPosInt ], 0,
-  function( G, prime )
-  local Q,    # current quotient system
-        QS,   # old quotient system
-      	 i,    # loop variable
-        weights,
-        largestQuot,
-        time,	# runtime
-        n;    # nilpotency class
-
-  i := Position( PQuotientSystems( G )[1], prime );
-  if i = fail then 
-    Print( "Try Next Method...\n" );
-    TryNextMethod();
-  fi;
-
-  # known quotient system of <G>
-  Q := PQuotientSystems( G )[2][i];
- 
-  # if the Frattini quotient is trivial
-  if IsEmpty( Q.Weights ) then 
-    return( Q.Epimorphism );
-  fi;
-
-  # p class of <Q>
-  n := Maximum( Q.Weights );
- 
-  if HasLargestPQuotients(G) then 
-    i := Position( LargestPQuotient( G ), prime );
-    if i <> fail then
-      Info( InfoLPRES, 1, "Largest nilpotent quotient of class ", NilpotencyClassOfGroup(LargestPQuotient(G)[2][i]));
-      return(Q.Epimorphism);
-    fi;
-  fi;
-
-  # extend the largest known quotient system
-  repeat
-    weights:=ShallowCopy(Q.Weights);
-
-    time := Runtime();
-    # extend the quotient system of G/\gamma_i to G/\gamma_{i+1}
-    Q:=ExtendPQuotientSystem(Q);
-
-    if Length(Q.Weights)-Length(weights) > InfoLPRES_MAX_GENS then 
-      Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(weights), " generators");
-    else
-      Info(InfoLPRES,1,"Class ",Maximum(Q.Weights),": ", Length(Q.Weights)-Length(weights),
-         " generators with relative orders: ", RelativeOrders(Q.Pccol){[Length(weights)+1..Length(Q.Weights)]});
-    fi;
-    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-  until weights = Q.Weights;
-
-  # store the largest quotient if this one is trivial
-  largestQuot := [ [], [] ];
-  if HasLargestPQuotients( G ) then 
-    Append( largestQuot[1], ShallowCopy( LargestPQuotients( G )[1] ) );
-    Append( largestQuot[2], ShallowCopy( LargestPQuotients( G )[2] ) );
-  fi;
-  ResetFilterObj( G, LargestPQuotients );
-
-  i := Position( largestQuot[1], prime ); 
-  if i <> fail then 
-    largestQuot[2][i] := PcpGroupByCollectorNC( Q.Pccol );
-  else 
-    Add( largestQuot[1], prime );
-    Add( largestQuot[2], PcpGroupByCollectorNC( Q.Pccol ) );
-  fi;
-  SetLargestPQuotients( G, largestQuot );
-
-  Info(InfoLPRES,1,"Largest nilpotent quotient of class ", Maximum(Q.Weights)); 
-
-  # store the quotient systems
-  QS := [ [], [] ];
-  if HasPQuotientSystems( G ) then 
-    Append( QS[1], ShallowCopy( PQuotientSystems(G)[1] ) );
-    Append( QS[2], ShallowCopy( PQuotientSystems(G)[2] ) );
-  fi;
-
-  i := Position( QS[1], prime );
-  if i = fail then
-    Add( QS[1], prime );
-    Add( QS[2], Q );
-  else
-    QS[2][i] := Q;
-  fi;
-  ResetFilterObj( G, PQuotientSystems );
-  SetPQuotientSystems( G, QS );
-
-  return(Q.Epimorphism); 
-
-  end);
-
-############################################################################
-##
-#M  NqEpimorphismPQuotient ( <LpGroup>, <int> )
-##
-## computes an epimorphism from <LpGroup> onto its class-<int> quotient.
-##
-InstallOtherMethod( NqEpimorphismPQuotient,
-  "for an invariantly L-presented group",
-  true,
-  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
-    IsPosInt,
-    IsPosInt], 0,
-  function( G, prime, c )
-  local i,  # loop variable
-        H; 	# nilpotent quotient <G>/gamma_<c>(<G>)
-  
-  Print( "NqEpimorphismsPQuotient - simple version\n" );
-  if not IsPrime( prime ) then 
-    Error( "<prime> should be a prime number\n" );
-  fi;
-
-  # compute the nilpotent quotient of <G>
-  H := NqPQuotient( G, prime, c );
-   
-  i := Position( PQuotientSystems( G )[1], prime );
-  if i = fail then 
-    Error( "Should not happen?" );
-  fi;
-
-  # note that we've computed precisely the (ATMOST) class c quotient 
-  return( PQuotientSystems( G )[2][i].Epimorphism );
-  end);
-
-
-############################################################################
-##
-#F  LPRES_ExponentPCentralSeries( <QS> )
-##
-## computes the lower central series of a nilpotent quotient given by a 
-## quotient system <QS>.
-##
-InstallGlobalFunction( LPRES_ExponentPCentralSeries,
-  function(Q)
-  local weights,	# weights-function of <Q>
-       	i,		     # loop variable
-       	c, 		    # nilpotency class of <Q>
-       	H,		     # nilpotent presentation corr. to <Q>
-       	gens,	   # generators of <H>
-        pcs;		   # lower central series of <H>
-
-  # nilpotent presentation group corr. to <Q>
-  H := PcpGroupByCollectorNC( Q.Pccol );
-
-  # generators of <H>
-  gens := GeneratorsOfGroup( H );
-
-  # weights function of the given quotient system
-  weights := Q.Weights;
-
-  # nilpotency class of <Q>
-  c := Maximum(weights);
-
-  # build the exponent-p central series
-  pcs:=[];
-  pcs[c+1] := SubgroupByIgs(H,[]);
-  pcs[1]   := H;
- 
-  for i in [2..c] do
-    # the exponent-p central series as subgroups by an induced generating system
-    # with weights at least <i>
-    pcs[i] := SubgroupByIgs( H, gens{Filtered([1..Length(gens)],x->weights[x]>=i)} );
-  od;
-
-  return( pcs );
-  end);
-
-############################################################################
-##
-#A  PQuotients( <LpGroup> ) .  .  .  .  . for invariant LpGroups
-##
-# InstallMethod( PQuotients,
-#   "for an invariantly L-presented group with a quotient system",
-#   true,
-#   [ IsLpGroup and HasPQuotientSystems ], 0,
-#   function ( G )
-#   local c;	# nilpotency class of the known quotient system
-#    
-#   c:=Maximum(PQuotientSystems(G).Weights); 
-#   return( List([1..c], i -> NqEpimorphismPQuotient(G,i) ) );
-#   end);
-
-############################################################################
-##
-#M  PQuotient( <FpGroup> )
-##
-# InstallOtherMethod( PQuotient,
-#   "for an FpGroup using the LPRES-package", true,
-#   [ IsFpGroup, IsPosInt ], -1, # give priority to NQ package
-#   function( G, c )
-#   return( PQuotient( Range( IsomorphismLpGroup( G ) ), c ) );
-#   end);
-# 
-# InstallOtherMethod( PQuotient,
-#   "for an FpGroup using the LPRES-package", true,
-#   [ IsFpGroup ], -1, # give priority to NQ package
-#   G -> PQuotient( Range( IsomorphismLpGroup( G ) ) ) );
-
-############################################################################
-##
-#M  NqEpimorphismPQuotient( <FpGroup> )
-##
-# InstallOtherMethod( NqEpimorphismPQuotient,
-#   "for an FpGroup using the LPRES-package", true,
-#   [ IsFpGroup, IsPosInt ], 0,
-#   function( G, c )
-#   local iso, 	# isomorphism from FpGroup to LpGroup
-# 	mapi,	# MappingGeneratorsImages of <iso>
-# 	epi;	# epimorphism from LpGroup onto its nilpotent quotient
-# 
-#   iso  := IsomorphismLpGroup( G );
-#   mapi := MappingGeneratorsImages( iso );
-#   epi  := NqEpimorphismPQuotient( Range( iso ), c );
-#   return( GroupHomomorphismByImages( G, Range( epi ), mapi[1], 
-#                         List( mapi[1], x -> Image( epi, Image( iso, x ) ) ) ) );
-#   end);
-
-############################################################################
-##
-#M  LargestPQuotient ( <LpGroup>, <int> ) . . for invariant LpGroups
-##
-## computes a weighted nilpotent presentation for the class-<int> quotient
-## of the invariant <LpGroup> if it already has a nilpotent quotient system.
-##
-InstallOtherMethod( LargestPQuotient,
-  "for invariantly L-presented groups (with qs) and positive integer",
-  true,
-  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
-    IsPosInt ], 0,
-  function( G, prime ) 
-  local i;
-
-  if HasLargestPQuotients( G ) and prime in LargestPQuotients( G )[1] then 
-    i := Position( LargestPQuotients(G)[1], prime );
-    return( LargestPQuotients(G)[2][i] );
-  fi;
-
-  return( NqPQuotient( G, prime ) );
+  iso := IsomorphismFpGroup( G );
+  return( Range( NqEpimorphismPQuotient( Range(iso), prime ) ) );
   end );
+
+############################################################################
+##
+#M  NqEpimorphismPQuotient( <FpGroup>, <prime>, <class> )
+## 
+## computes the natural homomorphism on the <class> p-quotient of  
+## <FpGroup>.
+##
+InstallOtherMethod( NqEpimorphismPQuotient,
+  "For an FpGroup, a prime number, and a positive integer (using the LPRES-package)",
+  true,
+  [ IsFpGroup,
+    IsPosInt,
+    IsPosInt ], -1,                       # give priority to ANUPQ package
+  function( G, prime, c )
+  local iso, 	# isomorphism from FpGroup to LpGroup
+        mapi,	# MappingGeneratorsImages of <iso>
+        epi;	# epimorphism from LpGroup onto its nilpotent quotient
+
+  if not IsPrime( prime ) then 
+    Error( "<prime> must be a prime number" );
+  fi;
+
+  iso  := IsomorphismLpGroup( G );
+  mapi := MappingGeneratorsImages( iso );
+  epi  := NqEpimorphismPQuotient( Range( iso ), prime, c );
+
+  return( GroupHomomorphismByImagesNC( G,
+                                       Range( epi ),
+                                       mapi[1],
+                                       List( mapi[1], x -> Image( epi, Image( iso, x ) ) ) ) );
+  end);
+
+############################################################################
+##
+#M  NqEpimorphismPQuotient( <FpGroup>, <prime> )
+## 
+## attempts to compute the natural homomorphism onto the largest p-quotient
+## of <FpGroup>.
+## This method only terminates if <FpGroup> has a largest p-quotient. 
+##
+InstallOtherMethod( NqEpimorphismPQuotient,
+  "For an FpGroup and a prime number (using the LPRES-package)",
+  true,
+  [ IsFpGroup,
+    IsPosInt ], -1,                        # give priority to ANUPQ-package
+  function( G, prime )
+  local iso, 	# isomorphism from FpGroup to LpGroup
+        mapi,	# MappingGeneratorsImages of <iso>
+        epi;	# epimorphism from LpGroup onto its nilpotent quotient
+
+  iso  := IsomorphismLpGroup( G );
+  mapi := MappingGeneratorsImages( iso );
+  epi  := NqEpimorphismPQuotient( Range( iso ), prime );
+
+  return( GroupHomomorphismByImagesNC( G,
+                                       Range( epi ),
+                                       mapi[1],
+                                       List( mapi[1], x -> Image( epi, Image( iso, x ) ) ) ) );
+  end);
 
 ############################################################################
 ##
 #F  SmallerPQuotientSystem ( <Q>, <int> )
 ## 
-## computes a nilpotent quotient system for G/gamma_i(G) if a nilpotent 
-## quotient system for G/gamma_j(G) is known, i<j.
+## computes a quotient system for G/phi_i(G) if a nilpotent 
+## quotient system for G/phi_j(G), i<j, is known.
 ##
 InstallGlobalFunction( SmallerPQuotientSystem,
   function( Q, c )
@@ -974,6 +539,7 @@ InstallGlobalFunction( SmallerPQuotientSystem,
         n,		             # number of gens of <QS>
         orders,		        # relative orders of the new qs.
        	imgs,		          # new images of the epimorphism
+        H,
         rhs_old,rhs_new; # right hand side of a relation
 
   # set up the new quotient system
@@ -1056,10 +622,11 @@ InstallGlobalFunction( SmallerPQuotientSystem,
   od;
   imgs:=List(imgs,x->PcpElementByGenExpList(QS.Pccol,x));
 
-  QS.Epimorphism:=GroupHomomorphismByImagesNC( QS.Lpres,
-                                            			PcpGroupByCollectorNC(QS.Pccol),
-                                               GeneratorsOfGroup(QS.Lpres),
-                                               imgs);
+  H := PcpGroupByCollectorNC(QS.Pccol);
+  SetPClassPGroup( H, Maximum( QS.Weights ) );
+  SetExponentPCentralSeries( H, LPRES_ExponentPCentralSeries( QS ) );
+
+  QS.Epimorphism:=GroupHomomorphismByImagesNC( QS.Lpres, H, GeneratorsOfGroup(QS.Lpres), imgs);
  
   return( QS );
   end);
@@ -1067,10 +634,9 @@ InstallGlobalFunction( SmallerPQuotientSystem,
 ############################################################################
 ##
 #F  PCentralSeries ( <PcpGroup> )
-## 
 ##
 InstallOtherMethod( PCentralSeries,
-  "",
+  "for a PcpGroup with attribute ExponentPCentralSeries",
   true,
   [ IsPcpGroup and HasExponentPCentralSeries ], 0,
   ExponentPCentralSeries );

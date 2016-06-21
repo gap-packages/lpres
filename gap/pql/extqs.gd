@@ -35,3 +35,12 @@ DeclareGlobalFunction( "LPRES_InduceSpinning" );
 #F  LPRES_CreateNewQuotientSystem
 ## 
 DeclareGlobalFunction( "LPRES_CreateNewQuotientSystem" );
+
+############################################################################
+##
+#F  LPRES_ExponentPCentralSeries( <QS> )
+##
+## computes the exponent-p central series of the p-quotient represented
+## by the weighted nilpotent quotient system <QS>.
+##
+DeclareGlobalFunction( "LPRES_ExponentPCentralSeries" );
