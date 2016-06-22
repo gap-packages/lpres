@@ -1,16 +1,17 @@
 <Chapter><Heading>Nilpotent Quotients of L-presented groups</Heading>
 
-Our nilpotent quotient algorithm for finitely L-presented groups
+The nilpotent quotient algorithm for finitely L-presented groups implemented in 
+the <Package>LPRES</Package> package
 generalizes Nickel's algorithm for finitely presented groups; see
-<Cite Key="Nickel96"/>. It determines a nilpotent presentation for the
+<Cite Key="Nickel96"/>. It computes a nilpotent presentation for the
 lower central series quotient of an invariantly L-presented group. A
 nilpotent presentation is a polycyclic presentation whose polycyclic
 series refines the lower central series of the group (see the
 description in the <Package>NQ</Package>-package for further
-details). In general, our algorithm determines a polycyclic
-presentation for the nilpotent quotient of an arbitrary finitely
-L-presented group. For further details on our algorithm we refer to
-<Cite Key="BEH08"/> or to the diploma thesis <Cite Key="H08"/>.
+details). In general, the nilpotent quotient algorithm computes a polycyclic
+presentation for the lower central series quotient of an arbitrary finitely
+L-presented group. For further details on the algorithm we refer to
+<Cite Key="BEH08"/> or <Cite Key="H08"/>.
 
 <Section><Heading>New methods for L-presented groups</Heading>
 
@@ -107,7 +108,7 @@ gap> AbelianInvariants( G );
 
 In the following we give a brief description of the nilpotent quotient
 algorithm for an arbitrary finitely L-presented group. For further
-details, we refer to <Cite Key="BEH08"/> and the diploma thesis
+details, we refer to <Cite Key="BEH08"/> or
 <Cite Key="H08"/>.<P/>
 
 Let <M>(S,Q,\Phi,R)</M> be a finite L-presentation defining the
