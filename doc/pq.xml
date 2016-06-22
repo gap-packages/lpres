@@ -1,0 +1,58 @@
+<Chapter><Heading>P-Quotients of L-presented groups</Heading>
+
+The nilpotent quotient algorithm for finitely L-presented groups and the
+p-quotient algorithm for finitely presented group <Cite Key=""> readily
+generalize to a algorithm for computing a polycyclic presentation for
+the p-quotient of a L-presented group.
+
+<ManSection><Oper Name="NqPQuotient" Arg="g p [c]"/>
+<Description>
+returns a polycyclic presentation for the <A>p</A>-class-<A>c</A> quotient
+<M>g/\phi_{c+1}(g)</M> of the L-presented group <A>g</A> if <A>c</A>
+is specified. If <A>c</A> is not given, this method attempts to
+compute the largest <A>p</A>-quotient of <A>g</A> and will terminate
+only if <A>g</A> has such a largest <A>p</A>-quotient.<P/>
+
+The following example computes the 2-class-5 quotient of the Grigorchuk
+group.
+<Example><![CDATA[
+gap> G:=ExamplesOfLPresentations( 1 );;
+gap> H:=NqPQuotient( G, 2, 5 );
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
+gap> pcs := PCentralSeries( H );
+[ Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ], Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2 ],
+  Pcp-group with orders [ 2, 2, 2, 2, 2 ], Pcp-group with orders [ 2, 2, 2 ], Pcp-group with orders [ 2, 2 ],
+  Pcp-group with orders [  ] ]
+gap> List( [1..Length(pcs)-1], x -> AbelianInvariants( pcs[x]/pcs[x+1] ) );
+[ [ 2, 2, 2 ], [ 2, 2 ], [ 2, 2 ], [ 2 ], [ 2, 2 ] ]
+]]></Example>
+</Description>
+</ManSection>
+
+<ManSection><Oper Name="NqEpimorphismPQuotient" Arg="g p [c]"/>
+<Description>
+This method returns an epimorphism from the L-presented group
+<A>g</A> onto a <A>p</A>-quotient. If the optional argument <A>c</A>
+is given, the epimorphism is onto the maximal class-<A>c</A> quotient
+<M>g//\phi_{c+1}(g)</M>. If no second argument is given, this method
+attempts to compute an epimorphism onto the largest <A>p</A>-quotient
+of <A>g</A>. If <A>g</A> does not have a largest <A>p</A>-quotient,
+this method will not terminate.<P/>
+
+The following example computes an epimorphism from the Grigorchuk group
+onto its 2-class-5 quotients.
+
+<Example><![CDATA[
+gap> G:=ExamplesOfLPresentations( 1 );
+<invariant LpGroup of size infinity on the generators [ a, b, c, d ]>
+gap> epi := NqEpimorphismPQuotient( G, 2, 5 );
+[ a, b, c, d ] -> [ g1, g2*g3, g2, g3 ]
+gap> H := Image(epi);
+Pcp-group with orders [ 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ]
+gap> PClassPGroup( H );
+5
+]]></Example>
+</Description>
+</ManSection>
+
+</Chapter>
