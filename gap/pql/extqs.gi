@@ -3,6 +3,9 @@
 #W extqs.gi			LPRES				René Hartung
 ##
 
+# define method to construct the endomorphisms (bottom-up or recursively)
+LPRES_COMPUTE_RECURSIVE_IMAGE := true;
+
 ############################################################################
 ##
 #F  internal function
@@ -154,7 +157,11 @@ InstallGlobalFunction( ExtendPQuotientSystem,
             Substitutions := [],
             IteratedRelations := [] );
   LPRES_InduceSpinning( QS, A );
-  Info( InfoLPRES, 3, "Time spent to induce the endomorphisms and relations: ", StringTime( Runtime()-time ) );
+  if LPRES_COMPUTE_RECURSIVE_IMAGE then 
+    Info( InfoLPRES, 3, "Time spent to induce the endomorphisms and relations (recursive): ", StringTime( Runtime()-time ) );
+  else
+    Info( InfoLPRES, 3, "Time spent to induce the endomorphisms and relations: ", StringTime( Runtime()-time ) );
+  fi;
 
   # run the spinning algorithm
   time:=Runtime();
@@ -742,12 +749,79 @@ end;
 
 ############################################################################
 ##
+#F  internal function
+## 
+## computes the images of the pos-th element in <imgs> recursively.
+##
+LPRES_ComputeImages := function( QS, sub, hom, imgs, pos, myOne ) 
+  local i,j,k, tmp, fam, obj;
+
+  # return the image if it's already known
+  if IsBound( imgs[pos] ) then
+    return( imgs[pos] );
+  fi;
+
+  # check the definitions
+  if IsPosInt( QS.Definitions[pos] ) then
+    fam := FamilyObj( GeneratorsOfGroup( QS.Lpres )[1] );
+
+    # generator defined as an image of a generator of the LpGroup
+    if IsList( QS.Imgs[QS.Definitions[pos]] ) then 
+      # tail added to an image x_pos^\pi = w_pos t <-> t = w_pos^-1 * x_pos^\pi
+      obj := QS.Imgs[ QS.Definitions[pos] ];
+      obj := obj{ [1..Length(obj)-2] }; # cut the tail
+  
+#     imgs[i] := LPRES_MapGenExpList( imgs, obj, One(H) );
+#     imgs[i] := imgs[i]^-1 * ElementOfLpGroup( fam, GeneratorsOfGroup( F )[ QS.Definitions[i] ]^sub ) ^hom;
+      tmp := myOne;
+      for i in [1,3..Length(obj)-1] do
+        tmp := tmp * LPRES_ComputeImages( QS, sub, hom, imgs, obj[i], myOne ) ^ obj[i+1];
+      od;
+      imgs[pos] := tmp^-1 * ElementOfLpGroup( fam,
+                            ( FreeGeneratorsOfLpGroup( QS.Lpres )[ QS.Definitions[pos] ] ^ sub  ) ) ^ hom;
+    else 
+      # one-to-one with the generator
+      imgs[pos] := ElementOfLpGroup( fam, FreeGeneratorsOfLpGroup( QS.Lpres )[ QS.Definitions[pos] ] ^ sub ) ^ hom;
+    fi;
+  elif IsInt( QS.Definitions[pos] ) then
+    # power relation a_pos^p = v_pospos t <-> t = v_pospos^-1 a_pos^p 
+    obj := GetPower( QS.Pccol, -QS.Definitions[pos] );
+    obj := obj{[1..Length(obj)-2]}; # cut the tail
+#   imgs[i] := LPRES_MapGenExpList( imgs, obj, One( H ) );
+#   imgs[i] := imgs[i]^-1 * imgs[ -QS.Definitions[i] ]^QS.Prime;
+    tmp := myOne;
+    for i in [1,3..Length(obj)-1] do
+      tmp := tmp * LPRES_ComputeImages( QS, sub, hom, imgs, obj[i], myOne ) ^ obj[i+1];
+    od;
+    imgs[pos] := tmp^-1 * LPRES_ComputeImages( QS, sub, hom, imgs, -QS.Definitions[pos], myOne ) ^ QS.Prime;
+  elif IsList( QS.Definitions[pos] ) then
+    # commutator a_j^-1 a_k a_j = v_jk t <-> t = v_jk^{-1} a_j^-1 a_k a_j
+    k := QS.Definitions[pos][1];
+    j := QS.Definitions[pos][2];
+    obj := GetConjugate( QS.Pccol, k, j );
+    obj := obj{[1..Length(obj)-2]}; # cut the tail
+
+#   imgs[i] := LPRES_MapGenExpList( imgs, obj, One(H) );
+#   imgs[i] := imgs[i]^-1 * imgs[j]^-1 * imgs[k] * imgs[j];
+    tmp := myOne;
+    for i in [1,3..Length(obj)-1] do
+      tmp := tmp * LPRES_ComputeImages( QS, sub, hom, imgs, obj[i], myOne ) ^ obj[i+1];
+    od;
+    imgs[pos] := tmp^-1 * LPRES_ComputeImages( QS, sub, hom, imgs, j, myOne ) ^ -1 
+                        * LPRES_ComputeImages( QS, sub, hom, imgs, k, myOne ) 
+                        * LPRES_ComputeImages( QS, sub, hom, imgs, j, myOne );
+  fi;
+
+  return( imgs[pos] );
+  end;
+
+############################################################################
+##
 #F  LPRES_InduceSpinning
 ##
 ## induces the endomorphism of the <LpGroup> to an endomorphism of the 
 ## quotient given by the quotient system <QS>; translates the 
 ## relations of the <LpGroup> to elements of the p-covering group.
-## TODO: try to use a recursive method for the endomorphisms
 ##
 InstallGlobalFunction( LPRES_InduceSpinning,
   function( QS, A ) 
@@ -781,8 +855,10 @@ InstallGlobalFunction( LPRES_InduceSpinning,
 
 # Append( A.Relations, List( FixedRelatorsOfLpGroup( QS.Lpres ),
 #                            x -> One(myField)*Exponents( x^hom ){[b..Length(QS.Weights)]} ) );
+  time := Runtime();
   A.Relations := List( FixedRelatorsOfLpGroup( QS.Lpres ),
                        x -> One(myField)*Exponents( ElementOfLpGroup( fam, x )^hom ){[b..Length(QS.Weights)]} );
+  Info( InfoLPRES, 3, "Time spent to map the fixed relations: ", StringTime( Runtime()-time ) );
 
 # Append( A.IteratedRelations, List( IteratedRelatorsOfLpGroup( QS.Lpres ),
 #                                    x -> One(myField)*Exponents( x ^ hom ){ [b..Length(QS.Weights) ]} ) );
@@ -795,6 +871,17 @@ InstallGlobalFunction( LPRES_InduceSpinning,
   for sub in EndomorphismsOfLpGroup( QS.Lpres ) do
     imgs := [];
     mat := [];
+if LPRES_COMPUTE_RECURSIVE_IMAGE then 
+    for i in Filtered( [1..Length(QS.Definitions)], x -> QS.Weights[x] = c+1 ) do
+      # compute the image recursively
+      LPRES_ComputeImages( QS, sub, hom, imgs, i, One( H ) );
+
+      if not IsZero( Exponents( imgs[i] ){ [1..b-1] } ) then
+        Error( "The L-presentation is not invariant @ i = ", i , "\n" );
+      fi;
+      Add( mat, One( myField ) * Exponents( imgs[i] ){[b..Length(QS.Weights)]} );
+    od;
+else 
     for i in [1..Length(QS.Definitions)] do
       if IsPosInt( QS.Definitions[i] ) then
         # generator defined as an image of a generator of the LpGroup
@@ -822,6 +909,7 @@ InstallGlobalFunction( LPRES_InduceSpinning,
         imgs[i] := LPRES_MapGenExpList( imgs, obj, One(H) );
         imgs[i] := imgs[i]^-1 * imgs[j]^-1 * imgs[k] * imgs[j];
       fi;
+
       if QS.Weights[i] = c+1 then
         if not IsZero( Exponents( imgs[i] ){ [1..b-1] } ) then
           Error( "The L-presentation is not invariant @ i = ", i , "\n" );
@@ -829,6 +917,8 @@ InstallGlobalFunction( LPRES_InduceSpinning,
         Add( mat, One( myField ) * Exponents( imgs[i] ){[b..Length(QS.Weights)]} );
       fi;
     od;
+fi;
+
     Add( A.Substitutions, mat );
   od;
 
