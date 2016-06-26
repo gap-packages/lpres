@@ -102,7 +102,7 @@ InstallMethod( ExtendQuotientSystem,
   od;
   
   Info(InfoLPRES,2,"Time spent for spinning algorithm: ", StringTime(Runtime()-time));
-  
+
   if Length(HNF.mat)=0 then 
     # the presentation ftl satisfy the relations and is consistent
     QS:=rec();

@@ -57,6 +57,9 @@ InstallGlobalFunction( LPRES_ExponentPCentralSeries,
 
   # weights function of the given quotient system
   weights := Q.Weights;
+  if Length( weights ) = 0 then 
+    return( [ H ] );
+  fi;
 
   # nilpotency class of <Q>
   c := Maximum(weights);
