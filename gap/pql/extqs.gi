@@ -415,7 +415,7 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
 
         # z^p y
         repeat 
-          ev2 := ExponentsByObj( QS.Pccol, GetPower( Q.Pccol, z ) );
+          ev2 := ExponentsByObj( QS.Pccol, GetPower( QS.Pccol, z ) );
         until CollectWordOrFail( QS.Pccol, ev2, [ y, 1 ] ) <> fail;
 
         # t := ( z^{p-1} (zy))^{-1} ((z^p)y )
