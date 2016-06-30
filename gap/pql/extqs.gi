@@ -8,33 +8,6 @@ LPRES_COMPUTE_RECURSIVE_IMAGE := true;
 
 ############################################################################
 ##
-#F  internal function
-##
-LPRES_PrintPcp := function( ftl ) 
-  local i,j,k,n,ev,H,gens;
-
-  H := PcpGroupByCollector( ftl );
-  gens := GeneratorsOfGroup( H );
-  n := ftl![ PC_NUMBER_OF_GENERATORS ];
-
-  Print( "orders = ", RelativeOrders( ftl ), "\n" );
- 
-  for i in [1..n] do
-    Print( "i^{", RelativeOrders( ftl )[i], "} = ", gens[i]^RelativeOrders(ftl)[i], "\n" );
-  od;
-
-  for i in [1..n] do
-    for j in [i+1..n] do
-      if not IsOne( Comm( gens[j], gens[i] ) ) then 
-        Print( "[", j, ",", i, "] = ", ObjByExponents( ftl, Exponents( Comm( gens[j], gens[i] ) ) ), "\n" );
-      fi;
-    od;
-  od;
-
-  end;
-
-############################################################################
-##
 #F  LPRES_ExponentPCentralSeries( <QS> )
 ##
 ## computes the p-central series of a p-quotient given by the 
@@ -134,8 +107,8 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   # Niemeyer, 1998
   time := Runtime();
   LPRES_PCoveringGroupByQSystem( Q, QS );
-  Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( time-Runtime() ) );
-  Info( InfoLPRES, 2, "Tails introduced in the tails routine: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
+  Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( Runtime()-time ) );
+  Info( InfoLPRES, 2, "Number of tails introduced: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
 
   # position of the first pseudo generator/tail
   b := Position( QS.Weights, Maximum( QS.Weights ) );
@@ -177,7 +150,6 @@ InstallGlobalFunction( ExtendPQuotientSystem,
 
   while not IsEmpty(stack) do
     Info( InfoLPRES, 4, "Spinning stack has size ", Length(stack) );
-#   ev:=stack[1];
     ev := Remove( stack, 1 );
     if not IsZero(ev) then 
       for mat in A.Substitutions do 
@@ -548,7 +520,7 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
   c := Maximum( QS.Weights);
 
   # prime - every generator has prime (relative) order
-  prime := RelativeOrders( QS.Pccol )[1];
+  prime := QS.Prime;
 
   # field with <prime> elements
   F := GF( prime );
@@ -585,7 +557,6 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
 
   # j^m i = j^(m-1) (j i)
   for j in [n,n-1..1] do
-#   if IsBound(QS.Pccol![ PC_EXPONENTS ][j]) then # not needed everything's finite
       for i in [1..j-1] do
         if QS.Weights[j]+QS.Weights[i]<=c then 
           repeat 
@@ -609,12 +580,10 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
           break;
         fi;
       od;
-#   fi;
   od;
 
   # j i^m = (j i) i^(m-1)
   for i in [1..n] do
-#   if IsBound(QS.Pccol![ PC_EXPONENTS ][i]) then # not needed everything's finite
       for j in [i+1..n] do
         if QS.Weights[i]+QS.Weights[j]<=c then 
           if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
@@ -637,12 +606,10 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
           break;
         fi;
       od;
-#   fi;
   od;
 
   # i^m i = i i^m
   for i in [1..n] do
-#   if IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then # not needed everything's finite
       if 2*QS.Weights[i]<=c then
         repeat
           ev1 := ListWithIdenticalEntries( n, 0 );
@@ -663,70 +630,7 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
       else 
         break;
       fi;
-#   fi;
   od;
-
-  # only finite quotients turn up
-# # j = (j -i) i 
-# for i in [1..n] do
-#   if not IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then
-#     for j in [i+1..n] do
-#       if QS.Weights[i]+QS.Weights[j]<=c then 
-#         repeat
-#           ev1 := ListWithIdenticalEntries( n, 0 );
-#         until CollectWordOrFail( QS.Pccol, ev1, [j,1,i,-1,i,1] )<>fail;
-# 
-#         ev1[j] := ev1[j] - 1;
-#         if not IsZero( ev1) then 
-#         Add(mat,ev1);
-#         fi;
-#       else 
-#         break;
-#       fi;
-#     od;
-#   fi;
-# od;
-
-  # only finite quotients turn up
-# # i = -j (j i)
-# for j in [1..n] do
-#   if not IsBound( QS.Pccol![ PC_EXPONENTS ][j] ) then
-#     for i in [1..j-1] do
-#       if QS.Weights[i]+QS.Weights[j]<=c then
-#         repeat
-#           ev1 := ListWithIdenticalEntries( n, 0 );
-#         until CollectWordOrFail( QS.Pccol, ev1, [ j,1,i,1 ] )<>fail;
-#   
-#         w := ObjByExponents( QS.Pccol, ev1 );
-#         repeat
-#           ev1 := ExponentsByObj( QS.Pccol, [j,-1] );
-#         until CollectWordOrFail( QS.Pccol, ev1, w )<>fail;
-#             
-#         if not IsZero( ev1 - ExponentsByObj( QS.Pccol, [i,1] )) then 
-#         Add(mat, ev1 - ExponentsByObj( QS.Pccol, [i,1] ));
-#         fi;
-#           
-#         # -i = -j (j -i)
-#         if not IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then
-#           repeat
-#             ev1 := ListWithIdenticalEntries( n, 0 );
-#           until CollectWordOrFail( QS.Pccol, ev1, [ j,1,i,-1 ] )<>fail;
-# 
-#           w := ObjByExponents( QS.Pccol, ev1 );
-#           repeat
-#             ev1 := ExponentsByObj( QS.Pccol, [j,-1] );
-#           until CollectWordOrFail( QS.Pccol, ev1, w )<>fail;
-#                 
-#         if not IsZero( ExponentsByObj( QS.Pccol, [i,-1] ) - ev1) then 
-#           Add( mat, ExponentsByObj( QS.Pccol, [i,-1] ) - ev1);
-#           fi;
-#         fi;
-#       else 
-#         break;
-#       fi;
-#     od;
-#   fi;
-# od;
 
   TriangulizeMat( mat );
   Basis := rec( mat := Filtered( mat, x -> not IsZero( x ) ) );
