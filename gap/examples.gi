@@ -533,6 +533,17 @@ InstallMethod( SymmetricGroupCons,
 
   return( LPresentedGroup( F, [], PHI, rels ) );
   end);
+
+############################################################################
+##
+#M QuaternionGroupCons
+##
+InstallOtherMethod( QuaternionGroupCons,
+  "for an LpGroup and a positive integer",
+  [ IsLpGroup, IsPosInt ], 0, 
+  function( filt, i ) 
+  return( Range( IsomorphismLpGroup( QuaternionGroup( IsFpGroup, i ) ) ) );
+  end );
   
 ############################################################################
 ##
