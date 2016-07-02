@@ -286,7 +286,7 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
   # 
   # Sorted in order to apply the TriangulizeMat later one (those which
   # we wish to survice succeed the others)!
-  for j in [1..n] do
+  for j in Filtered( [1..n], x -> Q.Weights[x] < c ) do
     # add the power relator
     if not -j  in Q.Definitions then 
       if not IsList( Q.Definitions[j] ) then 
@@ -295,7 +295,31 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
       fi;
     fi;
   od;
-  for j in [1..n] do
+  for j in Filtered( [1..n], x -> Q.Weights[x] < c ) do
+    # add the commutator relations [a_j,a_i] with w(a_i) = 1
+    for i in [1..j-1] do
+      if Q.Weights[i] > 1 then 
+        # generators are ordered by their weight
+        break;
+      fi;
+      if not [j,i] in Q.Definitions then 
+        Add( QS.Definitions, [j,i] );
+        Add( QS.Weights, c+1 );
+      fi;
+    od;
+  od;
+
+  # those tails which might survive (and are contained in the spanning set)
+  for j in Filtered( [1..n], x -> Q.Weights[x] = c ) do
+    # add the power relator
+    if not -j  in Q.Definitions then 
+      if not IsList( Q.Definitions[j] ) then 
+        Add( QS.Definitions, -j );
+        Add( QS.Weights, c+1 );
+      fi;
+    fi;
+  od;
+  for j in Filtered( [1..n], x -> Q.Weights[x] = c ) do
     # add the commutator relations [a_j,a_i] with w(a_i) = 1
     for i in [1..j-1] do
       if Q.Weights[i] > 1 then 
