@@ -60,6 +60,10 @@ if TestPackageAvailability( "Polycyclic", "2.5" ) <> fail then
   ReadPackage( LPRESPkgName, "gap/pql/initqs.gi" );
   ReadPackage( LPRESPkgName, "gap/pql/extqs.gi" );
   ReadPackage( LPRESPkgName, "gap/pql/pq.gi" );
+
+  # Jennings quotient
+  ReadPackage( LPRESPkgName, "gap/jql/extqs.gi" );
+  ReadPackage( LPRESPkgName, "gap/jql/jq.gi" );
   
   # approximating the Schur multiplier
   ReadPackage( LPRESPkgName, "gap/schumu/schumu.gi" );

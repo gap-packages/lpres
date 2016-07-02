@@ -367,7 +367,8 @@ InstallGlobalFunction( SmallerJenningsQuotientSystem,
 
   # set up the new quotient system
   QS := rec( Lpres := Q.Lpres, 
-             Weights := Filtered( Q.Weights, x -> x<=c ) );
+             Weights := Filtered( Q.Weights, x -> x<=c ),
+             Class := c );
   
   # number of gens of <QS>
   n := Length( QS.Weights );
@@ -453,13 +454,3 @@ InstallGlobalFunction( SmallerJenningsQuotientSystem,
  
   return( QS );
   end);
-
-############################################################################
-##
-#F  PCentralSeries ( <PcpGroup> )
-##
-# InstallOtherMethod( PCentralSeries,
-#   "for a PcpGroup with attribute ExponentPCentralSeries",
-#   true,
-#   [ IsPcpGroup and HasExponentPCentralSeries ], 0,
-#   ExponentPCentralSeries );
