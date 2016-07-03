@@ -169,6 +169,9 @@ InstallGlobalFunction( ExtendPQuotientSystem,
 
   # use the basis to create the new quotient system
   QSnew := LPRES_CreateNewQuotientSystem( QS, Basis );
+  SetExponentPCentralSeries( Range( QSnew.Epimorphism ), LPRES_ExponentPCentralSeries( Q ) );
+  SetPClassPGroup( Range( QSnew.Epimorphism ), Maximum( Q.Weights ) );
+
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
     Info( InfoLPRES, 1, "Class ", Maximum(QSnew.Weights), ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else
@@ -974,8 +977,6 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
     fi;
   od;
   H := PcpGroupByCollectorNC(Q.Pccol);
-  SetExponentPCentralSeries( H, LPRES_ExponentPCentralSeries( Q ) );
-  SetPClassPGroup( H, Maximum( Q.Weights ) );
 
   Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres, H, 
                                                 GeneratorsOfGroup(Q.Lpres), Imgs);

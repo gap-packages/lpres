@@ -26,3 +26,15 @@ DeclareGlobalFunction( "LPRES_JenningsCoveringGroupByQSystem" );
 ## by the weighted nilpotent quotient system <QS>.
 ##
 DeclareGlobalFunction( "LPRES_JenningsSeries" );
+
+############################################################################
+##
+#A  JenningsClass( <PcpGroup> )
+## 
+DeclareAttribute( "JenningsClass", IsPcpGroup );
+
+############################################################################
+##
+#A  JenningsSeries( <PcpGroup> )
+## 
+DeclareAttribute( "JenningsSeries", IsPcpGroup );

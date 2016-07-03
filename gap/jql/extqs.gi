@@ -108,7 +108,7 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   LPRES_JenningsCoveringGroupByQSystem( Q, QS );
 # PrintPcpPresentation( PcpGroupByCollectorNC( QS.Pccol ) );
   Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( Runtime()-time ) );
-  Info( InfoLPRES, 2, "Tails introduced in the tails routine: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
+  Info( InfoLPRES, 2, "Number of tails introduced: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
 
   # position of the first pseudo generator/tail
   b := Position( QS.Weights, Maximum( QS.Weights ) );
@@ -198,6 +198,8 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   # use the basis to create the new quotient system
   QSnew := LPRES_CreateNewQuotientSystem( QS, Basis );
   QSnew.Class := QS.Class;
+  SetJenningsSeries( Range( QSnew.Epimorphism ), LPRES_JenningsSeries( QSnew ) );
+  SetJenningsClass( Range( QSnew.Epimorphism ), QSnew.Class );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
     Info( InfoLPRES, 1, "Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else
@@ -265,7 +267,7 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
 
   # we sort the tails in ascending order by their pseudo weight
   #                w(a_k)        if 1<k<n
-  # \hat w(a_k) =  w(a_i)+1      if 1<k<n and a_k := a_i^p
+  # \hat w(a_k) =  p*w(a_i)      if 1<k<n and a_k := a_i^p
   #                w(a_i)+w(a_j) if a_k := [a_j,a_i] with w(a_i) = 1
   # 
   # Sorted in order to apply the TriangulizeMat later one (those which

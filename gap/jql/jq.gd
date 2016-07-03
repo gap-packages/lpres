@@ -41,15 +41,3 @@ DeclareAttribute( "LargestJenningsQuotients", IsLpGroup );
 ## quotient system for G/phi_j(G) is known, i<j.
 ##
 DeclareGlobalFunction( "SmallerJenningsQuotientSystem" );
-
-############################################################################
-##
-#A  JenningsClass( <PcpGroup> )
-## 
-DeclareAttribute( "JenningsClass", IsPcpGroup );
-
-############################################################################
-##
-#A  JenningsSeries( <PcpGroup> )
-## 
-DeclareAttribute( "JenningsSeries", IsPcpGroup );
