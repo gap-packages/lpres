@@ -120,17 +120,6 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
 #   Display( List( Basis.mat[i], Int ) );
 # od;
 
-  # throw away the zero entries not in the module
-  for i in [1..Length(Basis.mat)] do
-    if not IsZero(Basis.mat[i]{[1..b-1]}) then 
-      Error("in ExtendJenningsQuotientSystem: wrong basis from consistency check");
-    fi;
-
-    # forget the first b-1 (zero) entries
-    Basis.mat[i]   := Basis.mat[i]{[b..Length(QS.Weights)]};
-    Basis.Heads[i] := Basis.Heads[i]-b+1;
-  od;
-    
   # induce the substitutions of the L-presentation to the module
   time := Runtime();
   A := rec( Relations := [],
