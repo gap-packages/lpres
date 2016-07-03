@@ -65,7 +65,6 @@ InstallGlobalFunction( ExtendPQuotientSystem,
         Defs,	   # definitions of each (pseudo) generator and tail
         Imgs,	   # images of the generators of the LpGroup
         ftl,	    # collector of the covering group
-        b,		     # number of "old" generators + 1 
         Basis,		 # Hermite normal form of the consistency rels/relators
         A,		     # record: endos as matrices and (it.) rels as exp.vecs
         i,		     # loop variable
@@ -110,23 +109,9 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( Runtime()-time ) );
   Info( InfoLPRES, 2, "Number of tails introduced: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
 
-  # position of the first pseudo generator/tail
-  b := Position( QS.Weights, Maximum( QS.Weights ) );
-  
   # enforce consistency
   Basis := LPRES_ConsistencyChecks( QS );
 
-  # throw away the zero entries not in the module
-  for i in [1..Length(Basis.mat)] do
-    if not IsZero(Basis.mat[i]{[1..b-1]}) then 
-      Error("in ExtendPQuotientSystem: wrong basis from consistency check");
-    fi;
-
-    # forget the first b-1 (zero) entries
-    Basis.mat[i]   := Basis.mat[i]{[b..Length(QS.Weights)]};
-    Basis.Heads[i] := Basis.Heads[i]-b+1;
-  od;
-    
   # induce the substitutions of the L-presentation to the module
   time := Runtime();
   A := rec( Relations := [],
@@ -171,7 +156,6 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   QSnew := LPRES_CreateNewQuotientSystem( QS, Basis );
   SetExponentPCentralSeries( Range( QSnew.Epimorphism ), LPRES_ExponentPCentralSeries( Q ) );
   SetPClassPGroup( Range( QSnew.Epimorphism ), Maximum( Q.Weights ) );
-
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
     Info( InfoLPRES, 1, "Class ", Maximum(QSnew.Weights), ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else
@@ -524,14 +508,18 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
   local i,j,k,
         w,
         n,          # number of generators of the FromTheLeftCollector
-        ev1, ev2,
+        ev1,ev2,ev,
         c,
+        b,
         mat,
         Basis,
         prime,
         F,
         num,
         time;
+
+  # position of the first pseudo generator/tail
+  b := Position( QS.Weights, Maximum( QS.Weights ) );
 
   # keep track of the runtime for the checks
   time := Runtime();
@@ -570,8 +558,13 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
             ev2 := ExponentsByObj( QS.Pccol, [ k, 1 ] );
           until CollectWordOrFail( QS.Pccol, ev2, [j,1,i,1] )<>fail;
               
-          if not IsZero( ev1-ev2 ) then 
-            Add( mat, One(F) * ( ev1-ev2 ) );
+          ev := ev1-ev2;
+          if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
+            Error("in ExtendPQuotientSystem: wrong basis from consistency check (k j i)");
+          fi;
+
+          if not IsZero( ev{[b..n]} ) then 
+            Add( mat, One(F) * ( ev{[b..n]} ) );
           fi;
           num := num + 1;
         else 
@@ -584,79 +577,94 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
 
   # j^m i = j^(m-1) (j i)
   for j in [n,n-1..1] do
-      for i in [1..j-1] do
-        if QS.Weights[j]+QS.Weights[i]<=c then 
-          repeat 
-            ev1 := ListWithIdenticalEntries( n, 0 );
-          until CollectWordOrFail( QS.Pccol, ev1, [j, QS.Pccol![ PC_EXPONENTS ][j]-1, j, 1, i,1] )<>fail;
-              
-          repeat
-            ev2 := ListWithIdenticalEntries( n, 0 );
-          until CollectWordOrFail( QS.Pccol, ev2, [j,1,i,1] )<>fail;
-  
-          w := ObjByExponents( QS.Pccol, ev2 );
-          repeat 
-            ev2 := ExponentsByObj( QS.Pccol, [j,QS.Pccol![ PC_EXPONENTS ][j]-1] );
-          until CollectWordOrFail( QS.Pccol, ev2, w )<>fail;
-  
-          if not IsZero( ev1-ev2) then 
-            Add( mat, One( F ) * ( ev1 - ev2 ) );
-          fi;
-          num := num + 1;
-        else 
-          break;
-        fi;
-      od;
-  od;
-
-  # j i^m = (j i) i^(m-1)
-  for i in [1..n] do
-      for j in [i+1..n] do
-        if QS.Weights[i]+QS.Weights[j]<=c then 
-          if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
-            repeat 
-              ev1 := ExponentsByObj( QS.Pccol, [j,1] );
-            until CollectWordOrFail( QS.Pccol, ev1, QS.Pccol![ PC_POWERS ][i] );
-          else 
-            ev1 := ExponentsByObj( QS.Pccol, [j,1] );
-          fi;
-          
-          repeat
-            ev2 := ListWithIdenticalEntries( n, 0 );
-          until CollectWordOrFail(QS.Pccol,ev2,[j,1,i,QS.Pccol![PC_EXPONENTS][i]] ) <>fail;
-        
-          if not IsZero( ev1-ev2 ) then 
-            Add( mat, One( F ) * ( ev1-ev2 ) ); 
-          fi;
-          num := num + 1;
-        else 
-          break;
-        fi;
-      od;
-  od;
-
-  # i^m i = i i^m
-  for i in [1..n] do
-      if 2*QS.Weights[i]<=c then
-        repeat
+    for i in [1..j-1] do
+      if QS.Weights[j]+QS.Weights[i]<=c then 
+        repeat 
           ev1 := ListWithIdenticalEntries( n, 0 );
-        until CollectWordOrFail(QS.Pccol,ev1,[i,QS.Pccol![ PC_EXPONENTS ][i]+1])<>fail;
+        until CollectWordOrFail( QS.Pccol, ev1, [j, QS.Pccol![ PC_EXPONENTS ][j]-1, j, 1, i,1] )<>fail;
             
-        if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
-          repeat
-            ev2 := ExponentsByObj( QS.Pccol, [i,1] );
-          until CollectWordOrFail( QS.Pccol, ev2, QS.Pccol![ PC_POWERS ][i] ) <> fail;
-        else
-          ev2 := ExponentsByObj( QS.Pccol, [i,1] );
+        repeat
+          ev2 := ListWithIdenticalEntries( n, 0 );
+        until CollectWordOrFail( QS.Pccol, ev2, [j,1,i,1] )<>fail;
+
+        w := ObjByExponents( QS.Pccol, ev2 );
+        repeat 
+          ev2 := ExponentsByObj( QS.Pccol, [j,QS.Pccol![ PC_EXPONENTS ][j]-1] );
+        until CollectWordOrFail( QS.Pccol, ev2, w )<>fail;
+
+        ev := ev1 - ev2;
+        if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
+          Error("in ExtendPQuotientSystem: wrong basis from consistency check (j^m i)");
         fi;
-            
-        if not IsZero( ev1 - ev2 ) then 
-          Add( mat, One(F) * ( ev1-ev2 ) );
+
+        if not IsZero( ev{[b..n]} ) then 
+          Add( mat, One( F ) * ev{[b..n]} );
         fi;
         num := num + 1;
       else 
         break;
       fi;
+    od;
+  od;
+
+  # j i^m = (j i) i^(m-1)
+  for i in [1..n] do
+    for j in [i+1..n] do
+      if QS.Weights[i]+QS.Weights[j]<=c then 
+        if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
+          repeat 
+            ev1 := ExponentsByObj( QS.Pccol, [j,1] );
+          until CollectWordOrFail( QS.Pccol, ev1, QS.Pccol![ PC_POWERS ][i] );
+        else 
+          ev1 := ExponentsByObj( QS.Pccol, [j,1] );
+        fi;
+        
+        repeat
+          ev2 := ListWithIdenticalEntries( n, 0 );
+        until CollectWordOrFail(QS.Pccol,ev2,[j,1,i,QS.Pccol![PC_EXPONENTS][i]] ) <>fail;
+      
+        ev := ev1 - ev2;
+        if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
+          Error("in ExtendPQuotientSystem: wrong basis from consistency check (j i^m)");
+        fi;
+
+        if not IsZero( ev{[b..n]} ) then 
+          Add( mat, One( F ) * ev{[b..n]} ); 
+        fi;
+        num := num + 1;
+      else 
+        break;
+      fi;
+    od;
+  od;
+
+  # i^m i = i i^m
+  for i in [1..n] do
+    if 2 * QS.Weights[i]<=c then
+      repeat
+        ev1 := ListWithIdenticalEntries( n, 0 );
+      until CollectWordOrFail(QS.Pccol,ev1,[i,QS.Pccol![ PC_EXPONENTS ][i]+1])<>fail;
+          
+      if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
+        repeat
+          ev2 := ExponentsByObj( QS.Pccol, [i,1] );
+        until CollectWordOrFail( QS.Pccol, ev2, QS.Pccol![ PC_POWERS ][i] ) <> fail;
+      else
+        ev2 := ExponentsByObj( QS.Pccol, [i,1] );
+      fi;
+          
+      ev := ev1 - ev2;
+      if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
+        Error("in ExtendPQuotientSystem: wrong basis from consistency check (i^m i)");
+      fi;
+
+      if not IsZero( ev{[b..n]} ) then 
+        Add( mat, One(F) * ev{[b..n]} );
+      fi;
+      num := num + 1;
+    else 
+      break;
+    fi;
   od;
 
   TriangulizeMat( mat );
@@ -865,10 +873,16 @@ fi;
 LPRES_AdjustObject := function( obj, b, n, Basis, Gens, F, QSPccol, QPccol )
   local i,j,ev,ev1;
 
+  # exponent of the object in the old collector
   ev1 := ExponentsByObj( QSPccol, obj );
+
+  # tail vector (i.e. element in the module)
   ev := One(F) * ev1{ [b..n] };
+
+  # group element on top
   ev1 := ev1{[1..b-1]};
 
+  # reduce the element w.r.t. the basis
   for i in [1..Length(ev)] do
     if not IsZero( ev[i] ) then 
       j := Position( Basis.Heads, i );
@@ -878,6 +892,7 @@ LPRES_AdjustObject := function( obj, b, n, Basis, Gens, F, QSPccol, QPccol )
     fi;
   od;
 
+  # append the reduced tail vector to the group element
   Append( ev1, List( ev{Gens}, Int ) );
 
   return( ObjByExponents( QPccol, ev1 ) );
@@ -905,12 +920,16 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
   # position of the first tail
   b := Position( QS.Weights, Maximum( QS.Weights ) );
 
+  # number of generators of the quotient system
   n := QS.Pccol![ PC_NUMBER_OF_GENERATORS ];
 
+  # prime field
   F := GF( QS.Prime );
 
+  # new generators of the updated quotient system
   Gens := Filtered( [1..Length(QS.Weights)-b+1], x -> not x in Basis.Heads );
 
+  # set up the new quotient system
   Q := rec( Lpres       := QS.Lpres,
             Prime       := QS.Prime,
             Definitions := ShallowCopy( QS.Definitions{[1..b-1]} ),
@@ -933,7 +952,7 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
 
   m := Q.Pccol![ PC_NUMBER_OF_GENERATORS ];
 
-  # set up the power relation and conjugacy relations of the first b generators
+  # set up the power relation and conjugacy relations of the first b-1 generators
   # the new generators [b..m] are central (and have order p with trivial power
   # relation)
   for i in [1..b-1] do
