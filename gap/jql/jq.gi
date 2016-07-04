@@ -59,26 +59,6 @@ end;
 
 ############################################################################
 ##
-## No need for a method of the form?? REALLY - may still see something 
-## like this in the p-covering group?
-##
-## EpimorphismJenningsQuotient( <LpGroup>, <prime> ), or
-## JenningsQuotient( <LpGroup>, <prime> )
-## 
-## due to the following remark:
-## Remark 3. Let now G be a group but not a pgroup.
-## There is another limitation which applies
-## to the Jennings series, and not to the lower central
-## series and to the lower p-series: when Di(G) =
-## Di+1(G) 6= {1}, with p dividing the order of Di+1(G),
-## we do not know whether we have reached the end
-## of the calculation or not.
-## 
-## www.math.rwth-aachen.de/~Frank.Luebeck/Nikolaus/2003/CostantiniTalk.pdf
-##
-
-############################################################################
-##
 #M  EpimorphismJenningsQuotient( <LpGroup>, <prime>, <class> ) . . .
 ## 
 ## computes the natural homomorphism on the <class> p-quotient of the 
@@ -93,8 +73,9 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
   function( G, prime, c )
   local Q,           # current quotient system
 	       H,           # the nilpotent quotient of <G>
-	       weights, 	# old weights quotient system
+	       weights,    	# old weights quotient system
 	       i,	          # loop variable
+        class,
 	       time;	       # runtime
 
   if not IsPrime( prime ) then
@@ -117,7 +98,7 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
   
   for i in [2..c] do 
     # copy the old quotient system to compare with the extended qs.
-#   weights := ShallowCopy(Q.Weights);
+    weights := ShallowCopy(Q.Weights);
 
     # extend the quotient system of G/\phi_i to G/\phi_{i+1}
     time:=Runtime();
@@ -125,11 +106,19 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
     Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
    
     # if we couldn't extend the quotient system any more, we're finished
-#   if weights = Q.Weights then 
-#     LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-#     Info(InfoLPRES,1,"The group has a maximal p-quotient of p-class ", Maximum(Q.Weights) );
-#     break;
-#   fi;
+    if weights = Q.Weights then 
+      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      if class = Maximum( weights ) then 
+        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
+        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
+        break;
+      fi;
+      repeat 
+        Q.Class := Q.Class + 1;
+      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      Q.Class := Q.Class - 1;
+      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
+    fi;
   od;
   
   # store the largest known nilpotent quotient of <G>
@@ -156,6 +145,7 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
         H,    # the nilpotent quotient of <G>
         i,    # loop variable
         weights, 
+        class,
         time,	# runtime
         j;    # nilpotency class
 
@@ -201,12 +191,184 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
     Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
 
     # if we couldn't extend the quotient system any more, we're finished
-#   if weights = Q.Weights then 
-#     LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-#     Info(InfoLPRES,1,"The group has a maximal p-quotient of p-class ", Maximum(Q.Weights) );
-#     break;
-#   fi;
+    if weights = Q.Weights then 
+      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      if class = Maximum( weights ) then 
+        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
+        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
+        break;
+      fi;
+      repeat 
+        Q.Class := Q.Class + 1;
+      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      Q.Class := Q.Class - 1;
+      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
+    fi;
   od;
+
+  # store this quotient system as an attribute of the group G
+  LPRES_StoreJenningsQuotientSystems( G, prime, Q );
+  return( Q.Epimorphism );
+  end );
+
+############################################################################
+##
+## No need for a method of the form?? REALLY - may still see something 
+## like this in the p-covering group?
+##
+## EpimorphismJenningsQuotient( <LpGroup>, <prime> ), or
+## JenningsQuotient( <LpGroup>, <prime> )
+## 
+## due to the following remark:
+## Remark 3. Let now G be a group but not a pgroup.
+## There is another limitation which applies
+## to the Jennings series, and not to the lower central
+## series and to the lower p-series: when Di(G) =
+## Di+1(G) 6= {1}, with p dividing the order of Di+1(G),
+## we do not know whether we have reached the end
+## of the calculation or not.
+## 
+## www.math.rwth-aachen.de/~Frank.Luebeck/Nikolaus/2003/CostantiniTalk.pdf
+##
+
+############################################################################
+##
+#M  EpimorphismJenningsQuotient( <LpGroup>, <prime> ) . . .
+## 
+## computes the natural homomorphism on the largest Jennings-quotient of the 
+## invariant <LpGroup>.
+##
+InstallOtherMethod( EpimorphismJenningsQuotient,
+  "For an invariant LpGroup, a prime number, and a positive integer",
+  true,
+  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
+    IsPosInt ], 0,
+  function( G, prime )
+  local Q,           # current quotient system
+	       H,           # the nilpotent quotient of <G>
+	       weights,    	# old weights quotient system
+	       i,	          # loop variable
+        class,
+	       time;	       # runtime
+
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
+  fi;
+
+  # Compute a weighted nilpotent presentation for the Frattini quotient G/G'G^p
+  time := Runtime();
+  Q := InitPQuotientSystem( G, prime );
+  Q.Class := 1;
+  Info( InfoLPRES, 2, "Runtime for this step ",  StringTime(Runtime()-time));
+
+  # store the largest quotient and its quotient sysstem if it's trivial
+  if Length( Q.Weights ) = 0 then 
+    LPRES_StoreLargestJenningsQuotient( G, prime, Q );
+    LPRES_StoreJenningsQuotientSystems( G, prime, Q );
+
+    return( Q.Epimorphism );
+  fi;
+  
+  repeat
+    # copy the old quotient system to compare with the extended qs.
+    weights := ShallowCopy(Q.Weights);
+
+    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
+    time:=Runtime();
+    Q := ExtendJenningsQuotientSystem( Q );
+    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
+   
+    # if we couldn't extend the quotient system any more, we're finished
+    if weights = Q.Weights then 
+      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      if class = Maximum( weights ) then 
+        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
+        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
+        break;
+      fi;
+      repeat 
+        Q.Class := Q.Class + 1;
+      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      Q.Class := Q.Class - 1;
+      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
+    fi;
+  until false;
+  
+  # store the largest known nilpotent quotient of <G>
+  LPRES_StoreJenningsQuotientSystems( G, prime, Q );
+  return( Q.Epimorphism );
+  end );
+
+############################################################################
+##
+#M  EpimorphismJenningsQuotient ( <LpGroup>, <prime>, <class> ) . . . . . . 
+## 
+## computes the natural homomorphism on the largest Jennings quotient of the 
+## invariant <LpGroup>, if the latter has already some quotient system
+## stored as attribute.
+##
+InstallOtherMethod( EpimorphismJenningsQuotient,
+  "For an invariant LpGroup with quotient system, a prime number, and a positive integer",
+  true,
+  [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasJenningsQuotientSystems,
+    IsPosInt ], 0,
+  function( G, prime )
+  local Q,    # current quotient system
+        H,    # the nilpotent quotient of <G>
+        i,    # loop variable
+        weights, 
+        class,
+        time,	# runtime
+        j;    # nilpotency class
+
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
+  fi;
+
+  # check if there's already a quotient system w.r.t. this prime number
+  i := Position( JenningsQuotientSystems( G )[1], prime );
+  if i = fail then
+    TryNextMethod();
+  fi;
+
+  # known quotient system of <G>
+  Q := JenningsQuotientSystems( G )[2][i];
+ 
+  # p-class of the quotient system
+  j := Q.Class;
+ 
+  # check if there's already a largest p-quotient
+  if HasLargestJenningsQuotients(G) then
+    i := Position( LargestJenningsQuotients(G)[1], prime );
+    if i <> fail then 
+      return( LargestJenningsQuotients(G)[2][i].Epimorphism );
+    fi;
+  fi;
+
+  # extend the largest known quotient system
+  repeat
+    weights := ShallowCopy( Q.Weights );
+
+    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
+    time := Runtime();
+    Q := ExtendJenningsQuotientSystem( Q );
+    Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
+
+    # if we couldn't extend the quotient system any more, we're finished
+    if weights = Q.Weights then 
+      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      if class = Maximum( weights ) then 
+        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
+        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
+        break;
+      fi;
+      repeat 
+        Q.Class := Q.Class + 1;
+      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
+      Q.Class := Q.Class - 1;
+      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
+    fi;
+  until false;
 
   # store this quotient system as an attribute of the group G
   LPRES_StoreJenningsQuotientSystems( G, prime, Q );
@@ -276,6 +438,21 @@ InstallOtherMethod( JenningsQuotient,
     IsPosInt ], 0,
   function( G, prime, c )
   return( Range( EpimorphismJenningsQuotient( G, prime, c ) ) );
+  end);
+
+############################################################################
+##
+#M  JenningsQuotient ( <LpGroup>, <prime> ) . . . . . . . . . . .
+##
+## computes the largest Jennings-quotient of <LpGroup>.
+##
+InstallOtherMethod( JenningsQuotient,
+  "For an LpGroup and a prime number",
+  true,
+  [ IsLpGroup,
+    IsPosInt ], 0,
+  function( G, prime )
+  return( Range( EpimorphismJenningsQuotient( G, prime ) ) );
   end);
 
 ############################################################################

@@ -15,7 +15,6 @@ InstallGlobalFunction( LPRES_JenningsSeries,
   function(Q)
   local weights,	# weights-function of <Q>
        	i,		     # loop variable
-       	c, 		    # nilpotency class of <Q>
        	H,		     # nilpotent presentation corr. to <Q>
        	gens,	   # generators of <H>
         pcs;		   # lower central series of <H>
@@ -29,19 +28,15 @@ InstallGlobalFunction( LPRES_JenningsSeries,
   # weights function of the given quotient system
   weights := Q.Weights;
 
-  # nilpotency class of <Q>
-  c := Q.Class;
-
   # build the exponent-p central series
   pcs:=[];
-  pcs[c+1] := SubgroupByIgs(H,[]);
   pcs[1]   := H;
  
-  for i in [2..c] do
-    # the exponent-p central series as subgroups by an induced generating system
-    # with weights at least <i>
+  i := 1;
+  repeat 
+    i := i+1;
     pcs[i] := SubgroupByIgs( H, gens{Filtered([1..Length(gens)],x->weights[x]>=i)} );
-  od;
+  until Size( pcs[i] ) = 1;
 
   return( pcs );
   end );
@@ -56,7 +51,6 @@ InstallGlobalFunction( LPRES_JenningsSeries,
 InstallGlobalFunction( ExtendJenningsQuotientSystem,
   function( Q )
   local c,       # nilpotency class 
-        class,
        	weights,	# weight of the generators
         Defs,	   # definitions of each (pseudo) generator and tail
         Imgs,	   # images of the generators of the LpGroup
@@ -76,8 +70,8 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
         time;
 
   # p-class
-  c := Maximum( Q.Weights );
-  class := Q.Class;
+# c := Maximum( Q.Weights );
+  c := Q.Class;
 
   # weights, definitions and images of the quotient system
   QS := rec( Lpres       := Q.Lpres,
@@ -188,7 +182,6 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   QSnew := LPRES_CreateNewQuotientSystem( QS, Basis );
   QSnew.Class := QS.Class;
   SetJenningsSeries( Range( QSnew.Epimorphism ), LPRES_JenningsSeries( QSnew ) );
-  SetJenningsClass( Range( QSnew.Epimorphism ), QSnew.Class );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
     Info( InfoLPRES, 1, "Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else
@@ -214,8 +207,7 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
         m;
 
   # exponent p-class
-  c := Maximum( QS.Weights );
-  class := Q.Class;
+  c := Q.Class;
 
   # number of generators of the group
   n := Q.Pccol![ PC_NUMBER_OF_GENERATORS ];
@@ -405,12 +397,8 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
 
     m:=1;
     while b-m >= m+1 do
-      # [i..j] should be the generators of pseudo weigth m+1
-      i := Position( QS.Weights, m+1 );
-      j := Position( QS.Weights, m+2 )-1;
-
       # Compute tails for commutators [z,u] with w(z) = b-m and w(u) = m+1
-      for u in [i..j] do 
+      for u in Filtered( [1..Length(QS.Weights)], x -> QS.Weights[x] = m+1 ) do 
         if IsList( QS.Definitions[u] ) then 
           # case 1: u is defined by a commutator
           y := QS.Definitions[u][1];
