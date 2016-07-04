@@ -2,7 +2,7 @@
 
 The nilpotent quotient algorithm for finitely L-presented groups and the
 p-quotient algorithm for finitely presented group <Cite Key=""> readily
-generalize to a algorithm for computing a polycyclic presentation for
+generalize to an algorithm for computing a polycyclic presentation for
 the p-quotient of a L-presented group.
 
 <ManSection><Oper Name="NqPQuotient" Arg="g p [c]"/>

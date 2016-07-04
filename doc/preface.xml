@@ -60,13 +60,14 @@ this special case.<P/>
 A detailed description of the nilpotent quotient algorithm can be found in <Cite
 Key="BEH08"/> or <Cite Key="H08"/>.<P/>
 
-The &lpres;-package additionally provides a p-quotient algorithm which,
+The &lpres;-package additionally provides a p-quotient and Jennings-quotient algorithm which,
 given a finite L-presentation for a group <M>G</M>, computes a polycyclic
-presentation for the <M>p</M>-quotient <M>G/\phi_{c+1}(G)</M>. This
-algorithm readily generalizes the nilpotent quotient algorithm for
+presentation for the <M>p</M>-quotient <M>G/\phi_{c+1}(G)</M> or
+Jennings quotient <M>G/\kappa_{c+1}(G)</M>, respectively. These
+algorithms readily generalize the nilpotent quotient algorithm for
 finitely L-presented groups and the p-quotient algorithm for finitely
 presented groups as implemented in the <Package>ANUPQ</Package>-package;
-see <Cite Key="anupq"/>. Again, the p-quotient algorithm for finitely
+see <Cite Key="anupq"/>. Again, the p-quotient and Jennings quotient algorithm for finitely
 L-presented groups is implemented in &GAP; only.<P/>
 
 Furthermore the &lpres;-package includes the algorithms of <Cite
