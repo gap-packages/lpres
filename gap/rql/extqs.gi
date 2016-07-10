@@ -5,41 +5,37 @@
 
 ############################################################################
 ##
-#F  LPRES_JenningsSeries( <QS> )
+#F  LPRES_RationalLowerCentralSeries( <QS> )
 ##
-## computes the p-Jennings series of a p-Jennings quotient given by the 
+## computes the rational lower central series of the quotient given by the 
 ## quotient system <QS>.
 ## TODO: Recycle the method from the p-quotient algorithm?
 ##
-# InstallGlobalFunction( LPRES_JenningsSeries,
-#   function(Q)
-#   local weights,	# weights-function of <Q>
-#        	i,		     # loop variable
-#        	H,		     # nilpotent presentation corr. to <Q>
-#        	gens,	   # generators of <H>
-#         pcs;		   # lower central series of <H>
-# 
-#   # the p-quotient
-#   H := PcpGroupByCollectorNC( Q.Pccol );
-# 
-#   # generators of <H>
-#   gens := GeneratorsOfGroup( H );
-# 
-#   # weights function of the given quotient system
-#   weights := Q.Weights;
-# 
-#   # build the exponent-p central series
-#   pcs:=[];
-#   pcs[1]   := H;
-#  
-#   i := 1;
-#   repeat 
-#     i := i+1;
-#     pcs[i] := SubgroupByIgs( H, gens{Filtered([1..Length(gens)],x->weights[x]>=i)} );
-#   until Size( pcs[i] ) = 1;
-# 
-#   return( pcs );
-#   end );
+InstallGlobalFunction( LPRES_RationalLowerCentralSeries,
+  function(Q)
+  local i,		     # loop variable
+       	H,		     # nilpotent presentation corr. to <Q>
+       	gens,	   # generators of <H>
+        pcs;		   # lower central series of <H>
+
+  # the rational lcs quotient
+  H := PcpGroupByCollectorNC( Q.Pccol );
+
+  # generators of <H>
+  gens := GeneratorsOfGroup( H );
+
+  # build the exponent-p central series
+  pcs:=[];
+  pcs[1]   := H;
+ 
+  i := 1;
+  repeat 
+    i := i+1;
+    pcs[i] := SubgroupByIgs( H, gens{Filtered([1..Length(gens)],x->Q.Weights[x]>=i)} );
+  until Size( pcs[i] ) = 1;
+
+  return( pcs );
+  end );
 
 ############################################################################
 ##
@@ -165,6 +161,7 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
 
   # smith normal form to extract the torsion of G/G'
   # ( SNF.rowtrans x Basis.mat x SNF.coltrans = SNF.normal )
+  time := Runtime();
   SNF := SmithNormalFormIntegerMatTransforms( Basis.mat );
 
   # generators w/ finite order
@@ -181,6 +178,7 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
       LPRES_AddRow( Basis, mat[i] );
     od;
   fi;
+  Info(InfoLPRES,2,"Time spent to eliminate torsion (", Length(Torsion), "): ", StringTime(Runtime()-time));
 
 #  # check if we end up in the (expected) spanning set
 #  b := Position( QS.Weights, Maximum( QS.Weights ) );
@@ -198,8 +196,7 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
 
 # Display( Basis );
   QSnew := LPRES_CreateNewRationalQuotientSystem( QS, Basis );
-#  QSnew.Class := QS.Class;
-#  SetJenningsSeries( Range( QSnew.Epimorphism ), LPRES_JenningsSeries( QSnew ) );
+  SetRationalLowerCentralSeries( Range( QSnew.Epimorphism ), LPRES_RationalLowerCentralSeries( QSnew ) );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
     Info( InfoLPRES, 1, "Class ", Maximum( QSnew.Weights ), ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else

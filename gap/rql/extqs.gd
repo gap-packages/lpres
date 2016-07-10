@@ -25,7 +25,7 @@ DeclareGlobalFunction( "LPRES_RationalCoveringGroupByQSystem" );
 ## computes the p-Jennings central series of the p-quotient represented
 ## by the weighted nilpotent quotient system <QS>.
 ##
-# DeclareGlobalFunction( "LPRES_JenningsSeries" );
+DeclareGlobalFunction( "LPRES_RationalLowerCentralSeries" );
 
 ############################################################################
 ##
@@ -35,9 +35,9 @@ DeclareGlobalFunction( "LPRES_RationalCoveringGroupByQSystem" );
 
 ############################################################################
 ##
-#A  JenningsSeries( <PcpGroup> )
+#A  RationalLowerCentralSeries( <PcpGroup> )
 ## 
-# DeclareAttribute( "JenningsSeries", IsPcpGroup );
+DeclareAttribute( "RationalLowerCentralSeries", IsPcpGroup );
 
 ############################################################################
 ##
