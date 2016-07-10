@@ -222,10 +222,11 @@ InstallMethod( InitRationalQuotientSystem,
 
   # set up the images
   for i in [1..n] do
-    obj := LPRES_AdjustIntegralObject( [ i, 1 ], HNF, Gens, ftl, Q.Pccol );
-    if obj = [i,1] then 
-      Q.Imgs[i] := i;
+    if i in Gens then 
+      k:= i - Length( Filtered([ 1..Length(HNF.Heads) ], x -> HNF.mat[x][HNF.Heads[x]] = 1 and HNF.Heads[x]<i));
+      Q.Imgs[i] := k;
     else
+      obj := LPRES_AdjustIntegralObject( [ i, 1 ], HNF, Gens, ftl, Q.Pccol );
       Q.Imgs[i] := obj;
     fi;
   od;
