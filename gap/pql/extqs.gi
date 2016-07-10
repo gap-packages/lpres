@@ -110,14 +110,14 @@ InstallGlobalFunction( ExtendPQuotientSystem,
   Info( InfoLPRES, 2, "Number of tails introduced: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
 
   # enforce consistency
-  Basis := LPRES_ConsistencyChecks( QS );
+  Basis := LPRES_ConsistencyChecks( QS, GF( QS.Prime ) );
 
   # induce the substitutions of the L-presentation to the module
   time := Runtime();
   A := rec( Relations := [],
             Substitutions := [],
             IteratedRelations := [] );
-  LPRES_InduceSpinning( QS, A );
+  LPRES_InduceSpinning( QS, A, GF( QS.Prime ) );
   if LPRES_COMPUTE_RECURSIVE_IMAGE then 
     Info( InfoLPRES, 3, "Time spent to induce the endomorphisms and relations (recursive): ", StringTime( Runtime()-time ) );
   else
@@ -489,7 +489,7 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
 
 ############################################################################
 ##
-#F  LPRES_ConsistencyChecks( <quotient system> )
+#F  LPRES_ConsistencyChecks( <quotient system>, <myRing> )
 ##
 ## Checks the local confluence of the rewriting system given by the weighted 
 ## nilpotent presentation. It implements the check from Nickel: "Computing 
@@ -504,7 +504,7 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
 ##            j   = ( j i^-1 ) i,         i < j, i not in I, w_i+w_j <= c
 ## 
 InstallGlobalFunction( LPRES_ConsistencyChecks,
-  function( QS ) 
+  function( QS, myRing ) 
   local i,j,k,
         w,
         n,          # number of generators of the FromTheLeftCollector
@@ -535,10 +535,10 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
   c := Maximum( QS.Weights);
 
   # prime - every generator has prime (relative) order
-  prime := QS.Prime;
+# prime := QS.Prime;
 
   # field with <prime> elements
-  F := GF( prime );
+# F := GF( prime );
 
   # k (j i) = (k j) i
   for k in [n,n-1..1] do
@@ -564,7 +564,8 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
           fi;
 
           if not IsZero( ev{[b..n]} ) then 
-            Add( mat, One(F) * ( ev{[b..n]} ) );
+            Info( InfoLPRES, 5, "Consistency (", k, ", ", j, ", ", i, ") gives ", ev{[b..n]} );
+            Add( mat, One(myRing) * ( ev{[b..n]} ) );
           fi;
           num := num + 1;
         else 
@@ -577,98 +578,192 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
 
   # j^m i = j^(m-1) (j i)
   for j in [n,n-1..1] do
-    for i in [1..j-1] do
-      if QS.Weights[j]+QS.Weights[i]<=c then 
-        repeat 
-          ev1 := ListWithIdenticalEntries( n, 0 );
-        until CollectWordOrFail( QS.Pccol, ev1, [j, QS.Pccol![ PC_EXPONENTS ][j]-1, j, 1, i,1] )<>fail;
-            
-        repeat
-          ev2 := ListWithIdenticalEntries( n, 0 );
-        until CollectWordOrFail( QS.Pccol, ev2, [j,1,i,1] )<>fail;
-
-        w := ObjByExponents( QS.Pccol, ev2 );
-        repeat 
-          ev2 := ExponentsByObj( QS.Pccol, [j,QS.Pccol![ PC_EXPONENTS ][j]-1] );
-        until CollectWordOrFail( QS.Pccol, ev2, w )<>fail;
-
-        ev := ev1 - ev2;
-        if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
-          Error("in ExtendPQuotientSystem: wrong basis from consistency check (j^m i)");
+    if IsBound( QS.Pccol![ PC_EXPONENTS ][j] ) then
+      for i in [1..j-1] do
+        if QS.Weights[j]+QS.Weights[i]<=c then 
+          repeat 
+            ev1 := ListWithIdenticalEntries( n, 0 );
+          until CollectWordOrFail( QS.Pccol, ev1, [j, QS.Pccol![ PC_EXPONENTS ][j]-1, j, 1, i,1] )<>fail;
+              
+          repeat
+            ev2 := ListWithIdenticalEntries( n, 0 );
+          until CollectWordOrFail( QS.Pccol, ev2, [j,1,i,1] )<>fail;
+  
+          w := ObjByExponents( QS.Pccol, ev2 );
+          repeat 
+            ev2 := ExponentsByObj( QS.Pccol, [j,QS.Pccol![ PC_EXPONENTS ][j]-1] );
+          until CollectWordOrFail( QS.Pccol, ev2, w )<>fail;
+  
+          ev := ev1 - ev2;
+          if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
+            Error("in ExtendPQuotientSystem: wrong basis from consistency check (j^m i)");
+          fi;
+  
+          if not IsZero( ev{[b..n]} ) then 
+            Info( InfoLPRES, 5, "Consistency (", j, "^", QS.Pccol![ PC_EXPONENTS ][j], " ", i, ") gives ", ev{[b..n]} );
+            Add( mat, One( myRing ) * ev{[b..n]} );
+          fi;
+          num := num + 1;
+        else 
+          break;
         fi;
-
-        if not IsZero( ev{[b..n]} ) then 
-          Add( mat, One( F ) * ev{[b..n]} );
-        fi;
-        num := num + 1;
-      else 
-        break;
-      fi;
-    od;
+      od;
+    fi;
   od;
 
   # j i^m = (j i) i^(m-1)
   for i in [1..n] do
-    for j in [i+1..n] do
-      if QS.Weights[i]+QS.Weights[j]<=c then 
-        if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
-          repeat 
+    if IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then
+      for j in [i+1..n] do
+        if QS.Weights[i]+QS.Weights[j]<=c then 
+          if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
+            repeat 
+              ev1 := ExponentsByObj( QS.Pccol, [j,1] );
+            until CollectWordOrFail( QS.Pccol, ev1, QS.Pccol![ PC_POWERS ][i] );
+          else 
             ev1 := ExponentsByObj( QS.Pccol, [j,1] );
-          until CollectWordOrFail( QS.Pccol, ev1, QS.Pccol![ PC_POWERS ][i] );
-        else 
-          ev1 := ExponentsByObj( QS.Pccol, [j,1] );
-        fi;
+          fi;
+          
+          repeat
+            ev2 := ListWithIdenticalEntries( n, 0 );
+          until CollectWordOrFail(QS.Pccol,ev2,[j,1,i,QS.Pccol![PC_EXPONENTS][i]] ) <>fail;
         
+          ev := ev1 - ev2;
+          if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
+            Error("in ExtendPQuotientSystem: wrong basis from consistency check (j i^m)");
+          fi;
+  
+          if not IsZero( ev{[b..n]} ) then 
+            Info( InfoLPRES, 5, "Consistency (", j, " ", i, "^", QS.Pccol![ PC_EXPONENTS ][i], ") gives ", ev{[b..n]} );
+            Add( mat, One( myRing ) * ev{[b..n]} ); 
+          fi;
+          num := num + 1;
+        else 
+          break;
+        fi;
+      od;
+    fi;
+  od;
+
+  # i^m i = i i^m
+  for i in [1..n] do
+    if IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then
+      if 2 * QS.Weights[i]<=c then
         repeat
-          ev2 := ListWithIdenticalEntries( n, 0 );
-        until CollectWordOrFail(QS.Pccol,ev2,[j,1,i,QS.Pccol![PC_EXPONENTS][i]] ) <>fail;
-      
+          ev1 := ListWithIdenticalEntries( n, 0 );
+        until CollectWordOrFail(QS.Pccol,ev1,[i,QS.Pccol![ PC_EXPONENTS ][i]+1])<>fail;
+            
+        if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
+          repeat
+            ev2 := ExponentsByObj( QS.Pccol, [i,1] );
+          until CollectWordOrFail( QS.Pccol, ev2, QS.Pccol![ PC_POWERS ][i] ) <> fail;
+        else
+          ev2 := ExponentsByObj( QS.Pccol, [i,1] );
+        fi;
+            
         ev := ev1 - ev2;
         if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
-          Error("in ExtendPQuotientSystem: wrong basis from consistency check (j i^m)");
+          Error("in ExtendPQuotientSystem: wrong basis from consistency check (i^m i)");
         fi;
-
+  
         if not IsZero( ev{[b..n]} ) then 
-          Add( mat, One( F ) * ev{[b..n]} ); 
+          Info( InfoLPRES, 5, "Consistency (", i, " ", i, "^", QS.Pccol![ PC_EXPONENTS ][i], ") gives ", ev{[b..n]} );
+          Add( mat, One(myRing) * ev{[b..n]} );
         fi;
         num := num + 1;
       else 
         break;
       fi;
-    od;
-  od;
-
-  # i^m i = i i^m
-  for i in [1..n] do
-    if 2 * QS.Weights[i]<=c then
-      repeat
-        ev1 := ListWithIdenticalEntries( n, 0 );
-      until CollectWordOrFail(QS.Pccol,ev1,[i,QS.Pccol![ PC_EXPONENTS ][i]+1])<>fail;
-          
-      if IsBound( QS.Pccol![ PC_POWERS ][i] ) then
-        repeat
-          ev2 := ExponentsByObj( QS.Pccol, [i,1] );
-        until CollectWordOrFail( QS.Pccol, ev2, QS.Pccol![ PC_POWERS ][i] ) <> fail;
-      else
-        ev2 := ExponentsByObj( QS.Pccol, [i,1] );
-      fi;
-          
-      ev := ev1 - ev2;
-      if LPRES_TEST_ALL and not IsZero( ev{[1..b-1]} ) then 
-        Error("in ExtendPQuotientSystem: wrong basis from consistency check (i^m i)");
-      fi;
-
-      if not IsZero( ev{[b..n]} ) then 
-        Add( mat, One(F) * ev{[b..n]} );
-      fi;
-      num := num + 1;
-    else 
-      break;
     fi;
   od;
 
-  TriangulizeMat( mat );
-  Basis := rec( mat := Filtered( mat, x -> not IsZero( x ) ) );
+  # j = (j -i) i
+  for i in [1..n] do
+    if not IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then
+      for j in [i+1..n] do
+        if QS.Weights[i]+QS.Weights[j]<=c then
+          repeat
+            ev1 := ListWithIdenticalEntries( n, 0 );
+          until CollectWordOrFail( QS.Pccol, ev1, [j,1,i,-1,i,1] )<>fail;
+
+          ev1[j] := ev1[j] - 1;
+          if LPRES_TEST_ALL and not IsZero( ev1{[1..b-1]} ) then 
+            Error("in ExtendPQuotientSystem: wrong basis from consistency check (i^m i)");
+          fi;
+  
+          if not IsZero( ev1) then
+            Info( InfoLPRES, 5, "Consistency (", j, "  ", -i, ") ", i, " ) gives ", ev1{[b..n]} );
+            Add( mat, One( myRing ) * ev1{[b..n]} );
+          fi;
+          num := num + 1;
+        else
+          break;
+        fi;
+      od;
+    fi;
+  od;
+
+  # i = -j (j i)
+  for j in [1..n] do
+    if not IsBound( QS.Pccol![ PC_EXPONENTS ][j] ) then
+      for i in [1..j-1] do
+        if QS.Weights[i]+QS.Weights[j]<=c then
+          repeat
+            ev1 := ListWithIdenticalEntries( n, 0 );
+          until CollectWordOrFail( QS.Pccol, ev1, [ j,1,i,1 ] )<>fail;
+    
+          w := ObjByExponents( QS.Pccol, ev1 );
+          repeat
+            ev1 := ExponentsByObj( QS.Pccol, [j,-1] );
+          until CollectWordOrFail( QS.Pccol, ev1, w )<>fail;
+              
+          ev1[i] := ev1[i] - 1;
+          if LPRES_TEST_ALL and not IsZero( ev1{[1..b-1]} ) then 
+            Error("in ExtendPQuotientSystem: wrong basis from consistency check (-j j i)");
+          fi;
+
+          if not IsZero( ev1 ) then 
+            Info( InfoLPRES, 5, "Consistency (", -j, "  (", j, " ", i, ") ) gives ", ev1{[b..n]} );
+            Add( mat, One( myRing ) * ev1{[b..n]} );
+          fi;
+          num := num + 1;
+            
+          # -i = -j (j -i)
+          if not IsBound( QS.Pccol![ PC_EXPONENTS ][i] ) then
+            repeat
+              ev1 := ListWithIdenticalEntries( n, 0 );
+            until CollectWordOrFail( QS.Pccol, ev1, [ j,1,i,-1 ] )<>fail;
+  
+            w := ObjByExponents( QS.Pccol, ev1 );
+            repeat
+              ev1 := ExponentsByObj( QS.Pccol, [j,-1] );
+            until CollectWordOrFail( QS.Pccol, ev1, w )<>fail;
+                  
+            ev1[i] := ev1[i] + 1;
+            if LPRES_TEST_ALL and not IsZero( ev1{[1..b-1]} ) then 
+              Error("in ExtendPQuotientSystem: wrong basis from consistency check (-j j -i)");
+            fi;
+
+            if not IsZero( ev1 ) then 
+              Info( InfoLPRES, 5, "Consistency (", -j, "  (", j, " ",-i, ") ) gives ", ev1{[b..n]} );
+              Add( mat, One( myRing ) * ev1{[b..n]} );
+            fi;
+            num := num + 1;
+          fi;
+        else 
+          break;
+        fi;
+      od;
+    fi;
+  od;
+
+  Basis := rec( );
+  if myRing = Integers then 
+    Basis.mat := Filtered( HermiteNormalFormIntegerMat( mat ), x -> not IsZero( x ) );
+  elif IsField( myRing ) and IsFinite( myRing ) then 
+    TriangulizeMat( mat );
+    Basis.mat := Filtered( mat, x -> not IsZero( x ) );
+  fi;
   Basis.Heads := List( Basis.mat, PositionNonZero );
 
   Info( InfoLPRES, 2, "Time spent for ", num, " consistency checks: ", StringTime( Runtime() - time ) );
@@ -735,7 +830,7 @@ LPRES_ComputeImages := function( QS, sub, hom, imgs, pos, myOne )
     for i in [1,3..Length(obj)-1] do
       tmp := tmp * LPRES_ComputeImages( QS, sub, hom, imgs, obj[i], myOne ) ^ obj[i+1];
     od;
-    imgs[pos] := tmp^-1 * LPRES_ComputeImages( QS, sub, hom, imgs, -QS.Definitions[pos], myOne ) ^ QS.Prime;
+    imgs[pos] := tmp^-1 * LPRES_ComputeImages( QS, sub, hom, imgs, -QS.Definitions[pos], myOne ) ^ QS.Pccol![ PC_EXPONENTS ][ -QS.Definitions[pos] ];
   elif IsList( QS.Definitions[pos] ) then
     # commutator a_j^-1 a_k a_j = v_jk t <-> t = v_jk^{-1} a_j^-1 a_k a_j
     k := QS.Definitions[pos][1];
@@ -766,11 +861,8 @@ LPRES_ComputeImages := function( QS, sub, hom, imgs, pos, myOne )
 ## relations of the <LpGroup> to elements of the p-covering group.
 ##
 InstallGlobalFunction( LPRES_InduceSpinning,
-  function( QS, A ) 
-  local imgs, hom, F, sub, obj, i, j, k, b, mat, myField, H, G, c, fam, time;
-
-  # the prime field
-  myField := GF( QS.Prime );
+  function( QS, A, myRing ) 
+  local imgs, hom, F, sub, obj, i, j, k, b, mat, H, G, c, fam, time;
 
   F := FreeGroupOfLpGroup( QS.Lpres );
 
@@ -796,17 +888,17 @@ InstallGlobalFunction( LPRES_InduceSpinning,
   hom := GroupHomomorphismByImagesNC( QS.Lpres, H, GeneratorsOfGroup( QS.Lpres ), imgs );
 
 # Append( A.Relations, List( FixedRelatorsOfLpGroup( QS.Lpres ),
-#                            x -> One(myField)*Exponents( x^hom ){[b..Length(QS.Weights)]} ) );
+#                            x -> One(myRing)*Exponents( x^hom ){[b..Length(QS.Weights)]} ) );
   time := Runtime();
   A.Relations := List( FixedRelatorsOfLpGroup( QS.Lpres ),
-                       x -> One(myField)*Exponents( ElementOfLpGroup( fam, x )^hom ){[b..Length(QS.Weights)]} );
+                       x -> One(myRing)*Exponents( ElementOfLpGroup( fam, x )^hom ){[b..Length(QS.Weights)]} );
   Info( InfoLPRES, 3, "Time spent to map the fixed relations: ", StringTime( Runtime()-time ) );
 
 # Append( A.IteratedRelations, List( IteratedRelatorsOfLpGroup( QS.Lpres ),
-#                                    x -> One(myField)*Exponents( x ^ hom ){ [b..Length(QS.Weights) ]} ) );
+#                                    x -> One(myRing)*Exponents( x ^ hom ){ [b..Length(QS.Weights) ]} ) );
   time := Runtime();
   A.IteratedRelations := List( IteratedRelatorsOfLpGroup( QS.Lpres ),
-                               x -> One(myField)*Exponents( ElementOfLpGroup( fam, x ) ^ hom ){ [b..Length(QS.Weights) ]} );
+                               x -> One(myRing)*Exponents( ElementOfLpGroup( fam, x ) ^ hom ){ [b..Length(QS.Weights) ]} );
   Info( InfoLPRES, 3, "Time spent to map the iterated relations: ", StringTime( Runtime()-time ) );
  
   # map the endomorphisms to endomorphisms of the tails-module
@@ -821,7 +913,7 @@ if LPRES_COMPUTE_RECURSIVE_IMAGE then
       if not IsZero( Exponents( imgs[i] ){ [1..b-1] } ) then
         Error( "The L-presentation is not invariant @ i = ", i , "\n" );
       fi;
-      Add( mat, One( myField ) * Exponents( imgs[i] ){[b..Length(QS.Weights)]} );
+      Add( mat, One( myRing ) * Exponents( imgs[i] ){[b..Length(QS.Weights)]} );
     od;
 else 
     for i in [1..Length(QS.Definitions)] do
@@ -856,7 +948,7 @@ else
         if not IsZero( Exponents( imgs[i] ){ [1..b-1] } ) then
           Error( "The L-presentation is not invariant @ i = ", i , "\n" );
         fi;
-        Add( mat, One( myField ) * Exponents( imgs[i] ){[b..Length(QS.Weights)]} );
+        Add( mat, One( myRing ) * Exponents( imgs[i] ){[b..Length(QS.Weights)]} );
       fi;
     od;
 fi;

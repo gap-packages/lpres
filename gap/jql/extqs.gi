@@ -30,7 +30,7 @@ InstallGlobalFunction( LPRES_JenningsSeries,
 
   # build the exponent-p central series
   pcs:=[];
-  pcs[1]   := H;
+  pcs[1] := H;
  
   i := 1;
   repeat 
@@ -69,11 +69,10 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
         Qnew,
         time;
 
-  # p-class
-# c := Maximum( Q.Weights );
+  # Jennings class of the quotient system
   c := Q.Class;
 
-  # weights, definitions and images of the quotient system
+  # set up the next quotient system
   QS := rec( Lpres       := Q.Lpres,
              Prime       := Q.Prime,
              Class       := Q.Class + 1,
@@ -95,43 +94,26 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   od;
 
   # build a (possibly inconsistent) nilpotent presentation for the 
-  # p-covering group with respect to the given quotient system
-  # `Description of groups of prime power order', Neumann, Nickel,
-  # Niemeyer, 1998
+  # Jennings-covering group with respect to the given quotient system
+  # slight amendment of the p-cover methods in `Description of groups
+  # of prime power order', Neumann, Nickel, Niemeyer, 1998
   time := Runtime();
   LPRES_JenningsCoveringGroupByQSystem( Q, QS );
-# PrintPcpPresentation( PcpGroupByCollectorNC( QS.Pccol ) );
   Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( Runtime()-time ) );
   Info( InfoLPRES, 2, "Number of tails introduced: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
 
   # position of the first pseudo generator/tail
   b := Position( QS.Weights, Maximum( QS.Weights ) );
   
-  # enforce consistency
-  Basis := LPRES_ConsistencyChecks( QS );
-# Display( "Consistencies:" );
-# for i in [1..Length(Basis.mat)] do
-#   Display( List( Basis.mat[i], Int ) );
-# od;
+  # enforce consistency of the nilpotent presentation
+  Basis := LPRES_ConsistencyChecks( QS, GF( QS.Prime ) );
 
-  # induce the substitutions of the L-presentation to the module
+  # induce the substitutions and relations of the L-presentation to the module
   time := Runtime();
   A := rec( Relations := [],
             Substitutions := [],
             IteratedRelations := [] );
-  LPRES_InduceSpinning( QS, A );
-# Display("Relations:");
-# for i in [1..Length(A.Relations)] do
-#   Display( List( A.Relations[i], Int ) );
-# od;
-# Display("ItRelations:");
-# for i in [1..Length(A.IteratedRelations)] do
-#   Display( List( A.IteratedRelations[i], Int ) );
-# od;
-# Display("Map:");
-# for i in [1..Length(A.Substitutions)] do
-#   Display( List( A.Substitutions[i], x -> List( x, Int ) ) );
-# od;
+  LPRES_InduceSpinning( QS, A, GF( QS.Prime ) );
   if LPRES_COMPUTE_RECURSIVE_IMAGE then 
     Info( InfoLPRES, 3, "Time spent to induce the endomorphisms and relations (recursive): ", StringTime( Runtime()-time ) );
   else
@@ -139,14 +121,13 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   fi;
 
   # run the spinning algorithm
-  time:=Runtime();
-  stack:=A.IteratedRelations;
+  time := Runtime();
+  stack := A.IteratedRelations;
   for i in [1..Length(stack)] do 
     if not IsZero( stack[i] ) then 
       LPRES_AddPRow( Basis, stack[i] );
     fi;
   od;
-
   while not IsEmpty(stack) do
     Info( InfoLPRES, 4, "Spinning stack has size ", Length(stack) );
     ev := Remove( stack, 1 );
@@ -167,15 +148,17 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   Info(InfoLPRES,2,"Time spent for spinning algorithm: ", StringTime(Runtime()-time));
 
   # check if we end up in the (expected) spanning set
-  b := Position( QS.Weights, Maximum( QS.Weights ) );
-  Gens := Filtered( [1..Length(QS.Weights)-b+1], x -> not x in Basis.Heads );
-  if not ForAll( Gens, i -> ( IsList( QS.Definitions[i+b-1] ) and 
-                              QS.Weights[ QS.Definitions[i+b-1][1] ] = QS.Class - 1 and
-                              QS.Weights[ QS.Definitions[i+b-1][2] ] = 1 ) or
-                            ( IsInt( QS.Definitions[i+b-1] ) and
-                              QS.Definitions[i+b-1] < 0 and
-                              QS.Prime * QS.Weights[ -QS.Definitions[i+b-1] ] = QS.Class ) ) then 
-    Error( "Element outside the spanning set survives" );
+  if LPRES_TEST_ALL then 
+    b := Position( QS.Weights, Maximum( QS.Weights ) );
+    Gens := Filtered( [1..Length(QS.Weights)-b+1], x -> not x in Basis.Heads );
+    if not ForAll( Gens, i -> ( IsList( QS.Definitions[i+b-1] ) and 
+                                QS.Weights[ QS.Definitions[i+b-1][1] ] = QS.Class - 1 and
+                                QS.Weights[ QS.Definitions[i+b-1][2] ] = 1 ) or
+                              ( IsInt( QS.Definitions[i+b-1] ) and
+                                QS.Definitions[i+b-1] < 0 and
+                                QS.Prime * QS.Weights[ -QS.Definitions[i+b-1] ] = QS.Class ) ) then 
+      Error( "Element outside the spanning set survives" );
+    fi;
   fi;
 
   # use the basis to create the new quotient system
@@ -183,9 +166,9 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   QSnew.Class := QS.Class;
   SetJenningsSeries( Range( QSnew.Epimorphism ), LPRES_JenningsSeries( QSnew ) );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
-    Info( InfoLPRES, 1, "Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
+    Info( InfoLPRES, 1, "Jennings-Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else
-    Info( InfoLPRES, 1, "Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights),
+    Info( InfoLPRES, 1, "Jennings-Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights),
   	       " generators with relative orders: ", RelativeOrders(QSnew.Pccol){[Length(Q.Weights)+1..Length(QSnew.Weights)]});
   fi;
   return( QSnew );
@@ -200,13 +183,13 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
   local i,j,k,
         x,y,z,u,
         n,
-        c,                   # exponent p class
+        c,                   
         class,
         b, 
         ev1,ev2,
         m;
 
-  # exponent p-class
+  # Jennings class
   c := Q.Class;
 
   # number of generators of the group
@@ -239,13 +222,13 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
   # which t is defined as a commutator or as the p-th
   # power of a generator y, where y itself is defined
   # as a p-th power.
-
+  # 
   # continue with the set F descibed in NNN98
   # commutator relations [a_j,a_i] with w(a_i) = 1
   # BEWARE of the order [a_j,a_i] with w(a_j) = b
   # and w(a_i) = 1 are among the spanning set of 
   # \varphi_b / \varphi_{b+1}
-
+  # 
   # we sort the tails in ascending order by their pseudo weight
   #                w(a_k)        if 1<k<n
   # \hat w(a_k) =  p*w(a_i)      if 1<k<n and a_k := a_i^p
@@ -253,14 +236,18 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
   # 
   # Sorted in order to apply the TriangulizeMat later one (those which
   # we wish to survice succeed the others)!
+  # 
+  # NOTE: since a power relation ai^p gives an element of weight p*w(ai)
+  # we cannot ensure that power relation of an element defined by a 
+  # commutator do not generated the module; computation with the commutator
+  # needs to know all tails added to relations of weight w(aj)+w(ai) but 
+  # the power relation is too deep within the series
   for j in Filtered( [1..n], x -> Q.Weights[x]*Q.Prime < Q.Class+1 ) do
     # add tails to those the power relator which aren't definitions and 
     # which aren't trivial in the Jennings series
     if not -j  in Q.Definitions then 
-#     if not IsList( Q.Definitions[j] ) then 
-        Add( QS.Definitions, -j );
-        Add( QS.Weights, c+1 );
-#     fi;
+      Add( QS.Definitions, -j );
+      Add( QS.Weights, c+1 );
     fi;
   od;
   for j in Filtered( [1..n], x-> Q.Weights[x] < Q.Class ) do
@@ -282,10 +269,8 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
     # which aren't trivial in the Jennings series
     # NOTE we also add tails to power relations of commutators here
     if not -j  in Q.Definitions then 
-#     if not IsList( Q.Definitions[j] ) then 
-        Add( QS.Definitions, -j );
-        Add( QS.Weights, c+1 );
-#     fi;
+      Add( QS.Definitions, -j );
+      Add( QS.Weights, c+1 );
     fi;
   od;
   for j in Filtered( [1..n], x-> Q.Weights[x] = Q.Class ) do
@@ -362,39 +347,7 @@ InstallGlobalFunction( LPRES_JenningsCoveringGroupByQSystem,
 
   # run the tails routine ALGORITHM 3 in NNN98
   for b in [c+1,c..2] do
-
-    # if u has weight b-1, u^p has weight p*(b-1),
-    # then the definition [z,y] =: u has weight w(z) = p*(b-1)-1 and w(y) = 1
-#   for u in Filtered( [1..n], x-> QS.Weights[x] = b-1 and Q.Prime * QS.Weights[x] < Q.Class+1 )  do
-#     # Compute tails for p-th powers u^p with w(u) = b-1 and 
-#     # u is defined as a commutator [z,y] =: u
-#     if IsList( QS.Definitions[u] ) then 
-#       z := QS.Definitions[u][1];
-#       y := QS.Definitions[u][2];
-
-#       # z^p-1 ( zy )
-#       repeat 
-#         ev1 := ExponentsByObj( QS.Pccol, [ z, Q.Prime - 1 ] );
-#         repeat 
-#           ev2 := ExponentsByObj( QS.Pccol, [ z, 1 ] );
-#         until CollectWordOrFail( QS.Pccol, ev2, [ y, 1 ] ) <> fail;
-#       until CollectWordOrFail( QS.Pccol, ev1, ObjByExponents( QS.Pccol, ev2 ) ) <> fail;
-
-#       # z^p y
-#       repeat 
-#         ev2 := ExponentsByObj( QS.Pccol, GetPower( QS.Pccol, z ) );
-#       until CollectWordOrFail( QS.Pccol, ev2, [ y, 1 ] ) <> fail;
-
-#       # t := ( z^{p-1} (zy))^{-1} ((z^p)y )
-#       ev1 := ( ev2 - ev1 ) mod Q.Prime;
-
-#       # Add to \hat R the relation u^p = v_{u^p} t
-#       SetPower( QS.Pccol, u, Concatenation( GetPower( Q.Pccol, u ), ObjByExponents( QS.Pccol, ev1 ) ) );
-#       SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
-#       FromTheLeftCollector_SetCommute( QS.Pccol );
-#     fi;
-#   od;
-
+    # NOTE we skip the power relations (in contrast to NNN98) here:
     m:=1;
     while b-m >= m+1 do
       # Compute tails for commutators [z,u] with w(z) = b-m and w(u) = m+1
