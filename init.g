@@ -79,6 +79,11 @@ if TestPackageAvailability( "polycyclic", "2.5" ) <> fail then
   ReadPackage( LPRESPkgName, "gap/jql/extqs.gd" );
   ReadPackage( LPRESPkgName, "gap/jql/jq.gd" );
 
+  # rational lower central series
+  ReadPackage( LPRESPkgName, "gap/rql/initqs.gd" );
+  ReadPackage( LPRESPkgName, "gap/rql/extqs.gd" );
+  ReadPackage( LPRESPkgName, "gap/rql/rq.gd" );
+
   # approximating the Schur multiplier
   ReadPackage( LPRESPkgName, "gap/schumu/schumu.gd" );
   

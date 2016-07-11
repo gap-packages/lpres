@@ -64,6 +64,11 @@ if TestPackageAvailability( "Polycyclic", "2.5" ) <> fail then
   # Jennings quotient
   ReadPackage( LPRESPkgName, "gap/jql/extqs.gi" );
   ReadPackage( LPRESPkgName, "gap/jql/jq.gi" );
+
+  # rational lower central series
+  ReadPackage( LPRESPkgName, "gap/rql/initqs.gi" );
+  ReadPackage( LPRESPkgName, "gap/rql/extqs.gi" );
+  ReadPackage( LPRESPkgName, "gap/rql/rq.gi" );
   
   # approximating the Schur multiplier
   ReadPackage( LPRESPkgName, "gap/schumu/schumu.gi" );
