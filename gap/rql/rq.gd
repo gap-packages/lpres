@@ -19,9 +19,8 @@ DeclareOperation( "EpimorphismTorsionFreeNilpotentQuotient", [ IsLpGroup, IsPosI
 ##
 #A  TorsionFreeNilpotentQuotientSystem ( <LpGroup> )
 ##
-## Stores the largest torsion free nilpotent quotient systems of an invariant
-## LpGroup that has been computed by either InitRationalQuotientSystem
-## or ExtendRationalQuotientSystem.
+## A set of the largest p-quotient systems of an invariant LpGroup that has 
+## been computed by InitTorsionFreeNilpotentQuotientSystem or ExtendTorsionFreeNilpotentQuotientSystem.
 ##
 DeclareAttribute( "TorsionFreeNilpotentQuotientSystem", IsLpGroup and
                                       HasIsInvariantLPresentation and
@@ -31,21 +30,21 @@ DeclareAttribute( "TorsionFreeNilpotentQuotientSystem", IsLpGroup and
 ##
 #A  LargestTorsionFreeNilpotentQuotient( <LpGroup> )
 ## 
-## stores the largest torsion free nilpotent quotient.
+## stores the largest p-quotients as a list
 DeclareAttribute( "LargestTorsionFreeNilpotentQuotient", IsLpGroup );
 
 ############################################################################
 ##
 #F  SmallerTorsionFreeNilpotentQuotientSystem ( <Q>, <int> )
 ## 
-## Computes a nilpotent quotient system for G/G_i if a nilpotent 
-## quotient system for G/G_j is known, i<j.
+## Computes a nilpotent quotient system for G/gamma_i(G) if a nilpotent 
+## quotient system for G/gamma_j(G) is known, i<j.
 ##
 DeclareGlobalFunction( "SmallerTorsionFreeNilpotentQuotientSystem" );
 
 ############################################################################
 ##
-#A  RationalLowerCentralSeries( <PcpGroup> )
+#A  ExponentPCentralSeries( <PcpGroup> )
 ## 
-## stores the rational lower central series of the quotient.
+## stores the largest p-quotients as a list
 DeclareAttribute( "RationalLowerCentralSeries", IsPcpGroup );
