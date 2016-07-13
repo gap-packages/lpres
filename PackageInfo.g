@@ -58,8 +58,8 @@ AbstractHTML   := "The LPRES Package defines new GAP objects to work with \
 L-presented groups, namely groups given by a finite generating set and a \
 possibly-infinite set of relations given as iterates of finitely many \
 seed relations by a finite set of endomorphisms. The package implements \
-nilpotent-, p-, and Jennings-quotient, Todd-Coxeter and \
-Reidemeister-Schreier algorithms for L-presented groups.",
+nilpotent-, torsion-free nilpotent-, p-, and Jennings-quotient,\
+Todd-Coxeter and Reidemeister-Schreier algorithms for L-presented groups.",
 
 PackageDoc := rec(
   BookName  := ~.PackageName,
@@ -86,6 +86,7 @@ Dependencies := rec(
 Autoload := false,
 
 Keywords := [ "nilpotent quotient algorithm",
+              "torsion-free nilpotent quotient algorithm",
               "p-quotient algorithm",
               "Jennings quotient algorithm",
               "nilpotent presentations",
@@ -100,6 +101,7 @@ Keywords := [ "nilpotent quotient algorithm",
               "infinite presentations",
               "commutators",
               "lower central series",
+              "rational lower central series",
               "p-central series",
               "Jennings series", "Jennings-Lazard-Zassenhaus series",
               "Free Engel groups",

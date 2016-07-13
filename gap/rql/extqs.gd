@@ -7,8 +7,8 @@
 ##
 #O  ExtendRationalQuotientSystem ( <quo> )
 ##
-## Extends the quotient system for G/gamma_i(G) to a consistent quotient
-## system for G/gamma_{i+1}(G).
+## Extends the quotient system for G/G_i to a consistent quotient
+## system for G/G_{i+1}.
 ##
 DeclareGlobalFunction( "ExtendRationalQuotientSystem" );
 
@@ -20,18 +20,12 @@ DeclareGlobalFunction( "LPRES_RationalCoveringGroupByQSystem" );
 
 ############################################################################
 ##
-#F  LPRES_JenningsSeries( <QS> )
+#F  LPRES_RationalLowerCentralSeries( <QS> )
 ##
-## computes the p-Jennings central series of the p-quotient represented
-## by the weighted nilpotent quotient system <QS>.
+## computes the rational lower central series of the torsion-free nilpotent
+## quotient represented by the quotient system <QS>.
 ##
 DeclareGlobalFunction( "LPRES_RationalLowerCentralSeries" );
-
-############################################################################
-##
-#A  JenningsClass( <PcpGroup> )
-## 
-# DeclareAttribute( "JenningsClass", IsPcpGroup );
 
 ############################################################################
 ##

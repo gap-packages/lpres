@@ -19,7 +19,7 @@ LPRES_EpimorphismFromQS := function( Q )
       Add( imgs, PcpElementByGenExpList( Q.Pccol, Q.Imgs[i] ) );
     fi;
   od;
-  return( GroupHomomorphismByImagesNC( FreeGroupOfLpGroup( Q.Lpres ),
+  return( GroupHomomorphismByImagesNC( Q.Lpres,
                                        PcpGroupByCollector( Q.Pccol ),
                                        FreeGeneratorsOfLpGroup( Q.Lpres ),
                                        imgs ) );
@@ -82,7 +82,6 @@ InstallMethod( InitRationalQuotientSystem,
   [ IsLpGroup ], 0,
   function( G )
   local ftl,		# FromTheLeftCollector for G/G'G^p
-        A,		# power relations from Hermite normal form
         Q,		# new quotient system
         n,		# number of generators of L
         ev,evn,	# exponent vectors for spinning algorithm
@@ -103,6 +102,7 @@ InstallMethod( InitRationalQuotientSystem,
   # number of generators
   n := Length( GeneratorsOfGroup(G) );
   
+  # Hermite normal form of the exponent vectors
   HNF := rec( mat := [], Heads := [] );
 
   # exponent vectors of the iterated relators 
@@ -129,8 +129,7 @@ InstallMethod( InitRationalQuotientSystem,
   endos:=[];
   for map in EndomorphismsOfLpGroup(G) do
     mat := NullMat( n, n );
-    obj := List( GeneratorsOfGroup(G),
-                 x->ExtRepOfObj(UnderlyingElement(x)^map) );
+    obj := List( GeneratorsOfGroup(G), x->ExtRepOfObj(UnderlyingElement(x)^map) );
 
     for j in [1..n] do 
       for k in [1,3..Length(obj[j])-1] do 
@@ -155,7 +154,7 @@ InstallMethod( InitRationalQuotientSystem,
   
   # add the (fixed) relators
   for rel in FixedRelatorsOfLpGroup(G) do
-    ev := ListWithIdenticalEntries( n );
+    ev := ListWithIdenticalEntries( n, 0 );
     obj := ExtRepOfObj( rel );
     for i in [1,3..Length(obj)-1] do 
       ev[obj[i]] := ev[obj[i]] + obj[i+1];
@@ -177,25 +176,19 @@ InstallMethod( InitRationalQuotientSystem,
     mat := SNF.coltrans ^ -1;
    
     # add the torsion generators to the HNF:
-    for i in [1..Length(Torsion)] do
-      LPRES_AddRow( HNF, mat[i] );
-    od;
+    Append( HNF.mat, mat{[1..Length(Torsion)]} );
+    HNF.mat := HermiteNormalFormIntegerMat( HNF.mat );
+    HNF.mat := Filtered( HNF.mat, x -> not IsZero( x ) );
+    HNF.Heads := List( HNF.mat, PositionNonZero );
   fi;
 
-# Display( HNF );
-
-  # we have now killed the torsion of G/G' and continue as in NQL:
-  
+  # we have factored out the torsion of G/G' and continue as in NQL:
   # generators with power relations:
   Gens := HNF.Heads{ Filtered( [1..Length(HNF.Heads)], x->HNF.mat[x][HNF.Heads[x]]<>1) };
   
   # infinite generators;
   Append( Gens, Filtered( [1..n], x -> not x in HNF.Heads ) );
   Sort( Gens );
-# Display( Gens );
-
-  # adjust the HNF 
-# A := LPRES_PowerRelationsOfHNF( HNF );
 
   # set up the quotient system
   Q := rec( Lpres := G,
@@ -215,7 +208,6 @@ InstallMethod( InitRationalQuotientSystem,
 
       obj := LPRES_AdjustIntegralObject( [ Gens[i], HNF.mat[ j ][ Gens[i] ] ], HNF, Gens, ftl, Q.Pccol );
       SetPower( Q.Pccol, i, obj );
-# Print( i, "^", HNF.mat[j][Gens[i]], " = ", obj, "\n" );
     fi;
   od;
   UpdatePolycyclicCollector( Q.Pccol );
@@ -230,54 +222,11 @@ InstallMethod( InitRationalQuotientSystem,
       Q.Imgs[i] := obj;
     fi;
   od;
-  Q.Definitions := Filtered( [1..Length(Q.Imgs)], x -> not IsList(Q.Imgs[x]) );
-# Display( Q.Definitions );
 
-# set up the collector
-# for i in [ 1 .. Length( Gens ) ] do
-#   k := Position( HNF.Heads, Gens[i] );
-#   if k <> fail then
-#     SetRelativeOrder( Q.Pccol, i, A[k][Gens[i]] );
-#     ev := ShallowCopy( A[k]{ Gens } );
-#     ev[i] := 0;
-#     if not IsZero( ev ) then
-#       SetPower( Q.Pccol, i, ObjByExponents( Q.Pccol, -ev ) );
-#     fi;
-#   fi;
-# od;
-# UpdatePolycyclicCollector( Q.Pccol );
-
-# imgs := [];
-# for i in [1..n] do
-#   Q.Imgs[i] := ObjByExponents( Q.Pccol, SNF.coltrans[i]{[Length(Torsion)+1..n]} );
-#   imgs[i] := PcpElementByGenExpList( Q.Pccol, Q.Imgs[i] );
-# od;
-# H := PcpGroupByCollector( Q.Pccol );
-
-# # the natural homomorphism onto the new presentation
-# for i in [ 1 .. n ] do
-#   if i in Gens then
-#     k := i - Length( Filtered( [1..Length(HNF.Heads)], x-> HNF.mat[x][HNF.Heads[x]] = 1 and HNF.Heads[x]<i ) );
-#     Add( Q.Imgs, k );
-#   else
-#     Add( Q.Imgs, ObjByExponents( Q.Pccol, -A[Position(HNF.Heads,i)]{Gens} ) );
-#   fi;
-# od;
-# 
-  # the epimorphism into the new presentation
-# Imgs := [];
-# for i in [ 1 .. Length(Q.Imgs) ] do
-#   if IsInt( Q.Imgs[i] ) then
-#     Add( Imgs, PcpElementByGenExpList( Q.Pccol, [Q.Imgs[i],1] ) );
-#   else
-#     Add( Imgs, PcpElementByGenExpList( Q.Pccol, Q.Imgs[i] ) );
-#   fi;
-# od;
+  # set up the definitions
   Q.Definitions := Filtered( [1..Length(Q.Imgs)], x -> not IsList(Q.Imgs[x]) );
 
-# TODO amend later on to a hom from the LpGroup not from the free group
-# Q.Epimorphism := GroupHomomorphismByImagesNC( Q.Lpres, PcpGroupByCollectorNC(Q.Pccol), GeneratorsOfGroup(Q.Lpres),Imgs);
-# Q.Epimorphism := GroupHomomorphismByImagesNC( FreeGroupOfLpGroup( Q.Lpres ), H, FreeGeneratorsOfLpGroup( Q.Lpres ), Imgs );
+  # set up the epimorphism from the LpGroup onto the PcpGroup
   Q.Epimorphism := LPRES_EpimorphismFromQS( Q );
                                          
   return( Q );

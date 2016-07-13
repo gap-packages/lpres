@@ -41,8 +41,8 @@ InstallGlobalFunction( LPRES_RationalLowerCentralSeries,
 ##
 #M  ExtendRationalQuotientSystem ( <QS> )
 ##
-## extends the quotient system for G/G_i(G) to a consistent quotient
-## system for G/G_{i+1}(G).
+## extends the quotient system for G/G_i to a consistent quotient
+## system for G/G_{i+1}.
 ##
 InstallGlobalFunction( ExtendRationalQuotientSystem,
   function( Q )
@@ -95,17 +95,11 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
   Info( InfoLPRES, 2, "Time spent for the tails routine: ", StringTime( Runtime()-time ) );
   Info( InfoLPRES, 2, "Number of tails introduced: ", Length( Filtered( QS.Weights, x -> x = c+1 ) ) );
 
-# PrintPcpPresentation( PcpGroupByCollectorNC( QS.Pccol ) );
-
   # position of the first pseudo generator/tail
   b := Position( QS.Weights, Maximum( QS.Weights ) );
   
   # enforce consistency
   Basis := LPRES_ConsistencyChecks( QS, Integers );
-# Display( "Consistencies:" );
-# for i in [1..Length(Basis.mat)] do
-#   Display( Basis.mat[i] );
-# od;
 
   # induce the substitutions of the L-presentation to the module
   time := Runtime();
@@ -113,18 +107,6 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
             Substitutions := [],
             IteratedRelations := [] );
   LPRES_InduceSpinning( QS, A, Integers );
-# Display("Relations:");
-# for i in [1..Length(A.Relations)] do
-#   Display( List( A.Relations[i], Int ) );
-# od;
-# Display("ItRelations:");
-# for i in [1..Length(A.IteratedRelations)] do
-#   Display( List( A.IteratedRelations[i], Int ) );
-# od;
-# Display("Map:");
-# for i in [1..Length(A.Substitutions)] do
-#   Display( List( A.Substitutions[i], x -> List( x, Int ) ) );
-# od;
   if LPRES_COMPUTE_RECURSIVE_IMAGE then 
     Info( InfoLPRES, 3, "Time spent to induce the endomorphisms and relations (recursive): ", StringTime( Runtime()-time ) );
   else
@@ -174,27 +156,14 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
     mat := SNF.coltrans ^ -1;
    
     # add the torsion generators to the HNF:
-    for i in [1..Length(Torsion)] do
-      LPRES_AddRow( Basis, mat[i] );
-    od;
+    Append( Basis.mat, mat{[1..Length(Torsion)]} );
+    Basis.mat := HermiteNormalFormIntegerMat( Basis.mat );
+    Basis.mat := Filtered( Basis.mat, x -> not IsZero( x ) );
+    Basis.Heads := List( Basis.mat, PositionNonZero );
   fi;
   Info(InfoLPRES,2,"Time spent to eliminate torsion (", Length(Torsion), "): ", StringTime(Runtime()-time));
 
-#  # check if we end up in the (expected) spanning set
-#  b := Position( QS.Weights, Maximum( QS.Weights ) );
-#  Gens := Filtered( [1..Length(QS.Weights)-b+1], x -> not x in Basis.Heads );
-#  if not ForAll( Gens, i -> ( IsList( QS.Definitions[i+b-1] ) and 
-#                              QS.Weights[ QS.Definitions[i+b-1][1] ] = QS.Class - 1 and
-#                              QS.Weights[ QS.Definitions[i+b-1][2] ] = 1 ) or
-#                            ( IsInt( QS.Definitions[i+b-1] ) and
-#                              QS.Definitions[i+b-1] < 0 and
-#                              QS.Prime * QS.Weights[ -QS.Definitions[i+b-1] ] = QS.Class ) ) then 
-#    Error( "Element outside the spanning set survives" );
-#  fi;
-
-  # use the basis to create the new quotient system
-
-# Display( Basis );
+  # use the new basis to create the new quotient system
   QSnew := LPRES_CreateNewRationalQuotientSystem( QS, Basis );
   SetRationalLowerCentralSeries( Range( QSnew.Epimorphism ), LPRES_RationalLowerCentralSeries( QSnew ) );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
@@ -279,23 +248,6 @@ InstallGlobalFunction( LPRES_RationalCoveringGroupByQSystem,
 
   # new commutator relations which define pseudo-generators; i.e.
   # ([a_j,a_i] with w(a_j) < c)
-# for i in Filtered( [1..n], x -> QS.Weights[x] = 1 ) do
-#   for j in Filtered([i+1..Length(orders)],x-> not [x,i] in Defs and weights[x]<c) do
-  # gens are ordered by the weights so we end up with the
-  # new gens [aj,ai] with w(aj) = c and w(ai) =1
-# for j in [1..n] do 
-#   for i in [1..j-1] do
-#     if QS.Weights[i] > 1 then 
-#       break;
-#     fi;
-#     if not [j,i] in Q.Definitions then 
-#       SetConjugate( QS.Pccol, j, i, Concatenation( GetConjugate( Q.Pccol, j, i ), [t,1] ) );
-#       Add( QS.Weights, c+1 );
-#       Add( QS.Definitions, [j,i] );
-#       t := t+1;
-#     fi;
-#   od;
-# od; 
   for i in Filtered( [1..Length(orders)], x-> QS.Weights[x] = 1) do
     for j in Filtered([i+1..Length(orders)],x-> not [x,i] in QS.Definitions and QS.Weights[x]<c) do
       SetConjugate(QS.Pccol,j,i,Concatenation(GetConjugate(Q.Pccol,j,i),[t,1]));
@@ -323,8 +275,6 @@ InstallGlobalFunction( LPRES_RationalCoveringGroupByQSystem,
   fi;
 
   # set up the definitions
-# for i in [1..Length(Defs{Filtered([1..Length(Defs)], 
-#                               x->weights[x]<Maximum(weights))})] do 
   for i in [1..n] do 
     if IsList( QS.Definitions[i] ) then 
       SetConjugate( QS.Pccol, QS.Definitions[i][1], QS.Definitions[i][2],
@@ -349,16 +299,14 @@ InstallGlobalFunction( LPRES_RationalCoveringGroupByQSystem,
       fi;
     od;
   od;
-# for i in [ PC_INVERSES, PC_INVERSEPOWERS, PC_CONJUGATES, PC_CONJUGATESINVERSE, PC_INVERSECONJUGATES, PC_INVERSECONJUGATESINVERSE ] do Display( QS.Pccol![ i ] ); od;
-
   SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
 # SetFeatureObj( QS.Pccol, UseLibraryCollector, true );
   FromTheLeftCollector_SetCommute( QS.Pccol );
   FromTheLeftCollector_CompletePowers( QS.Pccol );
 
-# UpdateNilpotentCollector( QS.Pccol, QS.Weights, QS.Definitions );
-# 
+  # update the relative orders to those of the covering group
   orders := RelativeOrders( QS.Pccol );
+
   # THE TAILS ROUTINE
   b := c+1;
   while b > 1 do
@@ -419,14 +367,6 @@ InstallGlobalFunction( LPRES_RationalCoveringGroupByQSystem,
     od; 
     b := b-1;
   od;
-
-# not needed?
-# FromTheLeftCollector_SetCommute( QS.Pccol );
-# SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
-# FromTheLeftCollector_CompletePowers( QS.Pccol );
-# FromTheLeftCollector_CompleteConjugate( QS.Pccol );
-# SetFeatureObj( QS.Pccol, IsUpToDatePolycyclicCollector, true );
-
   end);
 
 ############################################################################
@@ -463,9 +403,6 @@ InstallGlobalFunction( LPRES_CreateNewRationalQuotientSystem,
       Add( Gens, i ); # it's a finite gens
     fi;
   od;
-# Filtered( [1..n-b+1], x -> not x in Basis.Heads ); # infinite gens
-# Append( Gens, Filtered( [1..Length(Basis.Heads)], i -> Basis.mat[i][ Basis.Heads[i] ] > 1 ) );
-# Sort( Gens );
 
   # set up the new quotient system
   Q := rec( Lpres       := QS.Lpres,
@@ -525,7 +462,6 @@ InstallGlobalFunction( LPRES_CreateNewRationalQuotientSystem,
   od;
 
   # set the order of the remaining generators (tails), they are central by def
-# Display(Gens);
   for i in [1..Length(Gens)] do
     j := Position( Basis.Heads, Gens[i] );
     if j <> fail then 
@@ -537,7 +473,6 @@ InstallGlobalFunction( LPRES_CreateNewRationalQuotientSystem,
       fi;
     fi;
   od;
-
   FromTheLeftCollector_SetCommute( Q.Pccol );
   SetFeatureObj( Q.Pccol, IsUpToDatePolycyclicCollector, true );
   FromTheLeftCollector_CompletePowers( Q.Pccol );
