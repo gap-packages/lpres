@@ -25,12 +25,14 @@ end;
 LPRES_StoreTorsionFreeNilpotentQuotientSystem := function( G, Q ) 
 
   # store the quotient systems
-  if HasTorsionFreeNilpotentQuotientSystem( G ) and
-     Maximum( TorsionFreeNilpotentQuotientSystem( G ).Weights ) < Maximum( Q.Weights ) then 
+  if HasTorsionFreeNilpotentQuotientSystem( G ) then
+    if Maximum( TorsionFreeNilpotentQuotientSystem( G ).Weights ) >= Maximum( Q.Weights ) then 
+      return;
+    fi;
 
     ResetFilterObj( G, TorsionFreeNilpotentQuotientSystem );
-    SetTorsionFreeNilpotentQuotientSystem( G, Q );
   fi;
+  SetTorsionFreeNilpotentQuotientSystem( G, Q );
 end;
 
 ############################################################################
