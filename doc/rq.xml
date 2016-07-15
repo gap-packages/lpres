@@ -1,9 +1,11 @@
 <Chapter><Heading>Torsion-Free Nilpotent Quotients of L-presented groups</Heading>
 
 The nilpotent quotient algorithm for finitely L-presented groups <Cite
-Key=""> readily generalizes to an algorithm for computing a polycyclic
+Key="BEH08"/> readily generalizes to an algorithm for computing a polycyclic
 presentation for the torsion free nilpotent quotients of an L-presented
 group.
+
+<Section><Heading>Methods</Heading>
 
 <ManSection><Oper Name="TorsionFreeNilpotentQuotient" Arg="g [c]"/>
 <Description>
@@ -63,5 +65,5 @@ Pcp-group with orders [ 0, 0, 0 ]
 ]]></Example>
 </Description>
 </ManSection>
-
+</Section>
 </Chapter>

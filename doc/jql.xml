@@ -1,12 +1,15 @@
 <Chapter><Heading>Jennings-Zassenhaus-Lazard Quotients of L-presented groups</Heading>
 
-The nilpotent quotient algorithm for finitely L-presented groups
-and the p-quotient algorithm for finitely L-presented group <Cite
-Key=""> generalize to an algorithm for computing a polycyclic
-presentation for the quotients of an L-presented group by the
-elements of the Jennings-Zassenhaus-Lazard series given recursively
-by <M>\kappa_1g = g</M> and <M>\kappa_{n+1}g = [\kappa_{n}g,g]
-(\kappa_{\ceil{\frac{n+1}{p}}}G)^p</M>.
+The nilpotent quotient algorithm for finitely L-presented groups and the
+p-quotient algorithm for finitely presented group (<Cite Key="anupq"/>,
+<Cite Key="NNN98"/>, <Cite Key="HN80"/>, <Cite Key="NO96"/>, <Cite
+Key="VL84"/>, <Cite Key="Sims94"/>) generalize to an algorithm for
+computing a polycyclic presentation for the quotients of an L-presented
+group by the elements of the Jennings-Zassenhaus-Lazard series given
+recursively by <M>\kappa_1g = g</M> and <M>\kappa_{n+1}g = [\kappa_{n}g,g]
+(\kappa_{\lceil{(n+1)/p}\rceil}g)^p</M>.
+
+<Section><Heading>Methods</Heading>
 
 <ManSection><Oper Name="JenningsQuotient" Arg="g p [c]"/>
 <Description>
@@ -37,7 +40,7 @@ gap> List( [1..Length(jcs)-1], x->AbelianInvariants( jcs[x]/jcs[x+1] ) );
 This method returns an epimorphism from the L-presented group
 <A>g</A> onto a <A>p</A>-Jennings quotient. If the optional argument <A>c</A>
 is given, the epimorphism is onto the maximal class-<A>c</A> quotient
-<M>g//\kappa_{c+1}(g)</M>. If no second argument is given, this method
+<M>g/\kappa_{c+1}(g)</M>. If no second argument is given, this method
 attempts to compute an epimorphism onto the largest <A>p</A>-quotient
 of <A>g</A>. If <A>g</A> does not have a largest <A>p</A>-quotient,
 this method will not terminate.<P/>
@@ -57,5 +60,7 @@ gap> Length( JenningsSeries( Range( epi ) ) );
 ]]></Example>
 </Description>
 </ManSection>
+
+</Section>
 
 </Chapter>
