@@ -5,8 +5,8 @@ Introduction
 ------------
 
 This is the package 'lpres' written for GAP 4. It provides a first
-construction of finitely L-presented groups and a nilpotent quotient
-algorithm for L-presented groups.
+construction of finitely L-presented groups, quotient algorithms, and
+subgroup methods for L-presented groups.
 
 The features of this package include
 
@@ -14,6 +14,16 @@ The features of this package include
 
   - computing nilpotent quotients of L-presented groups and epimorphisms
     from the L-presented group onto its nilpotent quotients,
+
+  - computing torsion-free nilpotent quotients of L-presented groups
+    and epimorphisms from the L-presented group onto its torsion-free
+    nilpotent quotients,
+
+  - computing p-quotients of L-presented groups and epimorphisms from
+    the L-presented group onto its p-quotients,
+
+  - computing Jennings-quotients of L-presented groups and epimorphisms from
+    the L-presented group onto its Jennings-quotients,
 
   - computing the abelian invariants of an L-presented group,
 
@@ -51,15 +61,15 @@ directories:
 Installation
 ------------
 
-Make sure that the GAP 4 packages Polycyclic and FGA are installed. It
-suffices to unpack the package in the 'pkg' directory and load the
-package from within gap using `LoadPackage("lpres");'.
+Make sure that the GAP 4 package FGA is installed. It suffices to unpack
+the package in the 'pkg' directory and load the package from within gap
+using `LoadPackage("lpres");'.
 
 
 Test-Files
 ----------
 
-The lpres-package can be tested with `ReadPackage("lpres","tst/testall.gi");'.
+The lpres-package can be tested with `ReadPackage("lpres","tst/testall.g");'.
 
 
 Compiling the Manual
@@ -69,7 +79,11 @@ If you obtained the package from its git repository, you have to compile
 the manual. For this, enter the directory of lpres (the one containing
 the file makedoc.g) and run `gap makedoc.g'.
 
+
 BugFixes/Changes/Features Added
 -----------------------------
+- Version 0.4.0:
+- Version 0.3.0:
+- Version 0.2.0:
 - Version 0.1.0:
                 - maintenance taken over by Laurent Bartholdi
