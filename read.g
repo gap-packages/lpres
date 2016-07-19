@@ -55,6 +55,9 @@ if TestPackageAvailability( "Polycyclic", "2.5" ) <> fail then
   ReadPackage( LPRESPkgName, "gap/nql/lpres.gi");
 
   ReadPackage( LPRESPkgName, "gap/nql/subgroups.gi" );
+
+  # general quotient algorithm
+  ReadPackage( LPRESPkgName, "gap/quots.gi" );
   
   # p-quotient algorithm
   ReadPackage( LPRESPkgName, "gap/pql/initqs.gi" );

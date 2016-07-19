@@ -9,7 +9,7 @@ SetPackageInfo( rec(
 
 PackageName := "lpres",
 Subtitle := "Computation with L-Presented Groups",
-Version := "0.3.0",
+Version := "0.4.0",
 Date    := "07/05/2016",
 
 Persons := [
@@ -58,8 +58,8 @@ AbstractHTML   := "The LPRES Package defines new GAP objects to work with \
 L-presented groups, namely groups given by a finite generating set and a \
 possibly-infinite set of relations given as iterates of finitely many \
 seed relations by a finite set of endomorphisms. The package implements \
-nilpotent-, torsion-free nilpotent-, p-, and Jennings-quotient,\
-Todd-Coxeter and Reidemeister-Schreier algorithms for L-presented groups.",
+nilpotent-, torsion-free nilpotent-, p-, and Jennings-quotient algorithms,\
+Todd-Coxeter- and Reidemeister-Schreier algorithms for L-presented groups.",
 
 PackageDoc := rec(
   BookName  := ~.PackageName,
@@ -94,7 +94,7 @@ Keywords := [ "nilpotent quotient algorithm",
               "Grigorchuk group",
               "Gupta-Sidki group",
               "L-presented groups",
-              "finite index subgroup of L-presented groups", 
+              "finite index subgroups of L-presented groups", 
               "coset enumeration",
               "Reidemeister Schreier methods",
               "recursively presented groups",
