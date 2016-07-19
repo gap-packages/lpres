@@ -1,5 +1,5 @@
 <Chapter><Heading>The &lpres; package</Heading> 
-This package was written by René Hartung in 2009; maintenance has been
+This package was written by René Hartung; maintenance has been
 overtaken by Laurent Bartholdi, who translated the manual to &GAPDoc;.
 
 <Section><Heading>Introduction</Heading>
@@ -10,14 +10,13 @@ is nowadays called the <E>Grigorchuk group</E> and was originally defined
 as a group of transformations of the unit interval which preserve the
 Lebesgue measure. Beside being a counter-example to the General Burnside
 Problem, the Grigorchuk group was a first example of a group with an
-intermediate growth function (see <Cite Key="Grigorchuk83"/>) and was used in
+intermediate growth function <Cite Key="Grigorchuk83"/> and was used in
 the construction of a finitely presented amenable group which is not
-elementary amenable (see <Cite Key="Grigorchuk98"/>).<P/>
+elementary amenable <Cite Key="Grigorchuk98"/>.<P/>
 
-The Grigorchuk group is not finitely presentable
-(see <Cite Key="Grigorchuk99"/>). In 1985, Lysenok
-(see <Cite Key="Lysenok85"/>) computed the following recursive presentation
-for the Grigorchuk group:
+The Grigorchuk group is not finitely presentable <Cite
+Key="Grigorchuk99"/>. In 1985, Lysenok <Cite Key="Lysenok85"/> gave the
+following recursive presentation for the Grigorchuk group:
 <Display>\langle a,b,c,d\mid a^2,b^2,c^2,d^2,bcd,[d,d^a]^{\sigma^n},[d,d^{acaca}]^{\sigma^n}, (n\in&NN;)\rangle,</Display>
 where <M>\sigma</M> is the homomorphism of the free group over
 <M>\{a,b,c,d\}</M> which is induced by <M>a\mapsto c^a, b\mapsto d,
@@ -36,7 +35,7 @@ in a variety of groups satisfying finitely many identities is finitely
 L-presented (e.g. the Free Burnside- and the Free <M>n</M>-Engel groups).<P/>
 
 The &lpres;-package defines new &GAP; objects to work with finitely
-L-presented groups and first algorithms for computing with finitely
+L-presented groups and algorithms for computing with finitely
 L-presented groups. For instance, the package provides a nilpotent
 quotient algorithm for finitely L-presented groups; that is, an
 algorithm which takes as input a finitely L-presented group <M>G</M>
@@ -48,8 +47,8 @@ sections <M>\gamma_c(G)/\gamma_{c+1}(G)</M> and the largest nilpotent
 quotient of <M>G</M> if it exists.<P/>
 
 The nilpotent quotient algorithm for finitely L-presented groups generalizes Nickel's algorithm for
-finitely presented groups (see <Cite Key="Nickel96"/>) which is
-implemented in the <Package>NQ</Package>-package; see <Cite
+finitely presented groups <Cite Key="Nickel96"/> which is
+implemented in the <Package>NQ</Package>-package; c.f. <Cite
 Key="nq"/>. In difference to the <Package>NQ</Package>-package, the
 &lpres;-package is implemented in &GAP; only.  
 Since finite L-presentations generalize finite presentations, the
@@ -60,23 +59,25 @@ this special case.<P/>
 A detailed description of the nilpotent quotient algorithm can be found in <Cite
 Key="BEH08"/> or <Cite Key="H08"/>.<P/>
 
-The &lpres;-package additionally provides a p-quotient and Jennings-quotient algorithm which,
-given a finite L-presentation for a group <M>G</M>, computes a polycyclic
-presentation for the <M>p</M>-quotient <M>G/\phi_{c+1}(G)</M> or
-Jennings quotient <M>G/\kappa_{c+1}(G)</M>, respectively. These
-algorithms readily generalize the nilpotent quotient algorithm for
-finitely L-presented groups and the p-quotient algorithm for finitely
-presented groups as implemented in the <Package>ANUPQ</Package>-package;
-see <Cite Key="anupq"/>. Again, the p-quotient and Jennings quotient algorithm for finitely
-L-presented groups is implemented in &GAP; only.<P/>
+The &lpres;-package additionally provides a p-quotient, Jennings-quotient,
+and a torsion-free nilpotent quotient algorithm which, given a finite
+L-presentation for a group <M>G</M>, computes a polycyclic presentation
+for the <M>p</M>-quotient <M>G/\phi_{c+1}(G)</M>, the Jennings quotient
+<M>G/\kappa_{c+1}(G)</M>, and the torsion-free nilpotent quotient
+<M>G/G_{c+1}</M>, respectively. These algorithms readily generalize the
+nilpotent quotient algorithm for finitely L-presented groups and the
+p-quotient algorithm for finitely presented groups as implemented in
+the <Package>ANUPQ</Package>-package; see <Cite Key="anupq"/>. Again,
+these algorithms for finitely L-presented groups are implemented in
+&GAP; only.<P/>
 
 Furthermore the &lpres;-package includes the algorithms of <Cite
 Key="MR2678952"/> for approximating the Schur multiplier of finitely
-L-presented groups, a generalized Todd-Coxeter method for computing 
-a permutation representation for the action of a finitely L-presented
-group on the coset of a finitely generated subgroup (i.e. coset-enumeration),
-and the $lpres;-package includes the Reidemeister-Schreier algorithm
-from <Cite Key="MR2876891"/>.
+L-presented groups, a generalized Todd-Coxeter method for computing a
+permutation representation for the action of a finitely L-presented group
+on the coset of a finitely generated subgroup (i.e. coset-enumeration)
+<Cite Key="MR2864562"/>, and the &lpres;-package includes the
+Reidemeister-Schreier algorithm from <Cite Key="MR2876891"/>.<P/>
 
 L-presented groups were introduced as a tool to understand self-similar
 groups such as the Grigorchuk group. As such, &lpres; works in close contact
@@ -84,7 +85,7 @@ with the package <Package>fr</Package>. See <Cite Key="MR3133711"/> for more
 on the relationships between L-presented groups and self-similar groups.<P/>
 
 Finally, we note that we use the term "algorithm" somewhat loosely:
-many of the algorithms in this package are in fact semi-algorithms,
+some of the algorithms in this package are in fact semi-algorithms,
 guaranteed to give a correct answer but not guaranteed to terminate.
 </Section>
 </Chapter>

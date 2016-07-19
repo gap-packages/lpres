@@ -1,9 +1,12 @@
 <Chapter><Heading>Torsion-Free Nilpotent Quotients of L-presented groups</Heading>
 
 The nilpotent quotient algorithm for finitely L-presented groups <Cite
-Key="BEH08"/> readily generalizes to an algorithm for computing a polycyclic
-presentation for the torsion free nilpotent quotients of an L-presented
-group.
+Key="BEH08"/> readily generalizes to an algorithm for computing a
+polycyclic presentation for the torsion free nilpotent quotients of an
+L-presented group. More precisely, the torsion-free nilpotent quotients
+of an L-presented group are the quotients of an L-presented group by the
+rational lower central series: <M>G_c = \{ x \in G \mid
+\exists n > 0\colon x^n\in \gamma_c(G) \}</M>; c.f. <Cite Key="MR1614551"/>.
 
 <Section><Heading>Methods</Heading>
 

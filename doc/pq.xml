@@ -1,11 +1,11 @@
 <Chapter><Heading>P-Quotients of L-presented groups</Heading><P/>
 
-The nilpotent quotient algorithm for finitely L-presented groups and the
-p-quotient algorithm for finitely presented group (<Cite Key="anupq"/>,
-<Cite Key="NNN98"/>, <Cite Key="HN80"/>, <Cite Key="NO96"/>, <Cite
-Key="VL84"/>, <Cite Key="Sims94"/>) readily generalize to an algorithm for
-computing a polycyclic presentation for the p-quotient of a L-presented
-group.
+The nilpotent quotient algorithm for finitely L-presented groups <Cite
+Key="BEH08"/> and the p-quotient algorithm for finitely presented
+group <Cite Key="anupq"/>, <Cite Key="NNN98"/>, <Cite Key="HN80"/>,
+<Cite Key="NO96"/>, <Cite Key="VL84"/>, <Cite Key="Sims94"/> readily
+generalize to an algorithm for computing a polycyclic presentation for
+the p-quotient of a L-presented group.
 
 <Section><Heading>Methods</Heading>
 

@@ -1,13 +1,13 @@
 <Chapter><Heading>Jennings-Zassenhaus-Lazard Quotients of L-presented groups</Heading>
 
-The nilpotent quotient algorithm for finitely L-presented groups and the
-p-quotient algorithm for finitely presented group (<Cite Key="anupq"/>,
-<Cite Key="NNN98"/>, <Cite Key="HN80"/>, <Cite Key="NO96"/>, <Cite
-Key="VL84"/>, <Cite Key="Sims94"/>) generalize to an algorithm for
-computing a polycyclic presentation for the quotients of an L-presented
-group by the elements of the Jennings-Zassenhaus-Lazard series given
-recursively by <M>\kappa_1g = g</M> and <M>\kappa_{n+1}g = [\kappa_{n}g,g]
-(\kappa_{\lceil{(n+1)/p}\rceil}g)^p</M>.
+The nilpotent quotient algorithm for finitely L-presented groups <Cite
+Key="BEH08"/> and the p-quotient algorithm for finitely presented group
+<Cite Key="anupq"/>, <Cite Key="NNN98"/>, <Cite Key="HN80"/>, <Cite
+Key="NO96"/>, <Cite Key="VL84"/>, <Cite Key="Sims94"/> generalize to an
+algorithm for computing a polycyclic presentation for the quotients of
+an L-presented group by the elements of the Jennings-Zassenhaus-Lazard
+series given recursively by <M>\kappa_1g = g</M> and <M>\kappa_{n+1}g =
+[\kappa_{n}g,g] (\kappa_{\lceil{(n+1)/p}\rceil}g)^p</M>.
 
 <Section><Heading>Methods</Heading>
 
@@ -20,7 +20,7 @@ compute the largest <A>p</A>-quotient of <A>g</A> and will terminate
 only if <A>g</A> has such a largest <A>p</A>-quotient.<P/>
 
 The following example computes the 2-Jennings class-5 quotient of the
-Grigorchuk group.
+Grigorchuk group:
 <Example><![CDATA[
 gap> G:=ExamplesOfLPresentations(1);;
 gap> H:=JenningsQuotient(G,2,5);
@@ -35,7 +35,7 @@ gap> List( [1..Length(jcs)-1], x->AbelianInvariants( jcs[x]/jcs[x+1] ) );
 </Description>
 </ManSection>
 
-<ManSection><Oper Name="NqEpimorphismPQuotient" Arg="g p [c]"/>
+<ManSection><Oper Name="EpimorphismJenningsQuotient" Arg="g p [c]"/>
 <Description>
 This method returns an epimorphism from the L-presented group
 <A>g</A> onto a <A>p</A>-Jennings quotient. If the optional argument <A>c</A>
@@ -62,5 +62,4 @@ gap> Length( JenningsSeries( Range( epi ) ) );
 </ManSection>
 
 </Section>
-
 </Chapter>
