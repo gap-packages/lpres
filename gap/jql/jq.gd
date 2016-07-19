@@ -40,4 +40,20 @@ DeclareAttribute( "LargestJenningsQuotients", IsLpGroup );
 ## Computes a nilpotent quotient system for G/phi_i(G) if a nilpotent 
 ## quotient system for G/phi_j(G) is known, i<j.
 ##
-DeclareGlobalFunction( "SmallerJenningsQuotientSystem" );
+DeclareGlobalFunction( "LPRES_SmallerJenningsQuotientSystem" );
+
+############################################################################
+##
+#F  internal function
+##
+## stores the largest p-quotient as an attribute of the <LpGroup>
+##
+DeclareGlobalFunction( "LPRES_StoreLargestJenningsQuotient" );
+
+############################################################################
+##
+#F  internal function
+##
+## stores the quotient system as an attribute of the <LpGroup>
+##
+DeclareGlobalFunction( "LPRES_StoreJenningsQuotientSystems" );

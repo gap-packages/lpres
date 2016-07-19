@@ -67,6 +67,7 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
         mat, 
         rel,
         Qnew,
+        class,
         time;
 
   # Jennings class of the quotient system
@@ -164,6 +165,19 @@ InstallGlobalFunction( ExtendJenningsQuotientSystem,
   # use the basis to create the new quotient system
   QSnew := LPRES_CreateNewQuotientSystem( QS, Basis );
   QSnew.Class := QS.Class;
+  if QSnew.Weights = Q.Weights then
+    class := Maximum( Filtered( Q.Weights, x -> x * QSnew.Prime <= QSnew.Class ) );
+    if class = Maximum( Q.Weights ) then
+      LPRES_StoreLargestJenningsQuotient( QSnew.Lpres, QSnew.Prime, Q );
+      Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
+      return( QSnew );
+    fi;
+    repeat
+      QSnew.Class := QSnew.Class + 1;
+    until class < Maximum( Filtered( Q.Weights, x -> x * QSnew.Prime <= QSnew.Class ) );
+    QSnew.Class := QSnew.Class - 1;
+    Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", QSnew.Class );
+  fi;
   SetJenningsSeries( Range( QSnew.Epimorphism ), LPRES_JenningsSeries( QSnew ) );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
     Info( InfoLPRES, 1, "Jennings-Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");

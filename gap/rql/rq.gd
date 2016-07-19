@@ -1,6 +1,6 @@
 ############################################################################
 ##
-#W pq.gd			LPRES				René Hartung
+#W gap/rql/rq.gd			LPRES				René Hartung
 ##
 
 ############################################################################
@@ -19,8 +19,7 @@ DeclareOperation( "EpimorphismTorsionFreeNilpotentQuotient", [ IsLpGroup, IsPosI
 ##
 #A  TorsionFreeNilpotentQuotientSystem ( <LpGroup> )
 ##
-## A set of the largest p-quotient systems of an invariant LpGroup that has 
-## been computed by InitTorsionFreeNilpotentQuotientSystem or ExtendTorsionFreeNilpotentQuotientSystem.
+## The largest known (torsion-free) quotient systems of an invariant LpGroup.
 ##
 DeclareAttribute( "TorsionFreeNilpotentQuotientSystem", IsLpGroup and
                                       HasIsInvariantLPresentation and
@@ -30,21 +29,40 @@ DeclareAttribute( "TorsionFreeNilpotentQuotientSystem", IsLpGroup and
 ##
 #A  LargestTorsionFreeNilpotentQuotient( <LpGroup> )
 ## 
-## stores the largest p-quotients as a list
+## stores the largest torsion-free nilpotent quotient if this has been found
+## already.
+## 
 DeclareAttribute( "LargestTorsionFreeNilpotentQuotient", IsLpGroup );
 
 ############################################################################
 ##
-#F  SmallerTorsionFreeNilpotentQuotientSystem ( <Q>, <int> )
+#F  LPRES_SmallerTorsionFreeNilpotentQuotientSystem ( <Q>, <int> )
 ## 
-## Computes a nilpotent quotient system for G/gamma_i(G) if a nilpotent 
-## quotient system for G/gamma_j(G) is known, i<j.
+## Computes a nilpotent quotient system for G/G_i if a nilpotent 
+## quotient system for G/G_j is known, i<j.
 ##
-DeclareGlobalFunction( "SmallerTorsionFreeNilpotentQuotientSystem" );
+DeclareGlobalFunction( "LPRES_SmallerTorsionFreeNilpotentQuotientSystem" );
 
 ############################################################################
 ##
-#A  ExponentPCentralSeries( <PcpGroup> )
+#A  RationalLowerCentralSeries( <PcpGroup> )
 ## 
-## stores the largest p-quotients as a list
+## stores the rational lower central series of the quotient
+## 
 DeclareAttribute( "RationalLowerCentralSeries", IsPcpGroup );
+############################################################################
+##
+#F  internal function
+##
+## stores the largest torsion-free nilpotent quotient as an attribute of
+## the <LpGroup>
+##
+DeclareGlobalFunction( "LPRES_StoreLargestTorsionFreeNilpotentQuotient" );
+
+############################################################################
+##
+#F  internal function
+##
+## stores the quotient system as an attribute of the <LpGroup>
+##
+DeclareGlobalFunction( "LPRES_StoreTorsionFreeNilpotentQuotientSystem" );

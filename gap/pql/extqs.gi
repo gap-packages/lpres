@@ -35,7 +35,7 @@ InstallGlobalFunction( LPRES_ExponentPCentralSeries,
   fi;
 
   # nilpotency class of <Q>
-  c := Maximum(weights);
+  c := Q.Class;
 
   # build the exponent-p central series
   pcs:=[];
@@ -78,11 +78,12 @@ InstallGlobalFunction( ExtendPQuotientSystem,
         time;
 
   # p-class
-  c := Maximum( Q.Weights );
+  c := Q.Class;
 
   # weights, definitions and images of the quotient system
   QS := rec( Lpres       := Q.Lpres,
              Prime       := Q.Prime,
+             Class       := Q.Class+1,
              Weights     := ShallowCopy( Q.Weights ),
              Definitions := ShallowCopy( Q.Definitions ),
              Imgs        := ShallowCopy( Q.Imgs ) );
@@ -154,12 +155,13 @@ InstallGlobalFunction( ExtendPQuotientSystem,
 
   # use the basis to create the new quotient system
   QSnew := LPRES_CreateNewQuotientSystem( QS, Basis );
-  SetExponentPCentralSeries( Range( QSnew.Epimorphism ), LPRES_ExponentPCentralSeries( Q ) );
-  SetPClassPGroup( Range( QSnew.Epimorphism ), Maximum( Q.Weights ) );
+  QSnew.Class := Maximum( QSnew.Weights );
+  SetExponentPCentralSeries( Range( QSnew.Epimorphism ), LPRES_ExponentPCentralSeries( QSnew ) );
+  SetPClassPGroup( Range( QSnew.Epimorphism ), Maximum( QSnew.Weights ) );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
-    Info( InfoLPRES, 1, "Class ", Maximum(QSnew.Weights), ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
+    Info( InfoLPRES, 1, QSnew.Prime, "-Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else
-    Info( InfoLPRES, 1, "Class ", Maximum(QSnew.Weights), ": ", Length(QSnew.Weights)-Length(Q.Weights),
+    Info( InfoLPRES, 1, QSnew.Prime, "-Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights),
   	       " generators with relative orders: ", RelativeOrders(QSnew.Pccol){[Length(Q.Weights)+1..Length(QSnew.Weights)]});
   fi;
   return( QSnew );
@@ -227,7 +229,7 @@ InstallGlobalFunction( LPRES_PCoveringGroupByQSystem,
         m;
 
   # exponent p-class
-  c := Maximum( QS.Weights );
+  c := Q.Class;
 
   # number of generators of the group
   n := Q.Pccol![ PC_NUMBER_OF_GENERATORS ];
@@ -519,7 +521,7 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
         time;
 
   # position of the first pseudo generator/tail
-  b := Position( QS.Weights, Maximum( QS.Weights ) );
+  b := Position( QS.Weights, QS.Class );
 
   # keep track of the runtime for the checks
   time := Runtime();
@@ -532,7 +534,7 @@ InstallGlobalFunction( LPRES_ConsistencyChecks,
   n := QS.Pccol![ PC_NUMBER_OF_GENERATORS ];
 
   # nilpotency class 
-  c := Maximum( QS.Weights);
+  c := QS.Class;
 
   # prime - every generator has prime (relative) order
 # prime := QS.Prime;
@@ -868,7 +870,7 @@ InstallGlobalFunction( LPRES_InduceSpinning,
 
   fam := FamilyObj( GeneratorsOfGroup( QS.Lpres )[1] );
 
-  c := Maximum( QS.Weights )-1;
+  c := QS.Class-1;
   b := Position( QS.Weights, c+1 );
 
   imgs := [];
@@ -1010,7 +1012,7 @@ InstallGlobalFunction( LPRES_CreateNewQuotientSystem,
         H;
 
   # position of the first tail
-  b := Position( QS.Weights, Maximum( QS.Weights ) );
+  b := Position( QS.Weights, QS.Class );
 
   # number of generators of the quotient system
   n := QS.Pccol![ PC_NUMBER_OF_GENERATORS ];

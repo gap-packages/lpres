@@ -10,12 +10,13 @@
 ## stores the largest torsion-free nilpotent quotient as an attribute of
 ## the <LpGroup>
 ##
-LPRES_StoreLargestTorsionFreeNilpotentQuotient := function( G, Q ) 
+InstallGlobalFunction( LPRES_StoreLargestTorsionFreeNilpotentQuotient,
+  function( G, Q ) 
   if HasLargestTorsionFreeNilpotentQuotient( G ) then 
     ResetFilterObj( G, LargestTorsionFreeNilpotentQuotient );
-    SetLargestTorsionFreeNilpotentQuotient( G, PcpGroupByCollectorNC( Q.Pccol ) );
   fi;
-end;
+  SetLargestTorsionFreeNilpotentQuotient( G, PcpGroupByCollectorNC( Q.Pccol ) );
+  end );
 
 ############################################################################
 ##
@@ -23,8 +24,8 @@ end;
 ##
 ## stores the quotient system as an attribute of the <LpGroup>
 ##
-LPRES_StoreTorsionFreeNilpotentQuotientSystem := function( G, Q ) 
-
+InstallGlobalFunction( LPRES_StoreTorsionFreeNilpotentQuotientSystem,
+  function( G, Q ) 
   # store the quotient systems
   if HasTorsionFreeNilpotentQuotientSystem( G ) then
     if Maximum( TorsionFreeNilpotentQuotientSystem( G ).Weights ) >= Maximum( Q.Weights ) then 
@@ -34,7 +35,26 @@ LPRES_StoreTorsionFreeNilpotentQuotientSystem := function( G, Q )
     ResetFilterObj( G, TorsionFreeNilpotentQuotientSystem );
   fi;
   SetTorsionFreeNilpotentQuotientSystem( G, Q );
-end;
+  end );
+
+############################################################################
+##
+#F internal function
+## 
+## to create an object for LPRES_QuotientAlgorithmEpimorphism
+## 
+LPRES_GetRationalObject := function( ) 
+  return( rec( initQS := InitRationalQuotientSystem,
+               storeLargest := function( g, q ) LPRES_StoreLargestTorsionFreeNilpotentQuotient( g, q ); end,
+               storeQS := function( g, q ) LPRES_StoreTorsionFreeNilpotentQuotientSystem( g, q ); end,
+               extendQS := ExtendRationalQuotientSystem,
+               hasQS := HasTorsionFreeNilpotentQuotientSystem,
+               getQS := TorsionFreeNilpotentQuotientSystem,
+               smallerQS := LPRES_SmallerTorsionFreeNilpotentQuotientSystem,
+               hasLargest := HasLargestTorsionFreeNilpotentQuotient,
+               getLargest := LargestTorsionFreeNilpotentQuotient
+               ) );
+  end;
 
 ############################################################################
 ##
@@ -49,44 +69,7 @@ InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
     IsPosInt ], 0,
   function( G, c )
-  local Q,           # current quotient system
-	       H,           # the nilpotent quotient of <G>
-	       weights, 	# old weights quotient system
-	       i,	          # loop variable
-	       time;	       # runtime
-
-  # Compute a weighted nilpotent presentation for the Frattini quotient G/G'G^p
-  time := Runtime();
-  Q := InitRationalQuotientSystem( G );
-  Info( InfoLPRES, 2, "Runtime for this step ",  StringTime(Runtime()-time));
-
-  # store the largest quotient and its quotient sysstem if it's trivial
-  if Length( Q.Weights ) = 0 then 
-    LPRES_StoreLargestTorsionFreeNilpotentQuotient( G, Q );
-    LPRES_StoreTorsionFreeNilpotentQuotientSystem( G, Q );
-    return( Q.Epimorphism );
-  fi;
-  
-  for i in [2..c] do 
-    # copy the old quotient system to compare with the extended qs.
-    weights := ShallowCopy(Q.Weights);
-
-    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
-    time:=Runtime();
-    Q := ExtendRationalQuotientSystem( Q );
-    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-   
-    # if we couldn't extend the quotient system any more, we're finished
-    if weights = Q.Weights then 
-      LPRES_StoreLargestTorsionFreeNilpotentQuotient( G, Q );
-      Info(InfoLPRES,1,"The group has a maximal p-quotient of p-class ", Maximum(Q.Weights) );
-      break;
-    fi;
-  od;
-  
-  # store the largest known nilpotent quotient of <G>
-  LPRES_StoreTorsionFreeNilpotentQuotientSystem( G, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetRationalObject( ) ) );
   end );
 
 ############################################################################
@@ -103,52 +86,7 @@ InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasTorsionFreeNilpotentQuotientSystem,
     IsPosInt ], 0,
   function( G, c )
-  local Q,    # current quotient system
-        H,    # the nilpotent quotient of <G>
-        i,    # loop variable
-        weights, 
-        time,	# runtime
-        j;    # nilpotency class
-
-  # known quotient system of <G>
-  Q := TorsionFreeNilpotentQuotientSystem( G );
- 
-  # class of the quotient system
-  j := Maximum( Q.Weights );
- 
-  if c = j then  
-    # requested this quotient system
-    return( Q.Epimorphism );
-  elif c<j then 
-    # the quotient system is already there
-    return( SmallerTorsionFreeNilpotentQuotientSystem( Q, c ).Epimorphism );
-  fi;
-
-  # check if there's already a largest quotient
-  if HasLargestTorsionFreeNilpotentQuotient(G) then
-    return( LargestTorsionFreeNilpotentQuotient(G).Epimorphism );
-  fi;
-
-  # extend the largest known quotient system
-  for i in [j+1..c] do
-    weights := ShallowCopy( Q.Weights );
-
-    # extend the quotient system of G/G_i to G/G_{i+1}
-    time := Runtime();
-    Q := ExtendRationalQuotientSystem( Q );
-    Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
-
-    # if we couldn't extend the quotient system any more, we're finished
-    if weights = Q.Weights then 
-      LPRES_StoreLargestTorsionFreeNilpotentQuotient( G, Q );
-      Info(InfoLPRES,1,"The group has a maximal torsion-free nilpotent quotient of class ", Maximum(Q.Weights) );
-      break;
-    fi;
-  od;
-
-  # store this quotient system as an attribute of the group G
-  LPRES_StoreTorsionFreeNilpotentQuotientSystem( G, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetRationalObject( ) ) );
   end );
 
 ############################################################################
@@ -164,39 +102,7 @@ InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
   true,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation ], 0,
   function( G )
-  local Q,	   # current quotient system
-        H,    # largest nilpotent quotient of <G>
-        QS,   # old quotient system
-        i,	   # loop variable
-        weights,
-        time;	# runtime
-
-  # Compute a confluent nilpotent presentation for G/G'
-  time:=Runtime();
-  Q := InitRationalQuotientSystem( G );
-  Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-
-  # store the largest quotient if this one is trivial
-  if Length( Q.Weights ) = 0 then 
-    LPRES_StoreLargestTorsionFreeNilpotentQuotient( G, Q );
-    LPRES_StoreTorsionFreeNilpotentQuotientSystem( G, Q );
-    return( Q.Epimorphism );
-  fi;
-  
-  repeat
-    weights := ShallowCopy(Q.Weights);
-    
-    # extend the quotient system of G/G_i to G/G_{i+1}
-    time := Runtime();
-    Q := ExtendRationalQuotientSystem( Q );
-    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-
-  until weights = Q.Weights;
-  Info(InfoLPRES,1,"The group has a maximal torsion-free nilpotent quotient of class ", Maximum(Q.Weights) );
-
-  LPRES_StoreLargestTorsionFreeNilpotentQuotient( G, Q );
-  LPRES_StoreTorsionFreeNilpotentQuotientSystem( G, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, LPRES_GetRationalObject( ) ) );
   end );
 
 ############################################################################
@@ -213,35 +119,7 @@ InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
   true,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasTorsionFreeNilpotentQuotientSystem ], 0,
   function( G )
-  local Q,    # current quotient system
-        H,    # largest nilpotent quotient of <G>
-        QS,   # old quotient system
-        time,	# runtime
-        weights,
-        i;	   # loop variable
-
-  # check if there's already a largest p-quotient known
-  if HasLargestTorsionFreeNilpotentQuotient(G) then 
-    return( LargestTorsionFreeNilpotentQuotient(G).Epimorphism );
-  fi;
-
-  # get the stored quotient system
-  Q := TorsionFreeNilpotentQuotientSystem( G );
-  
-  repeat
-    weights := ShallowCopy(Q.Weights);
-    
-    # extend the quotient system of G/G_i to G/G_{i+1}
-    time := Runtime();
-    Q := ExtendRationalQuotientSystem(Q);
-    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-  
-  until weights = Q.Weights;
-  Info(InfoLPRES,1,"The group has a maximal torsion-free nilpotent quotient of class ", Maximum(Q.Weights) );
-
-  LPRES_StoreLargestTorsionFreeNilpotentQuotient( G, Q );
-  LPRES_StoreTorsionFreeNilpotentQuotientSystem( G, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, LPRES_GetRationalObject( ) ) );
   end );
 
 ############################################################################
@@ -254,39 +132,10 @@ InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
 InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
   "For an (arbitrary) LpGroup and a positive integer",
   true,
-  [ IsLpGroup,
+  [ IsGroup,
     IsPosInt ], 0,
   function( G, c )
-  local Grp, epi, pi, H, N, hom;
-
-  # work with the underlying invariant LpGroup which maps onto G
-  Grp := UnderlyingInvariantLPresentation( G );
-
-  if not HasIsInvariantLPresentation( Grp ) then
-    SetIsInvariantLPresentation( Grp, true );
-  fi;
-
-  # natural homomorphism onto the p-quotient
-  epi := EpimorphismTorsionFreeNilpotentQuotient( Grp, c );
-
-  # the p-quotient
-  H := Range( epi );
-
-  # natural homomorphisms from the free group onto the LpGroup
-  pi := GroupHomomorphismByImages( FreeGroupOfLpGroup( Grp ), Grp,
-                                   GeneratorsOfGroup( FreeGroupOfLpGroup( Grp ) ),
-                                   GeneratorsOfGroup( Grp ) );
-  
-  # normal subgroup generated by the images of the fixed relations
-  N := NormalClosure( H, Subgroup( H, List( FixedRelatorsOfLpGroup( G ), x -> ImageElm( epi, ImageElm( pi, x ) ) ) ) );
-
-  # natural homomorphism onto H/N
-  hom := NaturalHomomorphismByNormalSubgroup( H, N );
-
-  # return the factor group
-  return( GroupHomomorphismByImagesNC( G, Range( hom ),
-                                       GeneratorsOfGroup( G ), 
-                                       List( GeneratorsOfGroup( G ), x -> ( ( UnderlyingElement( x )^pi ) ^ epi ) ^ hom ) ) );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetRationalObject( ) ) );
   end);
 
 ############################################################################
@@ -298,149 +147,128 @@ InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
 InstallOtherMethod( TorsionFreeNilpotentQuotient,
   "For an LpGroup and a positive integer",
   true,
-  [ IsLpGroup,
+  [ IsGroup,
     IsPosInt ], 0,
   function( G, c )
   return( Range( EpimorphismTorsionFreeNilpotentQuotient( G, c ) ) );
   end);
 
-############################################################################
-##
-#M  TorsionFreeNilpotentQuotient( <LpGroup> ) . . . . . . 
-## 
-## attempts to compute the largest torsion-free nilpotent quotient of <LpGroup>.
-## This method terminates if and only if <LpGroup> admits such a largest 
-## quotient.
-##
+#############################################################################
+###
+##M  TorsionFreeNilpotentQuotient( <LpGroup> ) . . . . . . 
+### 
+### attempts to compute the largest torsion-free nilpotent quotient of <LpGroup>.
+### This method terminates if and only if <LpGroup> admits such a largest 
+### quotient.
+###
 InstallOtherMethod( TorsionFreeNilpotentQuotient,
   "For an LpGroup",
   true,
-  [ IsLpGroup ], 0,
+  [ IsGroup ], 0,
   function( G )
   return( Range( EpimorphismTorsionFreeNilpotentQuotient( G ) ) );
   end);
 
-############################################################################
-##
-#M  TorsionFreeNilpotentQuotient( <FpGroup>, <class> )
-## 
-## computes the <class> torsion-free nilpotent quotient of <FpGroup>.
-##
-InstallOtherMethod( TorsionFreeNilpotentQuotient,
-  "For an FpGroup and a positive integer (using the LPRES-package)", true,
-  [ IsFpGroup, IsPosInt ], -1, # give priority to ANUPQ package
-  function( G, c )
-  return( Range( EpimorphismTorsionFreeNilpotentQuotient( G, c ) ) );
-  end);
+#############################################################################
+###
+##M  TorsionFreeNilpotentQuotient( <FpGroup>, <class> )
+### 
+### computes the <class> torsion-free nilpotent quotient of <FpGroup>.
+###
+#InstallOtherMethod( TorsionFreeNilpotentQuotient,
+#  "For an FpGroup and a positive integer (using the LPRES-package)", true,
+#  [ IsFpGroup, IsPosInt ], -1, # give priority to ANUPQ package
+#  function( G, c )
+#  return( Range( EpimorphismTorsionFreeNilpotentQuotient( G, c ) ) );
+#  end);
+#
+#############################################################################
+###
+##M  TorsionFreeNilpotentQuotient( <PcpGroup>, <class> )
+### 
+### computes the <class> torsion-free nilpotent quotient of <PcpGroup>.
+###
+#InstallOtherMethod( TorsionFreeNilpotentQuotient,
+#  "For a PcpGroup and a positive integer (using the LPRES-package)", true,
+#  [ IsPcpGroup, IsPosInt ], -1, # give priority to ANUPQ package
+#  function( G, c )
+#  local iso;
+#  iso := IsomorphismFpGroup( G );
+#  return( Range( EpimorphismTorsionFreeNilpotentQuotient( Range( iso ), c ) ) );
+#  end);
+#
+#############################################################################
+###
+##M  TorsionFreeNilpotentQuotient( <FpGroup> )
+###
+### attempts to compute the largest torsion-free nilpotent quotient of <FpGroup>.
+### This method terminates if and only if <FpGroup> admits such a largest 
+### quotient.
+###
+#InstallOtherMethod( TorsionFreeNilpotentQuotient,
+#  "For an FpGroup and a prime number (using the LPRES-package)", true,
+#  [ IsFpGroup ], -1,           # give priority to ANUPQ package
+#  function( G )
+#  return( Range( EpimorphismTorsionFreeNilpotentQuotient( G ) ) );
+#  end );
+#
+#############################################################################
+###
+##M  TorsionFreeNilpotentQuotient( <PcpGroup> )
+###
+### attempts to compute the largest torsion-free nilpotent quotient of <PcPGroup>.
+### This method terminates if and only if <FpGroup> admits such largest 
+### quotient.
+###
+#InstallOtherMethod( TorsionFreeNilpotentQuotient,
+#  "For a PcpGroup (using the LPRES-package)", true,
+#  [ IsPcpGroup ], -1,           # give priority to ANUPQ package
+#  function( G )
+#  local iso;
+#  iso := IsomorphismFpGroup( G );
+#  return( Range( EpimorphismTorsionFreeNilpotentQuotient( Range(iso) ) ) );
+#  end );
+#
+#############################################################################
+###
+##M  EpimorphismTorsionFreeNilpotentQuotient( <FpGroup>, <class> )
+### 
+### computes the natural homomorphism onto the <class> torsion-free nilpotent
+### quotient of <FpGroup>.
+###
+#InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
+#  "For an FpGroup and a positive integer (using the LPRES-package)",
+#  true,
+#  [ IsFpGroup,
+#    IsPosInt ], -1,                       # give priority to ANUPQ package
+#  function( G, c )
+#  return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetRationalObject( ) ) );
+#  end);
+#
+#############################################################################
+###
+##M  EpimorphismTorsionFreeNilpotentQuotient( <FpGroup> )
+### 
+### attempts to compute the natural homomorphism onto the largest torsion-free
+### nilpotent quotient of <FpGroup>.
+### This method only terminates if <FpGroup> has such a largest quotient. 
+###
+#InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
+#  "For an FpGroup (using the LPRES-package)",
+#  true,
+#  [ IsFpGroup ], -1,                        # give priority to ANUPQ-package
+#  function( G )
+#  return( LPRES_QuotientAlgorithmEpimorphism( G, LPRES_GetRationalObject( ) ) );
+#  end);
 
 ############################################################################
 ##
-#M  TorsionFreeNilpotentQuotient( <PcpGroup>, <class> )
-## 
-## computes the <class> torsion-free nilpotent quotient of <PcpGroup>.
-##
-InstallOtherMethod( TorsionFreeNilpotentQuotient,
-  "For a PcpGroup and a positive integer (using the LPRES-package)", true,
-  [ IsPcpGroup, IsPosInt ], -1, # give priority to ANUPQ package
-  function( G, c )
-  local iso;
-  iso := IsomorphismFpGroup( G );
-  return( Range( EpimorphismTorsionFreeNilpotentQuotient( Range( iso ), c ) ) );
-  end);
-
-############################################################################
-##
-#M  TorsionFreeNilpotentQuotient( <FpGroup> )
-##
-## attempts to compute the largest torsion-free nilpotent quotient of <FpGroup>.
-## This method terminates if and only if <FpGroup> admits such a largest 
-## quotient.
-##
-InstallOtherMethod( TorsionFreeNilpotentQuotient,
-  "For an FpGroup and a prime number (using the LPRES-package)", true,
-  [ IsFpGroup ], -1,           # give priority to ANUPQ package
-  function( G )
-  return( Range( EpimorphismTorsionFreeNilpotentQuotient( G ) ) );
-  end );
-
-############################################################################
-##
-#M  TorsionFreeNilpotentQuotient( <PcpGroup> )
-##
-## attempts to compute the largest torsion-free nilpotent quotient of <PcPGroup>.
-## This method terminates if and only if <FpGroup> admits such largest 
-## quotient.
-##
-InstallOtherMethod( TorsionFreeNilpotentQuotient,
-  "For a PcpGroup (using the LPRES-package)", true,
-  [ IsPcpGroup ], -1,           # give priority to ANUPQ package
-  function( G )
-  local iso;
-  iso := IsomorphismFpGroup( G );
-  return( Range( EpimorphismTorsionFreeNilpotentQuotient( Range(iso) ) ) );
-  end );
-
-############################################################################
-##
-#M  EpimorphismTorsionFreeNilpotentQuotient( <FpGroup>, <class> )
-## 
-## computes the natural homomorphism onto the <class> torsion-free nilpotent
-## quotient of <FpGroup>.
-##
-InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
-  "For an FpGroup and a positive integer (using the LPRES-package)",
-  true,
-  [ IsFpGroup,
-    IsPosInt ], -1,                       # give priority to ANUPQ package
-  function( G, c )
-  local iso, 	# isomorphism from FpGroup to LpGroup
-        mapi,	# MappingGeneratorsImages of <iso>
-        epi;	# epimorphism from LpGroup onto its nilpotent quotient
-
-  iso  := IsomorphismLpGroup( G );
-  mapi := MappingGeneratorsImages( iso );
-  epi  := EpimorphismTorsionFreeNilpotentQuotient( Range( iso ), c );
-
-  return( GroupHomomorphismByImagesNC( G,
-                                       Range( epi ),
-                                       mapi[1],
-                                       List( mapi[1], x -> Image( epi, Image( iso, x ) ) ) ) );
-  end);
-
-############################################################################
-##
-#M  EpimorphismTorsionFreeNilpotentQuotient( <FpGroup> )
-## 
-## attempts to compute the natural homomorphism onto the largest torsion-free
-## nilpotent quotient of <FpGroup>.
-## This method only terminates if <FpGroup> has such a largest quotient. 
-##
-InstallOtherMethod( EpimorphismTorsionFreeNilpotentQuotient,
-  "For an FpGroup (using the LPRES-package)",
-  true,
-  [ IsFpGroup ], -1,                        # give priority to ANUPQ-package
-  function( G )
-  local iso, 	# isomorphism from FpGroup to LpGroup
-        mapi,	# MappingGeneratorsImages of <iso>
-        epi;	# epimorphism from LpGroup onto its nilpotent quotient
-
-  iso  := IsomorphismLpGroup( G );
-  mapi := MappingGeneratorsImages( iso );
-  epi  := EpimorphismTorsionFreeNilpotentQuotient( Range( iso ) );
-  return( GroupHomomorphismByImagesNC( G,
-                                       Range( epi ),
-                                       mapi[1],
-                                       List( mapi[1], x -> Image( epi, Image( iso, x ) ) ) ) );
-  end);
-
-############################################################################
-##
-#F  SmallerTorsionFreeNilpotentQuotientSystem ( <Q>, <int> )
+#F  LPRES_SmallerTorsionFreeNilpotentQuotientSystem ( <Q>, <int> )
 ## 
 ## computes a quotient system for G/G_i if a nilpotent 
 ## quotient system for G/G_j, i<j, is known.
 ##
-InstallGlobalFunction( SmallerTorsionFreeNilpotentQuotientSystem,
+InstallGlobalFunction( LPRES_SmallerTorsionFreeNilpotentQuotientSystem,
   function( Q, c )
   local QS,		            # new quotient system
 	       i,j,k,		         # loop variables

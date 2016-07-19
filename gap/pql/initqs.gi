@@ -109,6 +109,7 @@ InstallMethod( InitPQuotientSystem,
               Pccol       := FromTheLeftCollector( 0 ),
               Imgs        := ListWithIdenticalEntries( n, [] ),
               Weights     := [],
+              Class       := 0,
               Definitions := [] );
 
     UpdatePolycyclicCollector( Q.Pccol );
@@ -129,6 +130,7 @@ InstallMethod( InitPQuotientSystem,
             Pccol := FromTheLeftCollector( Length(Gens) ),
             Prime := prime,
             Imgs  := [],
+            Class := 1,
             Weights := ListWithIdenticalEntries( Length(Gens), 1 )
           );
   

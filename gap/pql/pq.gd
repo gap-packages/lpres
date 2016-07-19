@@ -35,12 +35,12 @@ DeclareAttribute( "LargestPQuotients", IsLpGroup );
 
 ############################################################################
 ##
-#F  SmallerPQuotientSystem ( <Q>, <int> )
+#F  LPRES_SmallerPQuotientSystem ( <Q>, <int> )
 ## 
 ## Computes a nilpotent quotient system for G/gamma_i(G) if a nilpotent 
 ## quotient system for G/gamma_j(G) is known, i<j.
 ##
-DeclareGlobalFunction( "SmallerPQuotientSystem" );
+DeclareGlobalFunction( "LPRES_SmallerPQuotientSystem" );
 
 ############################################################################
 ##
@@ -48,3 +48,19 @@ DeclareGlobalFunction( "SmallerPQuotientSystem" );
 ## 
 ## stores the largest p-quotients as a list
 DeclareAttribute( "ExponentPCentralSeries", IsPcpGroup );
+
+############################################################################
+##
+#F  internal function
+##
+## stores the quotient system as an attribute of the <LpGroup>
+##
+DeclareGlobalFunction( "LPRES_StoreQuotientSystems" );
+
+############################################################################
+##
+#F  internal function
+##
+## stores the largest p-quotient as an attribute of the <LpGroup>
+##
+DeclareGlobalFunction( "LPRES_StoreLargestPQuotient" );

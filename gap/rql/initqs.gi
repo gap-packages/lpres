@@ -198,6 +198,13 @@ InstallMethod( InitRationalQuotientSystem,
             Definitions := [ ]
             );
 
+  # set up the class
+  if IsEmpty( Gens ) then
+    Q.Class := 0;
+  else 
+    Q.Class := 1;
+  fi;
+
 # set up the collector
   ftl := FromTheLeftCollector( n );
   for i in [ 1 .. Length( Gens ) ] do

@@ -9,7 +9,8 @@
 ##
 ## stores the largest p-quotient as an attribute of the <LpGroup>
 ##
-LPRES_StoreLargestJenningsQuotient := function( G, prime, Q ) 
+InstallGlobalFunction( LPRES_StoreLargestJenningsQuotient,
+  function( G, prime, Q ) 
   local largestQuot, i;
 
   largestQuot := [ [], [] ];
@@ -27,7 +28,7 @@ LPRES_StoreLargestJenningsQuotient := function( G, prime, Q )
   fi;
   ResetFilterObj( G, LargestJenningsQuotients );
   SetLargestJenningsQuotients( G, largestQuot );
-end;
+  end );
 
 ############################################################################
 ##
@@ -35,7 +36,8 @@ end;
 ##
 ## stores the quotient system as an attribute of the <LpGroup>
 ##
-LPRES_StoreJenningsQuotientSystems := function( G, prime, Q ) 
+InstallGlobalFunction( LPRES_StoreJenningsQuotientSystems,
+  function( G, prime, Q ) 
   local QS, i;
 
   # store the quotient systems
@@ -55,7 +57,34 @@ LPRES_StoreJenningsQuotientSystems := function( G, prime, Q )
   fi;
   ResetFilterObj( G, JenningsQuotientSystems );
   SetJenningsQuotientSystems( G, QS );
-end;
+  end );
+
+############################################################################
+##
+#F internal function
+## 
+## to create an object for LPRES_QuotientAlgorithmEpimorphism
+## 
+LPRES_GetJenningsObject := function( prime ) 
+  return( rec( initQS := g -> InitPQuotientSystem( g, prime ),
+               storeLargest := function( g, q ) LPRES_StoreLargestJenningsQuotient( g, prime, q ); end,
+               storeQS := function( g, q ) LPRES_StoreJenningsQuotientSystems( g, prime, q ); end,
+               extendQS := ExtendJenningsQuotientSystem,
+               hasQS := function( g )
+                        return( HasJenningsQuotientSystems( g ) and prime in JenningsQuotientSystems( g )[1] );
+                        end,
+               getQS := function( g )
+                        return( JenningsQuotientSystems( g )[2][ Position( JenningsQuotientSystems( g )[1], prime ) ] );
+                        end,
+               smallerQS := LPRES_SmallerJenningsQuotientSystem,
+               hasLargest := function( g )
+                        return( HasLargestJenningsQuotients( g ) and prime in LargestJenningsQuotients( g )[1] );
+                        end,
+               getLargest := function( g )
+                        return( LargestJenningsQuotients( g )[2][ Position( LargestJenningsQuotients( g )[1], prime ) ] );
+                        end,
+               ) );
+  end;
 
 ############################################################################
 ##
@@ -71,59 +100,10 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
     IsPosInt,
     IsPosInt ], 0,
   function( G, prime, c )
-  local Q,           # current quotient system
-	       H,           # the nilpotent quotient of <G>
-	       weights,    	# old weights quotient system
-	       i,	          # loop variable
-        class,
-	       time;	       # runtime
-
   if not IsPrime( prime ) then
     Error( "<prime> should be a prime number" );
   fi;
-
-  # Compute a weighted nilpotent presentation for the Frattini quotient G/G'G^p
-  time := Runtime();
-  Q := InitPQuotientSystem( G, prime );
-  Q.Class := 1;
-  Info( InfoLPRES, 2, "Runtime for this step ",  StringTime(Runtime()-time));
-
-  # store the largest quotient and its quotient sysstem if it's trivial
-  if Length( Q.Weights ) = 0 then 
-    LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-    LPRES_StoreJenningsQuotientSystems( G, prime, Q );
-
-    return( Q.Epimorphism );
-  fi;
-  
-  for i in [2..c] do 
-    # copy the old quotient system to compare with the extended qs.
-    weights := ShallowCopy(Q.Weights);
-
-    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
-    time:=Runtime();
-    Q := ExtendJenningsQuotientSystem( Q );
-    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-   
-    # if we couldn't extend the quotient system any more, we're finished
-    if weights = Q.Weights then 
-      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      if class = Maximum( weights ) then 
-        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
-        break;
-      fi;
-      repeat 
-        Q.Class := Q.Class + 1;
-      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      Q.Class := Q.Class - 1;
-      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
-    fi;
-  od;
-  
-  # store the largest known nilpotent quotient of <G>
-  LPRES_StoreJenningsQuotientSystems( G, prime, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetJenningsObject( prime ) ) );
   end );
 
 ############################################################################
@@ -141,74 +121,10 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
     IsPosInt,
     IsPosInt ], 0,
   function( G, prime, c )
-  local Q,    # current quotient system
-        H,    # the nilpotent quotient of <G>
-        i,    # loop variable
-        weights, 
-        class,
-        time,	# runtime
-        j;    # nilpotency class
-
   if not IsPrime( prime ) then
     Error( "<prime> should be a prime number" );
   fi;
-
-  # check if there's already a quotient system w.r.t. this prime number
-  i := Position( JenningsQuotientSystems( G )[1], prime );
-  if i = fail then
-    TryNextMethod();
-  fi;
-
-  # known quotient system of <G>
-  Q := JenningsQuotientSystems( G )[2][i];
- 
-  # p-class of the quotient system
-  j := Q.Class;
- 
-  if c = j then  
-    # requested this quotient system
-    return( Q.Epimorphism );
-  elif c<j then 
-    # the quotient system is already there
-    return( SmallerJenningsQuotientSystem( Q, c ).Epimorphism );
-  fi;
-
-  # check if there's already a largest p-quotient
-  if HasLargestJenningsQuotients(G) then
-    i := Position( LargestJenningsQuotients(G)[1], prime );
-    if i <> fail then 
-      return( LargestJenningsQuotients(G)[2][i].Epimorphism );
-    fi;
-  fi;
-
-  # extend the largest known quotient system
-  for i in [j+1..c] do
-#   weights := ShallowCopy( Q.Weights );
-
-    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
-    time := Runtime();
-    Q := ExtendJenningsQuotientSystem( Q );
-    Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
-
-    # if we couldn't extend the quotient system any more, we're finished
-    if weights = Q.Weights then 
-      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      if class = Maximum( weights ) then 
-        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
-        break;
-      fi;
-      repeat 
-        Q.Class := Q.Class + 1;
-      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      Q.Class := Q.Class - 1;
-      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
-    fi;
-  od;
-
-  # store this quotient system as an attribute of the group G
-  LPRES_StoreJenningsQuotientSystems( G, prime, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetJenningsObject( prime ) ) );
   end );
 
 ############################################################################
@@ -244,59 +160,10 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation,
     IsPosInt ], 0,
   function( G, prime )
-  local Q,           # current quotient system
-	       H,           # the nilpotent quotient of <G>
-	       weights,    	# old weights quotient system
-	       i,	          # loop variable
-        class,
-	       time;	       # runtime
-
   if not IsPrime( prime ) then
     Error( "<prime> should be a prime number" );
   fi;
-
-  # Compute a weighted nilpotent presentation for the Frattini quotient G/G'G^p
-  time := Runtime();
-  Q := InitPQuotientSystem( G, prime );
-  Q.Class := 1;
-  Info( InfoLPRES, 2, "Runtime for this step ",  StringTime(Runtime()-time));
-
-  # store the largest quotient and its quotient sysstem if it's trivial
-  if Length( Q.Weights ) = 0 then 
-    LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-    LPRES_StoreJenningsQuotientSystems( G, prime, Q );
-
-    return( Q.Epimorphism );
-  fi;
-  
-  repeat
-    # copy the old quotient system to compare with the extended qs.
-    weights := ShallowCopy(Q.Weights);
-
-    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
-    time:=Runtime();
-    Q := ExtendJenningsQuotientSystem( Q );
-    Info(InfoLPRES,2,"Runtime for this step ", StringTime(Runtime()-time));
-   
-    # if we couldn't extend the quotient system any more, we're finished
-    if weights = Q.Weights then 
-      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      if class = Maximum( weights ) then 
-        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
-        break;
-      fi;
-      repeat 
-        Q.Class := Q.Class + 1;
-      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      Q.Class := Q.Class - 1;
-      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
-    fi;
-  until false;
-  
-  # store the largest known nilpotent quotient of <G>
-  LPRES_StoreJenningsQuotientSystems( G, prime, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, LPRES_GetJenningsObject( prime ) ) );
   end );
 
 ############################################################################
@@ -313,66 +180,10 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
   [ IsLpGroup and HasIsInvariantLPresentation and IsInvariantLPresentation and HasJenningsQuotientSystems,
     IsPosInt ], 0,
   function( G, prime )
-  local Q,    # current quotient system
-        H,    # the nilpotent quotient of <G>
-        i,    # loop variable
-        weights, 
-        class,
-        time,	# runtime
-        j;    # nilpotency class
-
   if not IsPrime( prime ) then
     Error( "<prime> should be a prime number" );
   fi;
-
-  # check if there's already a quotient system w.r.t. this prime number
-  i := Position( JenningsQuotientSystems( G )[1], prime );
-  if i = fail then
-    TryNextMethod();
-  fi;
-
-  # known quotient system of <G>
-  Q := JenningsQuotientSystems( G )[2][i];
- 
-  # p-class of the quotient system
-  j := Q.Class;
- 
-  # check if there's already a largest p-quotient
-  if HasLargestJenningsQuotients(G) then
-    i := Position( LargestJenningsQuotients(G)[1], prime );
-    if i <> fail then 
-      return( LargestJenningsQuotients(G)[2][i].Epimorphism );
-    fi;
-  fi;
-
-  # extend the largest known quotient system
-  repeat
-    weights := ShallowCopy( Q.Weights );
-
-    # extend the quotient system of G/\phi_i to G/\phi_{i+1}
-    time := Runtime();
-    Q := ExtendJenningsQuotientSystem( Q );
-    Info( InfoLPRES, 2, "Runtime for this step ", StringTime(Runtime()-time) );
-
-    # if we couldn't extend the quotient system any more, we're finished
-    if weights = Q.Weights then 
-      class := Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      if class = Maximum( weights ) then 
-        LPRES_StoreLargestJenningsQuotient( G, prime, Q );
-        Info(InfoLPRES,1,"The group has a maximal Jennings-quotient of Jennings-class ", Maximum(Q.Weights) );
-        break;
-      fi;
-      repeat 
-        Q.Class := Q.Class + 1;
-      until class < Maximum( Filtered( weights, x -> x * Q.Prime <= Q.Class ) );
-      Q.Class := Q.Class - 1;
-      Info( InfoLPRES,1, "Trivial section found - enlarged the class to ", Q.Class );
-    fi;
-  until false;
-
-  # store this quotient system as an attribute of the group G
-  LPRES_StoreJenningsQuotientSystems( G, prime, Q );
-  return( Q.Epimorphism );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, LPRES_GetJenningsObject( prime ) ) );
   end );
 
 ############################################################################
@@ -385,43 +196,33 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
 InstallOtherMethod( EpimorphismJenningsQuotient,
   "For an (arbitrary) LpGroup, a prime number, and a positive integer",
   true,
-  [ IsLpGroup,
+  [ IsGroup,
     IsPosInt,
     IsPosInt ], 0,
   function( G, prime, c )
-  local Grp, epi, pi, H, N, hom;
-
   if not IsPrime( prime ) then
     Error( "<prime> should be a prime number" );
   fi;
+  return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetJenningsObject( prime ) ) );
+  end);
 
-  # work with the underlying invariant LpGroup which maps onto G
-  Grp := UnderlyingInvariantLPresentation( G );
-
-  if not HasIsInvariantLPresentation( Grp ) then
-    SetIsInvariantLPresentation( Grp, true );
+############################################################################
+##
+#M  EpimorphismJenningsQuotient( <LpGroup>, <prime>, <class> ) . . . . . .
+## 
+## computes the natural homomorphism on the <class> p-quotient of  
+## <LpGroup>.
+##
+InstallOtherMethod( EpimorphismJenningsQuotient,
+  "For an (arbitrary) LpGroup and a prime number",
+  true,
+  [ IsGroup,
+    IsPosInt ], 0,
+  function( G, prime )
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
   fi;
-
-  # natural homomorphism onto the p-quotient
-  epi := EpimorphismJenningsQuotient( Grp, prime, c );
-
-  # the p-quotient
-  H := Range( epi );
-
-  # natural homomorphisms from the free group onto the LpGroup
-  pi := GroupHomomorphismByImages( FreeGroupOfLpGroup( Grp ), Grp,
-                                   GeneratorsOfGroup( FreeGroupOfLpGroup( Grp ) ),
-                                   GeneratorsOfGroup( Grp ) );
-  
-  # normal subgroup generated by the images of the fixed relations
-  N := NormalClosure( H, Subgroup( H, List( FixedRelatorsOfLpGroup( G ), x -> ( x^pi ) ^ epi ) ) );
-
-  hom := NaturalHomomorphismByNormalSubgroup( H, N );
-
-  # return the factor group
-  return( GroupHomomorphismByImagesNC( G, Range( hom ),
-                                       GeneratorsOfGroup( G ), 
-                                       List( GeneratorsOfGroup( G ), x -> ( ( UnderlyingElement( x )^pi ) ^ epi ) ^ hom ) ) );
+  return( LPRES_QuotientAlgorithmEpimorphism( G, LPRES_GetJenningsObject( prime ) ) );
   end);
 
 ############################################################################
@@ -433,10 +234,13 @@ InstallOtherMethod( EpimorphismJenningsQuotient,
 InstallOtherMethod( JenningsQuotient,
   "For an LpGroup, a prime number, and a positive integer",
   true,
-  [ IsLpGroup,
+  [ IsGroup,
     IsPosInt,
     IsPosInt ], 0,
   function( G, prime, c )
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
+  fi;
   return( Range( EpimorphismJenningsQuotient( G, prime, c ) ) );
   end);
 
@@ -449,90 +253,81 @@ InstallOtherMethod( JenningsQuotient,
 InstallOtherMethod( JenningsQuotient,
   "For an LpGroup and a prime number",
   true,
-  [ IsLpGroup,
+  [ IsGroup,
     IsPosInt ], 0,
   function( G, prime )
+  if not IsPrime( prime ) then
+    Error( "<prime> should be a prime number" );
+  fi;
   return( Range( EpimorphismJenningsQuotient( G, prime ) ) );
   end);
 
-############################################################################
-##
-#M  JenningsQuotient( <FpGroup>, <prime>, <class> )
-## 
-## computes the <class> p-quotient of <FpGroup>.
-##
-InstallOtherMethod( JenningsQuotient,
-  "For an FpGroup, a prime number, and a positive integer (using the LPRES-package)", true,
-  [ IsFpGroup, IsPosInt, IsPosInt ], -1, # give priority to ANUPQ package
-  function( G, prime, c )
-
-  if not IsPrime( prime ) then 
-    Error( "<prime> must be a prime number" );
-  fi;
-
-  return( Range( EpimorphismJenningsQuotient( G, prime, c ) ) );
-  end);
-
-############################################################################
-##
-#M  JenningsQuotient( <PcpGroup>, <prime>, <class> )
-## 
-## computes the <class> p-quotient of <PcpGroup>.
-##
-InstallOtherMethod( JenningsQuotient,
-  "For a PcpGroup, a prime number, and a positive integer (using the LPRES-package)", true,
-  [ IsPcpGroup, IsPosInt, IsPosInt ], -1, # give priority to ANUPQ package
-  function( G, prime, c )
-  local iso;
-
-  if not IsPrime( prime ) then 
-    Error( "<prime> must be a prime number" );
-  fi;
-
-  iso := IsomorphismFpGroup( G );
-  return( Range( EpimorphismJenningsQuotient( Range( iso ), prime, c ) ) );
-  end);
-
-############################################################################
-##
-#M  EpimorphismJenningsQuotient( <FpGroup>, <prime>, <class> )
-## 
-## computes the natural homomorphism on the <class> p-quotient of  
-## <FpGroup>.
-##
-InstallOtherMethod( EpimorphismJenningsQuotient,
-  "For an FpGroup, a prime number, and a positive integer (using the LPRES-package)",
-  true,
-  [ IsFpGroup,
-    IsPosInt,
-    IsPosInt ], -1,                       # give priority to ANUPQ package
-  function( G, prime, c )
-  local iso, 	# isomorphism from FpGroup to LpGroup
-        mapi,	# MappingGeneratorsImages of <iso>
-        epi;	# epimorphism from LpGroup onto its nilpotent quotient
-
-  if not IsPrime( prime ) then 
-    Error( "<prime> must be a prime number" );
-  fi;
-
-  iso  := IsomorphismLpGroup( G );
-  mapi := MappingGeneratorsImages( iso );
-  epi  := EpimorphismJenningsQuotient( Range( iso ), prime, c );
-
-  return( GroupHomomorphismByImagesNC( G,
-                                       Range( epi ),
-                                       mapi[1],
-                                       List( mapi[1], x -> Image( epi, Image( iso, x ) ) ) ) );
-  end);
+# ############################################################################
+# ##
+# #M  JenningsQuotient( <FpGroup>, <prime>, <class> )
+# ## 
+# ## computes the <class> p-quotient of <FpGroup>.
+# ##
+# InstallOtherMethod( JenningsQuotient,
+#   "For an FpGroup, a prime number, and a positive integer (using the LPRES-package)", true,
+#   [ IsFpGroup, IsPosInt, IsPosInt ], -1, # give priority to ANUPQ package
+#   function( G, prime, c )
+# 
+#   if not IsPrime( prime ) then 
+#     Error( "<prime> must be a prime number" );
+#   fi;
+# 
+#   return( Range( EpimorphismJenningsQuotient( G, prime, c ) ) );
+#   end);
+# 
+# ############################################################################
+# ##
+# #M  JenningsQuotient( <PcpGroup>, <prime>, <class> )
+# ## 
+# ## computes the <class> p-quotient of <PcpGroup>.
+# ##
+# InstallOtherMethod( JenningsQuotient,
+#   "For a PcpGroup, a prime number, and a positive integer (using the LPRES-package)", true,
+#   [ IsPcpGroup, IsPosInt, IsPosInt ], -1, # give priority to ANUPQ package
+#   function( G, prime, c )
+#   local iso;
+# 
+#   if not IsPrime( prime ) then 
+#     Error( "<prime> must be a prime number" );
+#   fi;
+# 
+#   iso := IsomorphismFpGroup( G );
+#   return( Range( EpimorphismJenningsQuotient( Range( iso ), prime, c ) ) );
+#   end);
+# 
+# ############################################################################
+# ##
+# #M  EpimorphismJenningsQuotient( <FpGroup>, <prime>, <class> )
+# ## 
+# ## computes the natural homomorphism on the <class> p-quotient of  
+# ## <FpGroup>.
+# ##
+# InstallOtherMethod( EpimorphismJenningsQuotient,
+#   "For an FpGroup, a prime number, and a positive integer (using the LPRES-package)",
+#   true,
+#   [ IsFpGroup,
+#     IsPosInt,
+#     IsPosInt ], -1,                       # give priority to ANUPQ package
+#   function( G, prime, c )
+#   if not IsPrime( prime ) then 
+#     Error( "<prime> must be a prime number" );
+#   fi;
+#   return( LPRES_QuotientAlgorithmEpimorphism( G, c, LPRES_GetJenningsObject( prime ) ) );
+#   end);
 
 ############################################################################
 ##
-#F  SmallerJenningsQuotientSystem ( <Q>, <int> )
+#F  LPRES_SmallerJenningsQuotientSystem ( <Q>, <int> )
 ## 
 ## computes a quotient system for G/phi_i(G) if a nilpotent 
 ## quotient system for G/phi_j(G), i<j, is known.
 ##
-InstallGlobalFunction( SmallerJenningsQuotientSystem,
+InstallGlobalFunction( LPRES_SmallerJenningsQuotientSystem,
   function( Q, c )
   local QS,		            # new quotient system
 	       i,j,k,		         # loop variables

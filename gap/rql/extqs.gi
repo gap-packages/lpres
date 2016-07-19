@@ -72,6 +72,7 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
   # weights, definitions and images of the quotient system
   QS := rec( Lpres       := Q.Lpres,
              Weights     := ShallowCopy( Q.Weights ),
+             Class       := Q.Class + 1,
              Definitions := ShallowCopy( Q.Definitions ),
              Imgs        := ShallowCopy( Q.Imgs ) );
 
@@ -165,11 +166,17 @@ InstallGlobalFunction( ExtendRationalQuotientSystem,
 
   # use the new basis to create the new quotient system
   QSnew := LPRES_CreateNewRationalQuotientSystem( QS, Basis );
+  QSnew.Class := Maximum( QSnew.Weights );
+  if QSnew.Weights = Q.Weights then
+    LPRES_StoreLargestTorsionFreeNilpotentQuotient( Q.Lpres, Q );
+    Info(InfoLPRES,1,"The group has a maximal torsion-free nilpotent quotient class ", Maximum(Q.Weights) );
+    return( QSnew );
+  fi;
   SetRationalLowerCentralSeries( Range( QSnew.Epimorphism ), LPRES_RationalLowerCentralSeries( QSnew ) );
   if Length( QSnew.Weights ) - Length( Q.Weights ) > InfoLPRES_MAX_GENS then 
-    Info( InfoLPRES, 1, "Class ", Maximum( QSnew.Weights ), ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
+    Info( InfoLPRES, 1, "Rational-Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights), " generators");
   else
-    Info( InfoLPRES, 1, "Class ", Maximum( QSnew.Weights ), ": ", Length(QSnew.Weights)-Length(Q.Weights),
+    Info( InfoLPRES, 1, "Rational-Class ", QSnew.Class, ": ", Length(QSnew.Weights)-Length(Q.Weights),
   	       " generators with relative orders: ", RelativeOrders(QSnew.Pccol){[Length(Q.Weights)+1..Length(QSnew.Weights)]});
   fi;
   return( QSnew );
