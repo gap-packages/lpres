@@ -1,12 +1,10 @@
 ############################################################################
 ##
-#W  testall.gi  		The NQL-package			 René Hartung
-##
-##   @(#)$Id: testall.gi,v 1.1 2008/08/28 07:44:41 gap Exp $
+#W  testall.gi  		The LPRES-package		René Hartung
 ##
 
-LoadPackage("NQL");
-dir := DirectoriesPackageLibrary( "NQL", "tst" );
+LoadPackage("LPRES");
+dir := DirectoriesPackageLibrary( "LPRES", "tst" );
 
 # examples from the manual
 ReadTest( Filename( dir, "manual.tst" ) );

@@ -1,14 +1,12 @@
 ############################################################################
 ##
-#W  res.gi 			The NQL-package			 René Hartung
-##
-##   @(#)$Id: res.tst,v 1.2 2010/04/01 11:42:56 gap Exp $
+#W  res.gi 			The LPRES-package		René Hartung
 ##
 
 gap> START_TEST("Checking some self-similar groups");
 
-gap> IL:=InfoLevel(InfoNQL);;
-gap> SetInfoLevel(InfoNQL,1);
+gap> IL:=InfoLevel(InfoLPRES);;
+gap> SetInfoLevel(InfoLPRES,1);
 gap> G:=ExamplesOfLPresentations(1);
 #I  The Grigorchuk group on 4 generators from [Lys85]
 <invariant LpGroup of size infinity on the generators [ a, b, c, d ]>
@@ -232,6 +230,6 @@ gap> List([1..Length(lcs)-1], i -> AbelianInvariants( lcs[i]/lcs[i+1] ));
 [ [ 3, 0 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ],
   [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ] ]
 
-# reset the info level InfoNQL
-gap> SetInfoLevel(InfoNQL,IL);
+# reset the info level InfoLPRES
+gap> SetInfoLevel(InfoLPRES,IL);
 gap> STOP_TEST( "res.tst", 100000 );
