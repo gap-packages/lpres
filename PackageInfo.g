@@ -9,8 +9,8 @@ SetPackageInfo( rec(
 
 PackageName := "lpres",
 Subtitle := "Nilpotent Quotients of L-Presented Groups",
-Version := "0.3.0",
-Date    := "07/05/2016",
+Version := "0.4.0",
+Date    := "24/02/2017",
 
 Persons := [
   rec(
@@ -36,16 +36,16 @@ Persons := [
   )
 ],
 
-Status         := "accepted",
+Status         := "deposited",
 CommunicatedBy := "Alexander Konovalov (St Andrews)",
 AcceptDate     := "02/2009",
 
 SourceRepository := rec(
     Type := "git",
-    URL := Concatenation( "https://github.com/laurentbartholdi/", ~.PackageName ),
+    URL := Concatenation( "https://github.com/gap-packages/", ~.PackageName ),
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := Concatenation( "https://laurentbartholdi.github.io/", ~.PackageName ),
+PackageWWWHome  := Concatenation( "https://gap-packages.github.io/", ~.PackageName ),
 README_URL      := Concatenation( ~.PackageWWWHome, "/README" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
 ArchiveURL      := Concatenation( ~.SourceRepository.URL,
