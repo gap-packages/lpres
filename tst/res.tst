@@ -48,7 +48,7 @@ gap> H:=NilpotentQuotient(G,7);;
 #I  Class InvLpGroup 7: 29 generators
 gap> lcs:=LowerCentralSeriesOfGroup(H);;
 gap> List([1..Length(lcs)-1], i -> AbelianInvariants( lcs[i]/lcs[i+1] ) );
-[ [ 2, 0 ], [ 2 ], [ 2 ], [ 2 ], [ 2 ], [ 2 ], [ 2 ] ]
+[ [ 0, 2 ], [ 2 ], [ 2 ], [ 2 ], [ 2 ], [ 2 ], [ 2 ] ]
 
 gap> G:=ExamplesOfLPresentations(4);
 #I  The Brunner-Sidki-Vieira group
@@ -197,7 +197,7 @@ gap> H:=NilpotentQuotient(G,6);;
 [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
 gap> lcs:=LowerCentralSeriesOfGroup(H);;
 gap> List([1..Length(lcs)-1], i -> AbelianInvariants( lcs[i]/lcs[i+1] ));
-[ [ 3, 0 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ] ]
+[ [ 0, 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ] ]
 
 gap> G:=ExamplesOfLPresentations( 10 );
 #I  Baumslag's group
@@ -227,7 +227,7 @@ gap> H:=NilpotentQuotient(G,20);;
 #I  Class 20: 1 generators with relative orders: [ 3 ]
 gap> lcs:=LowerCentralSeriesOfGroup(H);;
 gap> List([1..Length(lcs)-1], i -> AbelianInvariants( lcs[i]/lcs[i+1] ));
-[ [ 3, 0 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ],
+[ [ 0, 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ],
   [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ], [ 3 ] ]
 
 # reset the info level InfoLPRES

@@ -86,6 +86,8 @@ Dependencies := rec(
 
 Autoload := false,
 
+TestFile := "tst/testall.g",
+
 Keywords := [ "nilpotent quotient algorithm",
               "nilpotent presentations",
               "finitely generated groups",
