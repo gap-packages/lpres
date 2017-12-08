@@ -50,15 +50,6 @@ InstallMethod( String,
 
 ############################################################################
 ##
-#M  LaTeXObj( <elm> ) 
-## 
-InstallMethod( LaTeXObj,
-  "for an element of an L-presented group", true,
-  [IsElementOfLpGroup and IsPackedElementDefaultRep], 0,
-  obj->LaTeXObj(obj![1]));
-
-############################################################################
-##
 #M  UnderlyingElement( <elm> ) 
 ## 
 InstallMethod( UnderlyingElement,

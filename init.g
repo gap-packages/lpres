@@ -12,39 +12,6 @@ LPRESPkgName:="lpres";
 
 ############################################################################
 ##
-##    Declare the package and test for the existence of the package 
-##    polycyclic.
-##
-DeclarePackage( LPRESPkgName , "0.0",
-  function()
-    
-    if TestPackageAvailability( "polycyclic", "1.0" ) = fail then
-      Info( InfoWarning, 1, 
-           "Loading the LPRES package: package polycyclic must be available" );
-      return fail;
-    fi;
-
-    return true;
-end );
-
-# install the documentation
-DeclarePackageDocumentation( LPRESPkgName, "doc", "lpres", 
-        "Computation of nilpotent quotients" );
-
-
-############################################################################
-## 
-#D Require other packages (polycyclic)
-##
-if IsList( TestPackageAvailability( "polycyclic", "1.0" ) ) then
-    HideGlobalVariables( "BANNER" );
-    BANNER := false;
-    LoadPackage( "polycyclic" );
-    UnhideGlobalVariables( "BANNER" );
-fi;
-
-############################################################################
-##
 #D Read .gd files
 ##
 ReadPackage( LPRESPkgName, "gap/lpres.gd");
