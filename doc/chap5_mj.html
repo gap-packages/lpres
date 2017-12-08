@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <script type="text/javascript"
-  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 <title>GAP (lpres) - Chapter 5: Approximating the Schur multiplier</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -49,42 +49,42 @@
 
 <h5>5.1-1 GeneratingSetOfMultiplier</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GeneratingSetOfMultiplier</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GeneratingSetOfMultiplier</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>uses Tietze transformations for computing an equivalent set of relators for <var class="Arg">lpgroup</var> so that a generating set for its Schur multiplier can be read off easily.</p>
 
 <p><a id="X87A3D6C07D99C79A" name="X87A3D6C07D99C79A"></a></p>
 
 <h5>5.1-2 FiniteRankSchurMultiplier</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FiniteRankSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">c</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FiniteRankSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">c</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>computes a finitely generated quotient of the Schur multiplier of <var class="Arg">lpgroup</var>. The method computes the image of the Schur multiplier of <var class="Arg">lpgroup</var> in the Schur multiplier of its class-<var class="Arg">c</var> quotient.</p>
 
 <p><a id="X78084374873BDFE1" name="X78084374873BDFE1"></a></p>
 
 <h5>5.1-3 EndomorphismsOfFRSchurMultiplier</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EndomorphismsOfFRSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">c</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EndomorphismsOfFRSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">c</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>computes a list of endomorphisms of the `FiniteRankSchurMultiplier' of <var class="Arg">lpgroup</var>. These are the endomorphisms of the invariant L-presentation induced to `FiniteRankSchurMultiplier'.</p>
 
 <p><a id="X7CF92D9880A3687E" name="X7CF92D9880A3687E"></a></p>
 
 <h5>5.1-4 EpimorphismCoveringGroups</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EpimorphismCoveringGroups</code>( <var class="Arg">lpgroup</var>, <var class="Arg">d</var>, <var class="Arg">c</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EpimorphismCoveringGroups</code>( <var class="Arg">lpgroup</var>, <var class="Arg">d</var>, <var class="Arg">c</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>computes an epimorphism of the covering group of the class-<var class="Arg">d</var> quotient onto the covering group of the class-<var class="Arg">c</var> quotient.</p>
 
 <p><a id="X86EAE6457CE03B7B" name="X86EAE6457CE03B7B"></a></p>
 
 <h5>5.1-5 EpimorphismFiniteRankSchurMultiplier</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EpimorphismFiniteRankSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">d</var>, <var class="Arg">c</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EpimorphismFiniteRankSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">d</var>, <var class="Arg">c</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>computes an epimorphism of the <span class="SimpleMath">\(d\)</span>-th `FiniteRankSchurMultiplier' of the invariant <var class="Arg">lpgroup</var> onto the <span class="SimpleMath">\(c\)</span>-th `FiniteRankSchurMultiplier'. Its restricts the epimorphism `EpimorphismCoveringGroups' to the corresponding finite rank multipliers.</p>
 
 <p><a id="X87182BC081DCA91E" name="X87182BC081DCA91E"></a></p>
 
 <h5>5.1-6 ImageInFiniteRankSchurMultiplier</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ImageInFiniteRankSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">c</var>, <var class="Arg">elm</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ImageInFiniteRankSchurMultiplier</code>( <var class="Arg">lpgroup</var>, <var class="Arg">c</var>, <var class="Arg">elm</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>computes the image of the free group element <var class="Arg">elm</var> in the <var class="Arg">c</var>-th `FiniteRankSchurMultiplier'. Note that <var class="Arg">elm</var> must be a relator contained in the Schur multiplier of <var class="Arg">lpgroup</var>; otherwise, the function fails in computing the image.</p>
 
 <p>The following example tackels the Schur multiplier of the Grigorchuk group.</p>

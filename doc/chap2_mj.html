@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <script type="text/javascript"
-  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 <title>GAP (lpres) - Chapter 2: An Introduction to L-presented groups</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -105,7 +105,7 @@
 
 <h5>2.2-1 LPresentedGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LPresentedGroup</code>( <var class="Arg">F</var>, <var class="Arg">frels</var>, <var class="Arg">endos</var>, <var class="Arg">irels</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LPresentedGroup</code>( <var class="Arg">F</var>, <var class="Arg">frels</var>, <var class="Arg">endos</var>, <var class="Arg">irels</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>returns the <strong class="pkg">GAP</strong> object of an L-presented group with the underlying free group <var class="Arg">F</var>, the fixed relators <var class="Arg">frels</var>, the set of endomorphisms <var class="Arg">endos</var>, and the iterated relators <var class="Arg">irels</var>. The input variables <var class="Arg">frels</var> and <var class="Arg">irels</var> need to be finite subsets of the underlying free group <var class="Arg">F</var> and <var class="Arg">endos</var> needs to be a finite list of homomorphisms <span class="SimpleMath">\(F\to F\)</span>.</p>
 
 <p>For example, the Grigorchuk group,</p>
@@ -133,7 +133,7 @@
 
 <h5>2.2-2 ExamplesOfLPresentations</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ExamplesOfLPresentations</code>( <var class="Arg">n</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ExamplesOfLPresentations</code>( <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>returns some well-known examples of finitely L-presented groups. The input of this function needs to be a positive integer at most <span class="SimpleMath">\(10\)</span>.</p>
 
 
@@ -171,7 +171,7 @@
 
 </dd>
 <dt><strong class="Mark">n=9</strong></dt>
-<dd><p>the Basilica group; cf. <a href="chapBib_mj.html#biBGrigorchukZuk02">[GZ02]</a> and <a href="chapBib_mj.html#biBBartholdiVirag05">[BV05]</a>,</p>
+<dd><p>the Basilica group; cf. <a href="chapBib_mj.html#biBGrigorchukZuk02">[GtZ02]</a> and <a href="chapBib_mj.html#biBBartholdiVirag05">[BV05]</a>,</p>
 
 </dd>
 <dt><strong class="Mark">n=10</strong></dt>
@@ -179,42 +179,42 @@
 
 </dd>
 </dl>
-<p>Furthermore, every free group in a variety of groups satisfying finitely many identities is finitely L-presented. Some of these groups are available from the <strong class="pkg">lpres</strong>-package using the following operations; for further details we refer to the diploma thesis <a href="chapBib_mj.html#biBH08">[Har8 ]</a>.</p>
+<p>Furthermore, every free group in a variety of groups satisfying finitely many identities is finitely L-presented. Some of these groups are available from the <strong class="pkg">lpres</strong>-package using the following operations; for further details we refer to the diploma thesis <a href="chapBib_mj.html#biBH08">[Har08]</a>.</p>
 
 <p><a id="X7DA323A87E7B6A7C" name="X7DA323A87E7B6A7C"></a></p>
 
 <h5>2.2-3 FreeEngelGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeEngelGroup</code>( <var class="Arg">n</var>, <var class="Arg">num</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeEngelGroup</code>( <var class="Arg">n</var>, <var class="Arg">num</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an L-presentation for the free <var class="Arg">n</var>-Engel group on <var class="Arg">num</var> generators; that is, the free group in the variety of <var class="Arg">num</var>-generated groups satisfying the <var class="Arg">n</var>-Engel identity.</p>
 
 <p><a id="X81C3537083E40A5C" name="X81C3537083E40A5C"></a></p>
 
 <h5>2.2-4 FreeBurnsideGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeBurnsideGroup</code>( <var class="Arg">exp</var>, <var class="Arg">num</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeBurnsideGroup</code>( <var class="Arg">exp</var>, <var class="Arg">num</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an L-presentation for the free Burnside group on <var class="Arg">num</var> generators with exponent <var class="Arg">exp</var>; that is, the free group in the variety of <var class="Arg">num</var>-generated groups with exponent <var class="Arg">exp</var>.</p>
 
 <p><a id="X8796306C7A7924D1" name="X8796306C7A7924D1"></a></p>
 
 <h5>2.2-5 FreeNilpotentGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeNilpotentGroup</code>( <var class="Arg">c</var>, <var class="Arg">num</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeNilpotentGroup</code>( <var class="Arg">c</var>, <var class="Arg">num</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an L-presentation for the free nilpotent group of class <var class="Arg">c</var> on <var class="Arg">num</var> generators; that is, the free group in the variety of <var class="Arg">num</var>-generated, nilpotent groups with nilpotency class <var class="Arg">c</var>.</p>
 
 <p><a id="X81450ABA81F0FCE5" name="X81450ABA81F0FCE5"></a></p>
 
 <h5>2.2-6 GeneralizedFabrykowskiGuptaLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GeneralizedFabrykowskiGuptaLpGroup</code>( <var class="Arg">n</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GeneralizedFabrykowskiGuptaLpGroup</code>( <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an L-presentation for the <var class="Arg">n</var>-th generalized Fabrykowski-Gupta group as constructed in <a href="chapBib_mj.html#biBBEH08">[BEH08]</a>.</p>
 
 <p><a id="X83BF8C597E1DC266" name="X83BF8C597E1DC266"></a></p>
 
 <h5>2.2-7 LamplighterGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LamplighterGroup</code>( <var class="Arg">filter</var>, <var class="Arg">int</var> )</td><td class="tdright">( operation )</td></tr></table></div>
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LamplighterGroup</code>( <var class="Arg">filter</var>, <var class="Arg">pcgroup</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LamplighterGroup</code>( <var class="Arg">filter</var>, <var class="Arg">int</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LamplighterGroup</code>( <var class="Arg">filter</var>, <var class="Arg">pcgroup</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns a finite L-presentation for the lamplighter group on <var class="Arg">int</var> lamp states in the first case, if <var class="Arg">filter</var> is the filter <code class="code">IsLpGroup</code>. In the second case, the group <var class="Arg">pcgroup</var> must be a finite cyclic group. Then the method returns a finite L-presentation for the lamplighter group on <code class="code">Size(pcgroup)</code> lamp states; for details on the L-presentation see <a href="chapBib_mj.html#biBBartholdi03">[Bar03]</a>.</p>
 
 
@@ -229,7 +229,7 @@
 
 <h5>2.2-8 EmbeddingOfIASubgroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EmbeddingOfIASubgroup</code>( <var class="Arg">a</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EmbeddingOfIASubgroup</code>( <var class="Arg">a</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>computes an L-presentation for the IA-automorphism group of a free group. This is the subgroup of automorphisms of a free group <span class="SimpleMath">\(f\)</span> that act trivially on the abelianization of <span class="SimpleMath">\(f\)</span>.</p>
 
 <p>The L-presentation is taken from <a href="chapBib_mj.html#biBDayPutman">[DP]</a>.</p>
@@ -270,35 +270,35 @@
 
 <h5>2.3-1 FreeGroupOfLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeGroupOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeGroupOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the underlying free group of the L-presented group <var class="Arg">lpgroup</var></p>
 
 <p><a id="X838079A587E8CF43" name="X838079A587E8CF43"></a></p>
 
 <h5>2.3-2 FreeGeneratorsOfLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeGeneratorsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeGeneratorsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the generators of the free group which underlies the L-presented group <var class="Arg">lpgroup</var></p>
 
 <p><a id="X79C44528864044C5" name="X79C44528864044C5"></a></p>
 
 <h5>2.3-3 GeneratorsOfGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GeneratorsOfGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GeneratorsOfGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the generators of the L-presented group <var class="Arg">lpgroup</var>. These are the images of the generators of the underlying free group under the natural homomorphism.</p>
 
 <p><a id="X85C405D57F65048A" name="X85C405D57F65048A"></a></p>
 
 <h5>2.3-4 UnderlyingElement</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnderlyingElement</code>( <var class="Arg">elm</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnderlyingElement</code>( <var class="Arg">elm</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns the preimage of an L-presented group element <var class="Arg">elm</var> in the underlying free group. More precisely, each element of an L-presented group is represented by an element in the free group. This method returns the corresponding element in the free group.</p>
 
 <p><a id="X8573CDF57CB216D7" name="X8573CDF57CB216D7"></a></p>
 
 <h5>2.3-5 ElementOfLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ElementOfLpGroup</code>( <var class="Arg">fam</var>, <var class="Arg">elm</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ElementOfLpGroup</code>( <var class="Arg">fam</var>, <var class="Arg">elm</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns the element in the L-presented group represented by the word <var class="Arg">elm</var> on the generators of the underlying free group, if <var class="Arg">fam</var> is the family of L-presented group elements.</p>
 
 
@@ -331,21 +331,21 @@ true
 
 <h5>2.4-1 FixedRelatorsOfLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FixedRelatorsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FixedRelatorsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the fixed relators of the L-presented group <var class="Arg">lpgroup</var> as elements of the underlying free group.</p>
 
 <p><a id="X7C468D1C81964268" name="X7C468D1C81964268"></a></p>
 
 <h5>2.4-2 IteratedRelatorsOfLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IteratedRelatorsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IteratedRelatorsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the iterated relators of the L-presented group <var class="Arg">lpgroup</var> as elements of the underlying free group.</p>
 
 <p><a id="X85D253888263A3F6" name="X85D253888263A3F6"></a></p>
 
 <h5>2.4-3 EndomorphismsOfLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EndomorphismsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EndomorphismsOfLpGroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>Returns: the endomorphisms of the L-presented group <var class="Arg">lpgroup</var> as endomorphisms of the underlying free group.</p>
 
 
@@ -371,14 +371,14 @@ true
 
 <h5>2.5-1 UnderlyingAscendingLPresentation</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnderlyingAscendingLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnderlyingAscendingLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>returns the underlying ascending L-presentation of <var class="Arg">lpgroup</var>; that is, if <var class="Arg">lpgroup</var> is finitely L-presented by <span class="SimpleMath">\((S,Q,\Phi,R)\)</span>, the underlying ascending L-presentation is <span class="SimpleMath">\((S,\emptyset,\Phi,R)\)</span>.</p>
 
 <p><a id="X86F017E085082624" name="X86F017E085082624"></a></p>
 
 <h5>2.5-2 UnderlyingInvariantLPresentation</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnderlyingInvariantLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UnderlyingInvariantLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>attempts to compute a ``good'' underlying invariant L-presentation for <var class="Arg">lpgroup</var>; that is, if <var class="Arg">lpgroup</var> is finitely L-presented by <span class="SimpleMath">\((S,Q,\Phi,R)\)</span>, then this method seeks to find a subset <span class="SimpleMath">\(Q'\subseteq Q\)</span> such that <span class="SimpleMath">\((S,Q',\Phi,R)\)</span> is an invariant L-presentation. Note that there is always the underlying ascending L-presentation <span class="SimpleMath">\((S,\emptyset,\Phi,R)\)</span>. However, for the efficiency of the nilpotent quotient algorithm it is important that the subset <span class="SimpleMath">\(Q'\)</span> is as big as possible.</p>
 
 <p>Since it is undecidable, in general, whether or not a given L-presentation is invariant, there is no algorithm which can determine the best possible underlying invariant L-presentation. The method implemented for this attribute tries to compute a ``good'' invariant L-presentation and will return the underlying ascending L-presentation in the worst case.</p>
@@ -407,21 +407,21 @@ true
 
 <h5>2.5-3 IsAscendingLPresentation</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsAscendingLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( property )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsAscendingLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
 <p>checks whether the L-presentation of <var class="Arg">lpgroup</var> is ascending; that is, if the set of fixed relators is empty. This property is set automatically when creating an L-presented group with no fixed relators using the function <code class="func">LPresentedGroup</code> (<a href="chap2_mj.html#X7BBBE4C082AE4D5A"><span class="RefLink">2.2-1</span></a>).</p>
 
 <p><a id="X87F0C52978D99BB5" name="X87F0C52978D99BB5"></a></p>
 
 <h5>2.5-4 IsInvariantLPresentation</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsInvariantLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( property )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsInvariantLPresentation</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;property&nbsp;)</td></tr></table></div>
 <p>attempts to check whether the L-presentation of <var class="Arg">lpgroup</var> is invariant. In general, one cannot decide whether or not a given L-presentation is invariant. There are mainly two methods implemented for this property. The first method seeks to find a ``good'' underlying invariant L-presentation using the operation <code class="func">UnderlyingInvariantLPresentation</code> (<a href="chap2_mj.html#X86F017E085082624"><span class="RefLink">2.5-2</span></a>). If this latter L-presentation coincides with the L-presentation of <var class="Arg">lpgroup</var>, then <var class="Arg">lpgroup</var> is invariantly L-presented. If this method fails, then the second method uses the nilpotent quotient algorithm for L-presented groups which yields a necessary condition for an L-presented group to be invariantly L-presented. Note that the latter method may not terminate. For instance, both methods fail on Baumslag's finitely generated, infinitely related group with trivial multiplier returned by <code class="func">ExamplesOfLPresentations</code> (<a href="chap2_mj.html#X79A034B8851444C9"><span class="RefLink">2.2-2</span></a>).</p>
 
 <p><a id="X783B99E381C5C8BF" name="X783B99E381C5C8BF"></a></p>
 
 <h5>2.5-5 EmbeddingOfAscendingSubgroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EmbeddingOfAscendingSubgroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">( attribute )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EmbeddingOfAscendingSubgroup</code>( <var class="Arg">lpgroup</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
 <p>stores an embedding of an ascendingly L-presented subgroup of the L-presented group <var class="Arg">lpgroup</var>. This attribute is set for ascending L-presentations only. In this case, the identity map of <var class="Arg">lpgroup</var> is returned. This attribute is used in the <strong class="pkg">FR</strong>-package which can construct various finitely L-presented groups. The embedding is useful for a nilpotent quotient algorithm of a non-invariantly L-presented group.</p>
 
 <p><a id="X7B5C48EA7CD8A57E" name="X7B5C48EA7CD8A57E"></a></p>
@@ -436,14 +436,14 @@ true
 
 <h5>2.6-1 EpimorphismFromFpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EpimorphismFromFpGroup</code>( <var class="Arg">lpgroup</var>, <var class="Arg">n</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; EpimorphismFromFpGroup</code>( <var class="Arg">lpgroup</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an epimorphism from a finitely presented group onto <var class="Arg">lpgroup</var>. The finitely presented group is obtained from <var class="Arg">lpgroup</var> by applying only words of length at most <var class="Arg">n</var> in the endomorphisms of <var class="Arg">lpgroup</var> to the iterated relators of <var class="Arg">lpgroup</var>.</p>
 
 <p><a id="X7972B0D87EF36536" name="X7972B0D87EF36536"></a></p>
 
 <h5>2.6-2 SplitExtensionByAutomorphismsLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SplitExtensionByAutomorphismsLpGroup</code>( <var class="Arg">lpgroup</var>, <var class="Arg">H</var>, <var class="Arg">auts</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SplitExtensionByAutomorphismsLpGroup</code>( <var class="Arg">lpgroup</var>, <var class="Arg">H</var>, <var class="Arg">auts</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an L-presentation for the split extension of <var class="Arg">lpgroup</var> by an L-presented or by a finitely presented group <var class="Arg">H</var>. The action of a generator of <var class="Arg">H</var> on <var class="Arg">lpgroup</var> is given by an automorphism in the list <var class="Arg">auts</var>. Thus for each generator of <var class="Arg">H</var> there must be an automorphism in the list <var class="Arg">auts</var>.</p>
 
 
@@ -464,14 +464,14 @@ true
 
 <h5>2.6-3 AsLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AsLpGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AsLpGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an ascending L-presentation for a finitely presented group <var class="Arg">G</var> or for a free group <var class="Arg">G</var>.</p>
 
 <p><a id="X856F237B7BAC3BC8" name="X856F237B7BAC3BC8"></a></p>
 
 <h5>2.6-4 IsomorphismLpGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsomorphismLpGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsomorphismLpGroup</code>( <var class="Arg">G</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an isomorphism from a finitely presented group <var class="Arg">G</var> or from a free group <var class="Arg">G</var> to the L-presented group obtained from the method <code class="func">AsLpGroup</code> (<a href="chap2_mj.html#X84F112247DA4037C"><span class="RefLink">2.6-3</span></a>).</p>
 
 

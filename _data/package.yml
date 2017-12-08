@@ -1,6 +1,6 @@
 name: lpres
-version: 0.4.1
-date: 24/02/2017
+version: 0.4.2
+date: 08/12/2017
 description: Nilpotent Quotients of L-Presented Groups
 
 authors:
@@ -37,7 +37,7 @@ packageinfo: https://gap-packages.github.io/lpres/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/lpres/releases/download/v0.4.1/lpres-0.4.1.tar.gz
+      url: https://github.com/gap-packages/lpres/releases/download/v0.4.2/lpres-0.4.2.tar.gz
 
 abstract: The LPRES Package defines new GAP objects to work with L-presented groups, namely groups given by a finite generating set and a possibly-infinite set of relations given as iterates of finitely many seed relations by a finite set of endomorphisms. The package implements nilpotent quotient, Todd-Coxeter and Reidemeister-Schreier algorithms for L-presented groups.
 

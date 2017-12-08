@@ -22,10 +22,11 @@
   presentation for the Grigorchuk group:[133X
   
   
-        [33X[1;6Y[24X[33X[0;0Y\langle a,b,c,d\mid
-        a^2,b^2,c^2,d^2,bcd,[d,d^a]^{\sigma^n},[d,d^{acaca}]^{\sigma^n},
-        (n\inℕ)\rangle,[133X [124X[133X
+  [24X[33X[0;6Y\langle                                                          a,b,c,d\mid
+  a^2,b^2,c^2,d^2,bcd,[d,d^a]^{\sigma^n},[d,d^{acaca}]^{\sigma^n},
+  (n\inℕ)\rangle,[133X
   
+  [124X
   
   [33X[0;0Ywhere  [22Xσ[122X  is  the  homomorphism  of  the  free group over [22X{a,b,c,d}[122X which is
   induced by [22Xa↦ c^a, b↦ d, c↦ b[122X, and [22Xd↦ c[122X. Hence, the infinitely many relators
@@ -36,9 +37,10 @@
   presentations of this type; that is, a group presentation of the form[133X
   
   
-        [33X[1;6Y[24X[33X[0;0YG=\left\langle S \left| Q\cup \bigcup_{\varphi\in\Phi^*}
-        R^\varphi\right.\right\rangle,[133X [124X[133X
+  [24X[33X[0;6YG=\left\langle      S      \left|      Q\cup      \bigcup_{\varphi\in\Phi^*}
+  R^\varphi\right.\right\rangle,[133X
   
+  [124X
   
   [33X[0;0Ywhere  [22XΦ^*[122X  denotes  the  free  monoid  generated  by  a  set  of free group
   endomorphisms   [22XΦ[122X.  He  proved  that  various  branch  groups  are  finitely
@@ -65,7 +67,7 @@
   algorithm in this special case.[133X
   
   [33X[0;0YA  detailed  description  of our algorithm can be found in [BEH08] or in the
-  diploma   thesis   [Har8  ].  Furthermore  the  [5Xlpres[105X-package  includes  the
+  diploma   thesis   [Har08].   Furthermore  the  [5Xlpres[105X-package  includes  the
   algorithms  of  [Har10]  for  approximating the Schur multiplier of finitely
   L-presented groups.[133X
   
