@@ -129,7 +129,7 @@ InstallGlobalFunction( LPRES_SaveQuotientSystem,
     Error("in input: <Q> must be a quotient system!");
   fi;
   
-  PrintTo( file, "RequirePackage(\"LPRES\");\n");
+  PrintTo( file, "LoadPackage(\"LPRES\");\n");
   AppendTo( file, "Q:=rec( ); \n");
  
   # the LpGroup
