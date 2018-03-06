@@ -48,7 +48,7 @@ InstallMethod( FrattiniSubgroup,
   fi;
 
   DH:=DerivedSubgroup(H);
-  delta:=NaturalHomomorphism(H,DH);
+  delta:=NaturalHomomorphismByNormalSubgroup(H,DH);
   T:=TorsionSubgroup(Range(delta));
   phi:=IsomorphismPcGroup(T);
   F:=FrattiniSubgroup(Range(phi));
