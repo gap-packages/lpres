@@ -4,7 +4,7 @@
 ##
 
 # force the slaves to load the LPRES-package
-if IsMaster() then BroadcastMsg("RequirePackage(\"LPRES\")"); fi;
+if IsMaster() then BroadcastMsg("LoadPackage(\"LPRES\")"); fi;
 
 # declaration for misc.gi
 DeclareGlobalFunction( "LPRESPar_CollectorToFunction" );

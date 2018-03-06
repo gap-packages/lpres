@@ -41,7 +41,7 @@ directory `pargap/lib/'.
 
 Now, you are ready for creating a <Package>ParGAP</Package>-session
 and you can load the &lpres;-package from within
-<Package>ParGAP</Package> using `RequirePackage' as usual.  The same
+<Package>ParGAP</Package> using `LoadPackage' as usual.  The same
 methods as described previously are available. The following example
 shows the application of the `NilpotentQuotient'-method to the
 Grigorchuk group on a quad-core machine. Note that the significant
@@ -58,7 +58,7 @@ GAP4, Version: 4.4.12 of 17-Dec-2008, i686-pc-linux-gnu-gcc
 GAP4, Version: 4.4.12 of 17-Dec-2008, i686-pc-linux-gnu-gcc
 gap> TOPCnumSlaves;
 4
-gap> RequirePackage("LPRES");
+gap> LoadPackage("LPRES");
 true
 gap> G:=ExamplesOfLPresentations(1);
 <L-presented group on the generators [ a, b, c, d ]>
