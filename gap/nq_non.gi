@@ -586,7 +586,7 @@ InstallGlobalFunction( LPRES_TerminatedNonInvariantNQ,
        	  			x->ElementOfLpGroup(fam,x)^EpiInv)));
   
    # natural homomorphism H -> H/U
-   nat:=NaturalHomomorphism(H,U);
+   nat:=NaturalHomomorphismByNormalSubgroup(H,U);
 
    # nilpotency class of <Q>
    c:=Maximum(Q.Weights);
