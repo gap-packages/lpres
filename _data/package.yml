@@ -1,7 +1,8 @@
 name: lpres
 version: 0.4.2
-date: 08/12/2017
-description: Nilpotent Quotients of L-Presented Groups
+date: 2017-12-08
+description: |
+    Nilpotent Quotients of L-Presented Groups
 
 authors:
     - name: René Hartung
@@ -15,7 +16,7 @@ GAP: ">= 4.4"
 needed-pkgs:
     - name: "polycyclic"
       version: ">= 2.5"
-      url: "http://www.icm.tu-bs.de/ag_algebra/software/polycyclic/"
+      url: "https://gap-packages.github.io/polycyclic/"
     - name: "FGA"
       version: ">= 1.1.0.1"
       url: "http://www.icm.tu-bs.de/ag_algebra/software/FGA/"
@@ -26,20 +27,21 @@ suggested-pkgs:
       url: "http://www.gap-system.org/HostedGapPackages/pargap/"
     - name: "AutPGrp"
       version: ">= 1.4"
-      url: "http://www.icm.tu-bs.de/~beick/so.html"
+      url: "https://gap-packages.github.io/autpgrp/"
     - name: "ACE"
       version: ">= 5.0"
       url: "https://gap-packages.github.io/ace"
 
 www: https://gap-packages.github.io/lpres
-readme: https://gap-packages.github.io/lpres/README
+readme: README
 packageinfo: https://gap-packages.github.io/lpres/PackageInfo.g
 
 downloads:
     - name: .tar.gz
       url: https://github.com/gap-packages/lpres/releases/download/v0.4.2/lpres-0.4.2.tar.gz
 
-abstract: The LPRES Package defines new GAP objects to work with L-presented groups, namely groups given by a finite generating set and a possibly-infinite set of relations given as iterates of finitely many seed relations by a finite set of endomorphisms. The package implements nilpotent quotient, Todd-Coxeter and Reidemeister-Schreier algorithms for L-presented groups.
+abstract: |
+    The LPRES Package defines new GAP objects to work with L-presented groups, namely groups given by a finite generating set and a possibly-infinite set of relations given as iterates of finitely many seed relations by a finite set of endomorphisms. The package implements nilpotent quotient, Todd-Coxeter and Reidemeister-Schreier algorithms for L-presented groups.
 
 status: deposited
 doc-html: doc/chap0.html
