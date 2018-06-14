@@ -35,7 +35,7 @@
    end);
   
   [33X[0;0YNow,  you  are  ready  for  creating  a  [5XParGAP[105X-session and you can load the
-  [5Xlpres[105X-package  from  within [5XParGAP[105X using `RequirePackage' as usual. The same
+  [5Xlpres[105X-package  from  within  [5XParGAP[105X  using  `LoadPackage' as usual. The same
   methods  as  described previously are available. The following example shows
   the application of the `NilpotentQuotient'-method to the Grigorchuk group on
   a  quad-core  machine.  Note  that the significant speed-up of the nilpotent
@@ -51,7 +51,7 @@
     [4X[28XGAP4, Version: 4.4.12 of 17-Dec-2008, i686-pc-linux-gnu-gcc[128X[104X
     [4X[25Xgap>[125X [27XTOPCnumSlaves;[127X[104X
     [4X[28X4[128X[104X
-    [4X[25Xgap>[125X [27XRequirePackage("LPRES");[127X[104X
+    [4X[25Xgap>[125X [27XLoadPackage("LPRES");[127X[104X
     [4X[28Xtrue[128X[104X
     [4X[25Xgap>[125X [27XG:=ExamplesOfLPresentations(1);[127X[104X
     [4X[28X<L-presented group on the generators [ a, b, c, d ]>[128X[104X

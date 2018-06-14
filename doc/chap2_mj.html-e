@@ -99,7 +99,7 @@
 
 <h4>2.2 <span class="Heading">Creating an L-presented group</span></h4>
 
-<p>The construction of an L-presented group is similar to the construction of a finitely presented group (see Chapter <a href="https://www.gap-system.org/Manuals/doc/ref/chap47_mj.html#X7AA982637E90B35A"><span class="RefLink">Reference: Finitely Presented Groups</span></a> of the <strong class="pkg">GAP</strong> Reference manual for further details).</p>
+<p>The construction of an L-presented group is similar to the construction of a finitely presented group (see Chapter <a href="../../../doc/ref/chap47_mj.html#X7AA982637E90B35A"><span class="RefLink">Reference: Finitely Presented Groups</span></a> of the <strong class="pkg">GAP</strong> Reference manual for further details).</p>
 
 <p><a id="X7BBBE4C082AE4D5A" name="X7BBBE4C082AE4D5A"></a></p>
 
