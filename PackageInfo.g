@@ -36,9 +36,9 @@ Persons := [
   )
 ],
 
-Status         := "deposited",
+Status         := "accepted",
 CommunicatedBy := "Alexander Konovalov (St Andrews)",
-AcceptDate     := "02/2009",
+AcceptDate     := "09/2018",
 
 SourceRepository := rec(
     Type := "git",
