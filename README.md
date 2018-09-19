@@ -1,222 +1,75 @@
-# GitHubPagesForGAP
+[![Build Status](https://travis-ci.org/gap-packages/lpres.svg?branch=master)](https://travis-ci.org/gap-packages/lpres)
+[![Code Coverage](https://codecov.io/github/gap-packages/lpres/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/lpres)
 
-This repository can be used to quickly set up a website hosted by
-[GitHub](https://github.com/) for GAP packages using a GitHub repository.
-Specifically, this uses [GitHub pages](https://pages.github.com/)
-by adding a `gh-pages` branch to your package repository which
-contains data generated from the `PackageInfo.g` file of your package.
+# The GAP 4 package `lpres`
 
-## Initial setup
+## Introduction
 
-The following instructions assume you do not already have a `gh-pages`
-branch in your repository. If you do have one, you should delete it before
-following these instructions.
+This is the package `lpres` written for GAP 4. It provides a first
+construction of finitely L-presented groups and a nilpotent quotient
+algorithm for L-presented groups.
 
-1. Go into your clone of your package repository.
+The features of this package include
 
-2. Setup a `gh-pages` branch in a `gh-pages` subdirectory.
+  - creating an L-presented group as new gap object,
 
-   Users with a recent enough git version (recommended is >= 2.11)
-   can do this using a "worktree", via the following commands:
+  - computing nilpotent quotients of L-presented groups and epimorphisms
+    from the L-presented group onto its nilpotent quotients,
 
-   ```sh
-   # Add a new remote pointing to the GitHubPagesForGAP repository
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   git fetch gh-gap
+  - computing the abelian invariants of an L-presented group,
 
-   # Create a fresh gh-pages branch from the new remote
-   git branch gh-pages gh-gap/gh-pages --no-track
+  - computing finite-index subgroups and if possible their L-presentation
 
-   # Create a new worktree and change into it
-   git worktree add gh-pages gh-pages
-   cd gh-pages
-   ```
+  - approximating the Schur multiplier of L-presented groups.
 
-   Everybody else should instead do the following, with the URL
-   in the initial clone command suitably adjusted:
+There is a manual in the subdirectory `doc` written in plain TeX which
+describes the functions available.
 
-   ```sh
-   # Create a fresh clone of your repository, and change into it
-   git clone https://github.com/USERNAME/REPOSITORY gh-pages
-   cd gh-pages
-
-   # Add a new remote pointing to the GitHubPagesForGAP repository
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   git fetch gh-gap
-
-   # Create a fresh gh-pages branch from the new remote
-   git checkout -b gh-pages gh-gap/gh-pages --no-track
-   ```
-
-5. Add in copies of your `PackageInfo.g`, `README` (or `README.md`) and manual:
-
-   ```
-   cp -f ../PackageInfo.g ../README* .
-   cp -f ../doc/*.{css,html,js,txt} doc/
-   ```
-
-6. Now run the `update.g` GAP script. This extracts data from your
-   `PackageInfo.g` file and puts that data into `_data/package.yml`.
-   From this, the website template can populate the web pages with
-   some sensible default values.
-
-   ```
-   gap update.g
-   ```
-
-7. Commit and push everything.
-
-   ```
-   git add PackageInfo.g README* doc/ _data/package.yml
-   git commit -m "Setup gh-pages based on GitHubPagesForGAP"
-   git push --set-upstream origin gh-pages
-   ```
-
-That's it. You can now see your new package website under
-https://USERNAME.github.io/REPOSITORY/ (of course after
-adjusting USERNAME and REPOSITORY suitably).
+If you have found a bug or any features missing please let me know
+(Laurent Bartholdi, laurent.bartholdi@gmail.com)
 
 
-## Adjusting the content and layout
+## Contents
 
-GitHubPagesForGAP tries to automatically provide good defaults for
-most packages. However, you can tweak everything about it:
+With this version you should have obtained the following files and
+directories:
 
-* To adjust the page layout, edit the files `stylesheets/styles.css`
-and `_layouts/default.html`.
-
-* To adjust the content of the front page, edit `index.md` (resp.
-  for the content of the sidebar, edit `_layouts/default.html`
-
-* You can also add additional pages, in various formats (HTML,
-Markdown, Textile, ...).
-
-For details, please consult the [Jekyll](http://jekyllrb.com/)
-manual.
-
-
-## Testing the site locally
-
-If you would like to test your site on your own machine, without
-uploading it to GitHub (where it is visible to the public), you can do
-so by installing [Jekyll](http://jekyllrb.com/), the static web site
-generator used by GitHub to power GitHub Pages.
-
-Once you have installed Jekyll as described on its homepage, you can
-test the website locally as follows:
-
-1. Go to the `gh-pages` directory we created above.
-
-2. Run jekyll (this launches a tiny web server on your machine):
-
-   ```
-   jekyll serve -w
-   ```
-
-3. Visit the URL http://localhost:4000 in a web browser.
+    README.lpres    this file
+    
+    init.g          the file that initializes this package
+    
+    read.g          the file that reads in the package        
+    
+    makedoc.g       the file used to compile the documentation
+    
+    PackageInfo.g   the file for the new package loading mechanism
+    
+    doc             the manual
+    
+    gap             the GAP code
 
 
-## Updating after you made a release
+## Installation
 
-Whenever you make a release of your package (and perhaps more often than
-that), you will want to update your website. The easiest way is to use
-the `release` script from the [ReleaseTools][]. However, you can also do
-it manually. The steps for doing it are quite similar to the above:
-
-1. Go to the `gh-pages` directory we created above.
-
-2. Add in copies of your `PackageInfo.g`, `README` (or `README.md`) and manual:
-
-   ```
-   cp -f ../PackageInfo.g ../README* .
-   cp -f ../doc/*.{css,html,js,txt} doc/
-   ```
-
-3. Now run the `update.g` GAP script.
-
-4. Commit and push the work we have just done.
-
-   ```
-   git add PackageInfo.g README* doc/ _data/package.yml
-   git commit -m "Update web pages"
-   git push
-   ```
-
-A few seconds after you have done this, your changes will be online
-under https://USERNAME.github.io/REPOSITORY/ .
+Make sure that the GAP 4 packages Polycyclic and FGA are installed. It
+suffices to unpack the package in the `pkg` directory and load the
+package from within gap using `LoadPackage("lpres");`.
 
 
-## Updating to a newer version of GitHubPagesForGAP
+## Test Files
 
-Normally you should not have to ever do this. However, if you really want to,
-you can attempt to update to the most recent version of GitHubPagesForGAP via
-the following instructions. The difficulty of such an update depends on how
-much you tweaked the site after initially cloning GitHubPagesForGAP.
+The lpres package can be tested with
 
-1. Go to the `gh-pages` directory we created above.
-   Make sure that there are no uncommitted changes, as they will be lost
-   when following these instructions.
-
-2. Make sure the `gh-gap` remote exists and has the correct URL. If in doubt,
-   just re-add it:
-   ```
-   git remote remove gh-gap
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   ```
-
-3. Attempt to merge the latest GitHubPagesForGAP.
-   ```
-   git pull gh-gap gh-pages
-   ```
-
-4. If this produced no errors and just worked, skip to the next step.
-   But it is quite likely that you will have conflicts in the file
-   `_data/package.yml`, or in your `README` or `PackageInfo.g` files.
-   These can usually be resolved by entering this:
-   ```
-   cp ../PackageInfo.g ../README* .
-   gap update.g
-   git add PackageInfo.g README* _data/package.yml
-   ```
-   If you are lucky, these were the only conflicts (check with `git status`).
-   If no merge conflicts remain, finish with this command:
-   ```
-   git commit -m "Merge gh-gap/gh-pages"
-   ```
-   If you still have merge conflicts, and don't know how to resolve them, or
-   get stuck some other way, you can abort the merge process and revert to the
-   original state by issuing this command:
-   ```
-   git merge --abort
-   ```
-
-5. You should be done now. Don't forget to push your changes if you want them
-   to become public.
+    ReadPackage("lpres","tst/testall.g");
 
 
-## Packages using GitHubPagesForGAP
-Packages using GitHubPagesForGAP include the following:
+## Compiling the Manual
 
-* <https://gap-packages.github.io/anupq>
-* <https://gap-packages.github.io/cvec>
-* <https://gap-packages.github.io/genss>
-* <https://gap-packages.github.io/io>
-* <https://gap-packages.github.io/NormalizInterface>
-* <https://gap-packages.github.io/nq>
-* <https://gap-packages.github.io/orb>
-* <https://gap-packages.github.io/polenta>
-* <https://gap-packages.github.io/recog>
-* <https://gap-packages.github.io/recogbase>
-* <https://gap-packages.github.io/SingularInterface>
+If you obtained the package from its git repository, you have to compile
+the manual. For this, enter the directory of lpres (the one containing
+the file `makedoc.g`) and run `gap makedoc.g`.
 
+## BugFixes/Changes/Features Added
 
-## Contact
-
-Please submit bug reports, suggestions for improvements and patches via
-the [issue tracker](https://github.com/gap-system/GitHubPagesForGAP/issues).
-
-You can also contact me directly via [email](max@quendi.de).
-
-Copyright (c) 2013-2018 Max Horn
-
-[ReleaseTools]: https://github.com/gap-system/ReleaseTools
+* Version 0.1.0:
+  - maintenance taken over by Laurent Bartholdi
