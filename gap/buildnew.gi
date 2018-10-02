@@ -143,13 +143,13 @@ InstallGlobalFunction( LPRES_BuildNewCollector,
 
   FromTheLeftCollector_SetCommute(QS.Pccol);
 
-  SetFeatureObj(QS.Pccol,IsUpToDatePolycyclicCollector,true);
+  SetFilterObj(QS.Pccol,IsUpToDatePolycyclicCollector);
 
   FromTheLeftCollector_CompleteConjugate(QS.Pccol); 
   FromTheLeftCollector_CompletePowers(QS.Pccol); 
 
-  SetFeatureObj(QS.Pccol,IsUpToDatePolycyclicCollector,true);
-# SetFeatureObj(QS.Pccol,UseLibraryCollector,true);
+  SetFilterObj(QS.Pccol,IsUpToDatePolycyclicCollector);
+# SetFilterObj(QS.Pccol,UseLibraryCollector);
 
   if LPRES_TEST_ALL then 
     if not IsConfluent(QS.Pccol) then

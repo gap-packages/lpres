@@ -121,8 +121,8 @@ InstallMethod( UpdateNilpotentCollector,
   fi;
   
   FromTheLeftCollector_SetCommute(coll);
-  SetFeatureObj(coll, IsUpToDatePolycyclicCollector,true);
-# SetFeatureObj(coll, UseLibraryCollector,true);
+  SetFilterObj(coll, IsUpToDatePolycyclicCollector);
+# SetFilterObj(coll, UseLibraryCollector);
   FromTheLeftCollector_CompletePowers(coll);
   
   # conjugates
@@ -149,7 +149,7 @@ InstallMethod( UpdateNilpotentCollector,
               fi;
             fi;
             SetConjugateNC(coll,j,i,rhs);
-            SetFeatureObj(coll,IsUpToDatePolycyclicCollector,true);
+            SetFilterObj(coll,IsUpToDatePolycyclicCollector);
             FromTheLeftCollector_SetCommute(coll);
           fi;
           if orders[i]=0 then 
@@ -163,7 +163,7 @@ InstallMethod( UpdateNilpotentCollector,
               fi;
             fi;
             SetConjugateNC(coll,j,-i,rhs);
-            SetFeatureObj(coll,IsUpToDatePolycyclicCollector,true);
+            SetFilterObj(coll,IsUpToDatePolycyclicCollector);
           fi;
           if orders[j]=0 then  
             repeat
@@ -176,7 +176,7 @@ InstallMethod( UpdateNilpotentCollector,
               fi;
             fi;
             SetConjugateNC(coll,-j,i,rhs);
-            SetFeatureObj(coll,IsUpToDatePolycyclicCollector,true);
+            SetFilterObj(coll,IsUpToDatePolycyclicCollector);
           fi;
           if orders[i]+orders[j]=0 then
             repeat
@@ -189,7 +189,7 @@ InstallMethod( UpdateNilpotentCollector,
               fi;
             fi;
             SetConjugateNC(coll,-j,-i,rhs);
-            SetFeatureObj(coll,IsUpToDatePolycyclicCollector,true);
+            SetFilterObj(coll,IsUpToDatePolycyclicCollector);
           fi;
         elif weights[i]+weights[j]>b then 
           break;

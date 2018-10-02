@@ -50,11 +50,11 @@ InstallGlobalFunction( LPRESPar_CollectorToFunction,
     od;
   od;
   AppendTo( file, "FromTheLeftCollector_SetCommute( ftl );\n");
-  AppendTo( file, "SetFeatureObj( ftl, IsUpToDatePolycyclicCollector,true);\n");
+  AppendTo( file, "SetFilterObj( ftl, IsUpToDatePolycyclicCollector );\n");
   AppendTo( file, "FromTheLeftCollector_CompleteConjugate( ftl );\n");
 # redundant due to the < coll![ PC_INVERSEPOWERS ] > above
 # AppendTo( file, "FromTheLeftCollector_CompletePowers( ftl );\n");
-  AppendTo( file, "SetFeatureObj( ftl, IsUpToDatePolycyclicCollector,true);\n");
+  AppendTo( file, "SetFilterObj( ftl, IsUpToDatePolycyclicCollector );\n");
   AppendTo( file, "return( ftl );\n" );
 
   return( ReadAsFunction( file ) ); 

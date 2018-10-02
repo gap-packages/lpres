@@ -199,11 +199,11 @@ InstallGlobalFunction( LPRES_SaveQuotientSystem,
     od;
   od;
   AppendTo( file, "FromTheLeftCollector_SetCommute( Q.Pccol );\n");
-  AppendTo( file, "SetFeatureObj( Q.Pccol, IsUpToDatePolycyclicCollector, true);\n");
+  AppendTo( file, "SetFilterObj( Q.Pccol, IsUpToDatePolycyclicCollector);\n");
   AppendTo( file, "FromTheLeftCollector_CompleteConjugate( Q.Pccol );\n");
 # don't compute the inverse of gens with finite relative order
 # AppendTo( file, "FromTheLeftCollector_CompletePowers( Q.Pccol );\n");
-  AppendTo( file, "SetFeatureObj( Q.Pccol, IsUpToDatePolycyclicCollector, true);\n");
+  AppendTo( file, "SetFilterObj( Q.Pccol, IsUpToDatePolycyclicCollector);\n");
 
   AppendTo( file, "Q.Imgs := ", Q.Imgs, ";\n");
   AppendTo( file, "Q.Definitions := ", Q.Definitions, ";\n");
@@ -303,10 +303,10 @@ InstallGlobalFunction( LPRES_SaveQuotientSystemCover,
     od;
   od;
   AppendTo( file, "FromTheLeftCollector_SetCommute( Q.Pccol );\n");
-  AppendTo( file, "SetFeatureObj( Q.Pccol, IsUpToDatePolycyclicCollector, true);\n");
+  AppendTo( file, "SetFilterObj( Q.Pccol, IsUpToDatePolycyclicCollector);\n");
   AppendTo( file, "FromTheLeftCollector_CompleteConjugate( Q.Pccol );\n");
   AppendTo( file, "FromTheLeftCollector_CompletePowers( Q.Pccol );\n");
-  AppendTo( file, "SetFeatureObj( Q.Pccol, IsUpToDatePolycyclicCollector, true);\n");
+  AppendTo( file, "SetFilterObj( Q.Pccol, IsUpToDatePolycyclicCollector);\n");
 
   AppendTo( file, "Q.Imgs := ", Q.Imgs, ";\n");
   AppendTo( file, "Q.Definitions := ", Q.Definitions, ";\n");
