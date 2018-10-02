@@ -75,7 +75,7 @@ AvailabilityTest := ReturnTrue,
 BannerString := Concatenation("Loading ", ~.PackageName, " ", String( ~.Version ), " ...\n"),
 
 Dependencies := rec(
-  GAP                    := ">= 4.4",
+  GAP                    := ">= 4.9",
   NeededOtherPackages    := [ ["polycyclic", ">= 2.5"], 
                               ["FGA", ">= 1.1.0.1"] ], 
   SuggestedOtherPackages := [ ["ParGAP", ">= 1.1.2" ],

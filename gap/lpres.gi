@@ -754,11 +754,11 @@ InstallMethod( \=,
 ##
 #M  Random( <LpGroup> ) .  .  .  .  .  .  .  . a random element in <LpGroup>
 ##
-InstallOtherMethod( Random,
-  "for LpGroups", true,
-  [ IsLpGroup ], 0,
-  G -> ElementOfLpGroup( ElementsFamily( FamilyObj( G ) ), 
-                         Random( FreeGroupOfLpGroup( G ) ) ) );
+InstallMethodWithRandomSource( Random,
+  "for a random source and an LpGroup", true,
+  [ IsRandomSource, IsLpGroup ], 0,
+  {rs, G} -> ElementOfLpGroup( ElementsFamily( FamilyObj( G ) ), 
+                         Random( rs, FreeGroupOfLpGroup( G ) ) ) );
 
 ############################################################################
 ##
