@@ -27,7 +27,7 @@ InstallOtherMethod( NilpotentQuotient,
   Q:=NilpotentQuotientSystem(G);
  
   # nilpotency class
-  j:=MaximumList(Q.Weights,infinity);
+  j:=MaximumList(Q.Weights,0);
  
   if c=j then 
     # the given nilpotency class <j> is already known
@@ -330,7 +330,7 @@ InstallOtherMethod( NqEpimorphismNilpotentQuotient,
   Q:=NilpotentQuotientSystem(G);
  
   # nilpotency class of <Q>
-  n:=MaximumList(Q.Weights,infinity);
+  n:=MaximumList(Q.Weights,0);
  
   if c=n then 
     # the given nilpotency class <n> is already known
