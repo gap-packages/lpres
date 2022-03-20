@@ -6,25 +6,14 @@
                   [1X Nilpotent Quotients of L-Presented Groups [101X
   
   
-                                     1.0.1
+                                     1.0.2
   
   
-                                   14/11/2018
+                                 19 March 2022
   
   
                                   René Hartung
   
-                               Laurent Bartholdi
-  
-  
-  
-  Laurent Bartholdi
-      Email:    [7Xmailto:laurent.bartholdi@gmail.com[107X
-      Homepage: [7Xhttp://www.uni-math.gwdg.de/laurent[107X
-      Address:  [33X[0;14YMathematisches Institut[133X
-                [33X[0;14YBunsenstraße 3-5[133X
-                [33X[0;14YD-37073 Göttingen[133X
-                [33X[0;14YGermany[133X
   
   
   

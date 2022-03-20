@@ -411,12 +411,11 @@
   length.[133X
   
   [33X[0;0YEquality  test  of  elements  of L-presented groups is implemented using the
-  operation                 [2XNqEpimorphismNilpotentQuotient[102X                ([14Xnq:
-  NqEpimorphismNilpotentQuotient[114X)   to  compare  the  images  in  a  nilpotent
-  quotient  of  the  group.  The implemented method successively increases the
-  class of the considered quotient until the images differ. Hence, this method
-  may  not  terminate  and  it  will  only  determine whether the elements are
-  different.[133X
+  operation [2XNqEpimorphismNilpotentQuotient[102X ([14XNqEpimorphismNilpotentQuotient???[114X)
+  to  compare the images in a nilpotent quotient of the group. The implemented
+  method successively increases the class of the considered quotient until the
+  images  differ.  Hence,  this  method  may  not  terminate  and it will only
+  determine whether the elements are different.[133X
   
   [1X2.6-1 EpimorphismFromFpGroup[101X
   
