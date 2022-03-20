@@ -9,8 +9,8 @@ SetPackageInfo( rec(
 
 PackageName := "lpres",
 Subtitle := "Nilpotent Quotients of L-Presented Groups",
-Version := "1.0.1",
-Date    := "14/11/2018", # dd/mm/yyyy format
+Version := "1.0.2",
+Date    := "19/03/2022", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
@@ -26,14 +26,14 @@ Persons := [
   IsAuthor      := false,
   IsMaintainer  := true,
   Email         := "laurent.bartholdi@gmail.com",
-  WWWHome       := "http://www.uni-math.gwdg.de/laurent",
+  WWWHome       := "https://www.math.uni-sb.de/ag/bartholdi",
   PostalAddress := Concatenation( [
-                       "Mathematisches Institut\n",
-                       "Bunsenstraße 3-5\n",
-                       "D-37073 Göttingen\n",
+                       "FR Mathematik+Informatik\n",
+                       "Universität des Saarlandes\n",
+                       "D-66041 Saarbrücken\n",
                        "Germany" ] ),
-  Place         := "Göttingen",
-  Institution   := "Georg-August Universität zu Göttingen"
+  Place         := "Saarbrücken",
+  Institution   := "Universität des Saarlandes"
   )
 ],
 

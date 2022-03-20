@@ -27,7 +27,7 @@ InstallOtherMethod( NilpotentQuotient,
   Q:=NilpotentQuotientSystem(G);
  
   # nilpotency class
-  j:=Maximum(Q.Weights);
+  j:=MaximumList(Q.Weights,infinity);
  
   if c=j then 
     # the given nilpotency class <j> is already known
@@ -330,7 +330,7 @@ InstallOtherMethod( NqEpimorphismNilpotentQuotient,
   Q:=NilpotentQuotientSystem(G);
  
   # nilpotency class of <Q>
-  n:=Maximum(Q.Weights);
+  n:=MaximumList(Q.Weights,infinity);
  
   if c=n then 
     # the given nilpotency class <n> is already known
@@ -480,7 +480,7 @@ InstallGlobalFunction( LPRES_LCS,
   weights:=Q.Weights;
 
   # nilpotency class of <Q>
-  c:=Maximum(weights);
+  c:=MaximumList(weights,0);
 
   # build the lower central series
   lcs:=[];
@@ -517,7 +517,7 @@ InstallMethod( NilpotentQuotients,
   function ( G )
   local c;	# nilpotency class of the known quotient system
    
-  c:=Maximum(NilpotentQuotientSystem(G).Weights); 
+  c:=MaximumList(NilpotentQuotientSystem(G).Weights,0); 
   return( List([1..c], i -> NqEpimorphismNilpotentQuotient(G,i) ) );
   end);
 
