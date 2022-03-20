@@ -12,14 +12,14 @@ BindGlobal( "LPRES_TEST_ALL", false);
 
 # coset enumeration for (finite index) subgroups of LpGroups
 LPRES_TCSTART := 2;
-if TestPackageAvailability( "ACE", "5.0" ) <> fail then
+if IsPackageMarkedForLoading( "ACE", "5.0" ) then
   LPRES_CosetEnumerator := function( h )
     local f, rels, gens;
 
     f    := FreeGeneratorsOfFpGroup( Parent( h ) );
     rels := RelatorsOfFpGroup( Parent( h ) );
     gens := List( GeneratorsOfGroup( h ), UnderlyingElement );
-    return( ACECosetTable( f, rels, gens : silent, hard, max := 10^8, Wo := 10^8 ) );
+    return ValueGlobal("ACECosetTable")( f, rels, gens : silent, hard, max := 10^8, Wo := 10^8 );
     end;
 else
   LPRES_CosetEnumerator := CosetTableInWholeGroup;
@@ -48,7 +48,7 @@ ReadPackage( LPRESPkgName, "gap/examples.gi");
 ReadPackage( LPRESPkgName, "gap/schumu/schumu.gi" );
 
 # parallel version of LPRES's nilpotent quotient algorithm
-if TestPackageAvailability( "ParGap", "1.1.2" ) <> fail then
+if IsPackageMarkedForLoading( "ParGap", "1.1.2" ) then
   LPRESPar_StoreResults := true;
   ReadPackage( LPRESPkgName, "gap/pargap/misc.gi" );
   ReadPackage( LPRESPkgName, "gap/pargap/consist.gi" );
