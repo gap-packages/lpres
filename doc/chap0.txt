@@ -6,10 +6,10 @@
                   [1X Nilpotent Quotients of L-Presented Groups [101X
   
   
-                                     1.0.2
+                                     1.0.3
   
   
-                                 19 March 2022
+                                 20 March 2022
   
   
                                   René Hartung
