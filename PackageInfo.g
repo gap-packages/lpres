@@ -38,7 +38,7 @@ Persons := [
 ],
 
 Status         := "accepted",
-CommunicatedBy := "Alexander Konovalov (St Andrews)",
+CommunicatedBy := "Olexandr Konovalov (St Andrews)",
 AcceptDate     := "09/2018",
 
 SourceRepository := rec(
