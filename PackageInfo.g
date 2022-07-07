@@ -65,7 +65,7 @@ for L-presented groups.",
 PackageDoc := rec(
   BookName  := ~.PackageName,
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := ~.Subtitle,
