@@ -2,8 +2,6 @@
 ##
 #W    read.g            The GAP 4 package LPRES                    René Hartung
 ##
-#H   @(#)$Id: read.g,v 1.7 2010/03/17 13:09:28 gap Exp $
-##
 
 # problem with polycyclic's Igs vs. Cgs
 USE_CANONICAL_PCS := true;
