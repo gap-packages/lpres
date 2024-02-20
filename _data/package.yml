@@ -1,5 +1,6 @@
 name: lpres
-version: 1.0.3
+version: "1.0.3"
+license: "GPL-2.0-or-later"
 date: 2022-03-20
 description: |
     Nilpotent Quotients of L-Presented Groups
@@ -24,7 +25,6 @@ needed-pkgs:
 suggested-pkgs:
     - name: "ParGAP"
       version: ">= 1.1.2"
-      url: "http://www.gap-system.org/HostedGapPackages/pargap/"
     - name: "AutPGrp"
       version: ">= 1.4"
       url: "https://gap-packages.github.io/autpgrp/"
@@ -46,3 +46,38 @@ abstract: |
 status: accepted
 doc-html: doc/chap0.html
 doc-pdf: doc/manual.pdf
+keywords: |
+    nilpotent quotient algorithm, nilpotent presentations, finitely generated groups, Grigorchuk group, Gupta-Sidki group, L-presented groups, finite index subgroup of L-presented groups, coset enumeration, recursively presented groups, infinite presentations, commutators, lower central series, Free Engel groups, Free Burnside groups, computational, parallel computing.
+citeas: |
+    <p class='BibEntry'>
+    [<span class='BibKey'>HB22</span>]   <b class='BibAuthor'>Hartung, R. and Bartholdi, L.</b>,
+     <i class='BibTitle'>lpres, Nilpotent Quotients of L-Presented Groups,
+             Version 1.0.3</i>
+     (<span class='BibYear'>2022</span>)<br />
+    (<span class='BibNote'>Refereed GAP package</span>),
+    <span class='BibHowpublished'><a href="https://gap-packages.github.io/lpres">https://gap-packages.github.io/lpres</a></span>.
+    </p>
+    
+
+bibtex: |
+    @misc{ lpres1.0.3,
+      author =           {Hartung, R. and Bartholdi, L.},
+      title =            {{lpres},  Nilpotent  Quotients  of L-Presented Groups,
+                          {V}ersion 1.0.3},
+      month =            {Mar},
+      year =             {2022},
+      note =             {Refereed GAP package},
+      howpublished =     {\href           {https://gap-packages.github.io/lpres}
+                          {\texttt{https://gap-packages.github.io/}\discretionary
+                          {}{}{}\texttt{lpres}}},
+      keywords =         {nilpotent quotient algorithm; nilpotent presentations;
+                          finitely    generated    groups;   Grigorchuk   group;
+                          Gupta-Sidki  group;  L-presented  groups; finite index
+                          subgroup  of  L-presented  groups;  coset enumeration;
+                          recursively  presented groups; infinite presentations;
+                          commutators;  lower central series; Free Engel groups;
+                          Free    Burnside   groups;   computational;   parallel
+                          computing},
+      printedkey =       {HB22}
+    }
+
