@@ -17,7 +17,6 @@ LPRESPkgName:="lpres";
 ReadPackage( LPRESPkgName, "gap/lpres.gd");
 ReadPackage( LPRESPkgName, "gap/hnf.gd");
 ReadPackage( LPRESPkgName, "gap/initqs.gd");
-ReadPackage( LPRESPkgName, "gap/homs.gd");
 ReadPackage( LPRESPkgName, "gap/tails.gd");
 ReadPackage( LPRESPkgName, "gap/consist.gd");
 ReadPackage( LPRESPkgName, "gap/cover.gd");
