@@ -127,11 +127,11 @@ further details we refer to the diploma thesis <Cite Key="H08"/>.
 </Description>
 </ManSection>
 
-<ManSection><Oper Name="FreeBurnsideGroup" Arg="exp num"/>
+<ManSection><Oper Name="FreeBurnsideGroup" Arg="num exp"/>
 <Description>
   returns an L-presentation for the free Burnside group on <A>num</A>
-  generators with exponent <A>exp</A>; that is, the free group in the
-  variety of <A>num</A>-generated groups with exponent <A>exp</A>.
+  generators with exponent <A>exp</A>; that is, the free group on
+  <A>num</A> generators in the variety of groups with exponent <A>exp</A>.
 </Description>
 </ManSection>
 

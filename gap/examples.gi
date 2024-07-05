@@ -321,7 +321,7 @@ InstallMethod( FreeEngelGroup,
 
 ############################################################################
 ##
-#O  FreeBurnsideGroup( <exp>, <num> )
+#O  FreeBurnsideGroup( <num>, <exp> )
 ##
 ## returns an $L$-presentation for the free Burnside group B(m,n) on
 ## <num> generators with exponent <exp>; see Section~2.4 of [Har08].

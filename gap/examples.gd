@@ -23,7 +23,7 @@ DeclareOperation( "FreeEngelGroup", [ IsPosInt, IsPosInt ]);
 
 ############################################################################
 ##
-#O  FreeBurnsideGroup( <exp>, <num> )
+#O  FreeBurnsideGroup( <num>, <exp> )
 ##
 ##  returns an $L$-presentation for the free Burnside group B(m,n) on 
 ##  <num> generators with exponent <exp>.
