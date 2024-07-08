@@ -96,7 +96,7 @@
 
 <h4>2.2 <span class="Heading">Creating an L-presented group</span></h4>
 
-<p>The construction of an L-presented group is similar to the construction of a finitely presented group (see Chapter <a href="https://www.gap-system.org/Manuals/doc/ref/chap47.html#X7AA982637E90B35A"><span class="RefLink">Reference: Finitely Presented Groups</span></a> of the <strong class="pkg">GAP</strong> Reference manual for further details).</p>
+<p>The construction of an L-presented group is similar to the construction of a finitely presented group (see Chapter <a href="https://docs.gap-system.org/doc/ref/chap47.html#X7AA982637E90B35A"><span class="RefLink">Reference: Finitely Presented Groups</span></a> of the <strong class="pkg">GAP</strong> Reference manual for further details).</p>
 
 <p><a id="X7BBBE4C082AE4D5A" name="X7BBBE4C082AE4D5A"></a></p>
 
@@ -182,21 +182,21 @@
 
 <h5>2.2-3 FreeEngelGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeEngelGroup</code>( <var class="Arg">n</var>, <var class="Arg">num</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeEngelGroup</code>( <var class="Arg">num</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an L-presentation for the free <var class="Arg">n</var>-Engel group on <var class="Arg">num</var> generators; that is, the free group in the variety of <var class="Arg">num</var>-generated groups satisfying the <var class="Arg">n</var>-Engel identity.</p>
 
 <p><a id="X81C3537083E40A5C" name="X81C3537083E40A5C"></a></p>
 
 <h5>2.2-4 FreeBurnsideGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeBurnsideGroup</code>( <var class="Arg">exp</var>, <var class="Arg">num</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
-<p>returns an L-presentation for the free Burnside group on <var class="Arg">num</var> generators with exponent <var class="Arg">exp</var>; that is, the free group in the variety of <var class="Arg">num</var>-generated groups with exponent <var class="Arg">exp</var>.</p>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeBurnsideGroup</code>( <var class="Arg">num</var>, <var class="Arg">exp</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>returns an L-presentation for the free Burnside group on <var class="Arg">num</var> generators with exponent <var class="Arg">exp</var>; that is, the free group on <var class="Arg">num</var> generators in the variety of groups with exponent <var class="Arg">exp</var>.</p>
 
 <p><a id="X8796306C7A7924D1" name="X8796306C7A7924D1"></a></p>
 
 <h5>2.2-5 FreeNilpotentGroup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeNilpotentGroup</code>( <var class="Arg">c</var>, <var class="Arg">num</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FreeNilpotentGroup</code>( <var class="Arg">num</var>, <var class="Arg">c</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>returns an L-presentation for the free nilpotent group of class <var class="Arg">c</var> on <var class="Arg">num</var> generators; that is, the free group in the variety of <var class="Arg">num</var>-generated, nilpotent groups with nilpotency class <var class="Arg">c</var>.</p>
 
 <p><a id="X81450ABA81F0FCE5" name="X81450ABA81F0FCE5"></a></p>
@@ -427,7 +427,7 @@ true
 
 <p>Some operations are natural extensions of the operations for finitely generated groups. For example, <code class="code">MappedWord(x,gens,imgs)</code>, when applied to a word <code class="code">x</code> in an L-presented group, returns the group element obtained by replacing each occurrence of a generator in <code class="code">gens</code> by the corresponding element in the list <code class="code">imgs</code>. The lists <code class="code">gens</code> and <code class="code">imgs</code> need to have the same length.</p>
 
-<p>Equality test of elements of L-presented groups is implemented using the operation <code class="func">NqEpimorphismNilpotentQuotient</code> (<span class="RefLink">???</span>) to compare the images in a nilpotent quotient of the group. The implemented method successively increases the class of the considered quotient until the images differ. Hence, this method may not terminate and it will only determine whether the elements are different.</p>
+<p>Equality test of elements of L-presented groups is implemented using the operation <code class="func">NqEpimorphismNilpotentQuotient</code> (<a href="../../../pkg/nq-2.5.11/doc/chap3.html#X8758F663782AE655"><span class="RefLink">nq: NqEpimorphismNilpotentQuotient</span></a>) to compare the images in a nilpotent quotient of the group. The implemented method successively increases the class of the considered quotient until the images differ. Hence, this method may not terminate and it will only determine whether the elements are different.</p>
 
 <p><a id="X7C81CB1C7F0D7A90" name="X7C81CB1C7F0D7A90"></a></p>
 

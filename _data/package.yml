@@ -1,7 +1,7 @@
 name: lpres
-version: "1.0.3"
+version: "1.1.0"
 license: "GPL-2.0-or-later"
-date: 2022-03-20
+date: 2024-07-08
 description: |
     Nilpotent Quotients of L-Presented Groups
 
@@ -20,11 +20,12 @@ needed-pkgs:
       url: "https://gap-packages.github.io/polycyclic/"
     - name: "FGA"
       version: ">= 1.1.0.1"
-      url: "http://www.icm.tu-bs.de/ag_algebra/software/FGA/"
+      url: "https://gap-packages.github.io/fga/"
 
 suggested-pkgs:
     - name: "ParGAP"
       version: ">= 1.1.2"
+      url: "http://www.gap-system.org/HostedGapPackages/pargap/"
     - name: "AutPGrp"
       version: ">= 1.4"
       url: "https://gap-packages.github.io/autpgrp/"
@@ -38,35 +39,35 @@ packageinfo: https://gap-packages.github.io/lpres/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/lpres/releases/download/v1.0.3/lpres-1.0.3.tar.gz
+      url: https://github.com/gap-packages/lpres/releases/download/v1.1.0/lpres-1.1.0.tar.gz
 
 abstract: |
     The LPRES Package defines new GAP objects to work with L-presented groups, namely groups given by a finite generating set and a possibly-infinite set of relations given as iterates of finitely many seed relations by a finite set of endomorphisms. The package implements nilpotent quotient, Todd-Coxeter and Reidemeister-Schreier algorithms for L-presented groups.
 
 status: accepted
-doc-html: doc/chap0.html
+doc-html: doc/chap0_mj.html
 doc-pdf: doc/manual.pdf
 keywords: |
     nilpotent quotient algorithm, nilpotent presentations, finitely generated groups, Grigorchuk group, Gupta-Sidki group, L-presented groups, finite index subgroup of L-presented groups, coset enumeration, recursively presented groups, infinite presentations, commutators, lower central series, Free Engel groups, Free Burnside groups, computational, parallel computing.
 citeas: |
     <p class='BibEntry'>
-    [<span class='BibKey'>HB22</span>]   <b class='BibAuthor'>Hartung, R. and Bartholdi, L.</b>,
+    [<span class='BibKey'>HB24</span>]   <b class='BibAuthor'>Hartung, R. and Bartholdi, L.</b>,
      <i class='BibTitle'>lpres, Nilpotent Quotients of L-Presented Groups,
-             Version 1.0.3</i>
-     (<span class='BibYear'>2022</span>)<br />
-    (<span class='BibNote'>Refereed GAP package</span>),
+             Version 1.1.0</i>
+     (<span class='BibYear'>2024</span>)<br />
+    (<span class='BibNote'>GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/lpres">https://gap-packages.github.io/lpres</a></span>.
     </p>
     
 
 bibtex: |
-    @misc{ lpres1.0.3,
+    @misc{ lpres1.1.0,
       author =           {Hartung, R. and Bartholdi, L.},
       title =            {{lpres},  Nilpotent  Quotients  of L-Presented Groups,
-                          {V}ersion 1.0.3},
-      month =            {Mar},
-      year =             {2022},
-      note =             {Refereed GAP package},
+                          {V}ersion 1.1.0},
+      month =            {Jul},
+      year =             {2024},
+      note =             {GAP package},
       howpublished =     {\href           {https://gap-packages.github.io/lpres}
                           {\texttt{https://gap-packages.github.io/}\discretionary
                           {}{}{}\texttt{lpres}}},
@@ -78,6 +79,6 @@ bibtex: |
                           commutators;  lower central series; Free Engel groups;
                           Free    Burnside   groups;   computational;   parallel
                           computing},
-      printedkey =       {HB22}
+      printedkey =       {HB24}
     }
 

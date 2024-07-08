@@ -22,11 +22,10 @@
   [[20XBV05[120X]  [16XBartholdi,  L. and Vir{\'a}g, B.[116X, [17XAmenability via random walks[117X, [18XDuke
   Math. J.[118X, [19X130[119X, 1 (2005), 39--56.
   
-  [[20XCoo04[120X]   [16XCooperman,   G.[116X,   [17XParGAP[117X   (2004),   ((A   {\GAP4}  package,  see
-  \cite{GAP4})).
+  [[20XCoo04[120X] [16XCooperman, G.[116X, [17XParGAP[117X (2004), (A {\GAP4} package, see \cite{GAP4}).
   
   [[20XDP[120X]  [16XDay,  M.  and  Putman,  A.[116X,  [17X  A Birman exact sequence for the Torelli
-  subgroup of Aut(F_n) [117X, (( Preprint )).
+  subgroup of Aut(F_n) [117X, ( Preprint ).
   
   [[20XFG85[120X]  [16XFabrykowski,  J.  and  Gupta,  N. D.[116X, [17XOn groups with sub-exponential
   growth  functions[117X,  [18XJ.  Indian  Math.  Soc. (N.S.)[118X, [19X49[119X, 3-4 (1985), 249--256
@@ -74,7 +73,7 @@
   Groups[117X,  [18XDIMACS  Series  in  Discrete  Mathematics  and Theoretical Computer
   Science[118X, [19X25[119X (1996), 175-191.
   
-  [[20XNic03[120X] [16XNickel, W.[116X, [17XNQ[117X (2003), ((A {\GAP4} package, see \cite{GAP4})).
+  [[20XNic03[120X] [16XNickel, W.[116X, [17XNQ[117X (2003), (A {\GAP4} package, see \cite{GAP4}).
   
   [[20XSid87[120X]  [16XSidki,  S.[116X,  [17XOn  a  2-generated  infinite 3-group: The presentation
   problem[117X, [18XJournal of Algebra[118X, [19X110[119X (1987), 13-23.

@@ -141,14 +141,14 @@
   
   [1X4.3-1 LPRES_TCSTART[101X
   
-  [33X[1;0Y[29X[2XLPRES_TCSTART[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XLPRES_TCSTART[102X [32X global variable[133X
   
   [33X[0;0Ydefines  the  maximal  word-length of endomorphisms in the free monoid which
   are applied to the iterated relations.[133X
   
   [1X4.3-2 LPRES_CosetEnumerator[101X
   
-  [33X[1;0Y[29X[2XLPRES_CosetEnumerator[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XLPRES_CosetEnumerator[102X [32X global variable[133X
   
   [33X[0;0Ydefines the coset enumeration process used for finitely presented groups. It
   should  be  a  function  which  take  as  input  a  subgroup [3Xh[103X of a finitely

@@ -129,7 +129,7 @@
   
   [1X2.2-3 FreeEngelGroup[101X
   
-  [33X[1;0Y[29X[2XFreeEngelGroup[102X( [3Xn[103X, [3Xnum[103X ) [32X operation[133X
+  [33X[1;0Y[29X[2XFreeEngelGroup[102X( [3Xnum[103X, [3Xn[103X ) [32X operation[133X
   
   [33X[0;0Yreturns an L-presentation for the free [3Xn[103X-Engel group on [3Xnum[103X generators; that
   is,  the  free  group  in the variety of [3Xnum[103X-generated groups satisfying the
@@ -137,15 +137,15 @@
   
   [1X2.2-4 FreeBurnsideGroup[101X
   
-  [33X[1;0Y[29X[2XFreeBurnsideGroup[102X( [3Xexp[103X, [3Xnum[103X ) [32X operation[133X
+  [33X[1;0Y[29X[2XFreeBurnsideGroup[102X( [3Xnum[103X, [3Xexp[103X ) [32X operation[133X
   
   [33X[0;0Yreturns an L-presentation for the free Burnside group on [3Xnum[103X generators with
-  exponent [3Xexp[103X; that is, the free group in the variety of [3Xnum[103X-generated groups
-  with exponent [3Xexp[103X.[133X
+  exponent  [3Xexp[103X;  that  is, the free group on [3Xnum[103X generators in the variety of
+  groups with exponent [3Xexp[103X.[133X
   
   [1X2.2-5 FreeNilpotentGroup[101X
   
-  [33X[1;0Y[29X[2XFreeNilpotentGroup[102X( [3Xc[103X, [3Xnum[103X ) [32X operation[133X
+  [33X[1;0Y[29X[2XFreeNilpotentGroup[102X( [3Xnum[103X, [3Xc[103X ) [32X operation[133X
   
   [33X[0;0Yreturns  an  L-presentation  for  the free nilpotent group of class [3Xc[103X on [3Xnum[103X
   generators;  that  is,  the  free  group  in  the  variety of [3Xnum[103X-generated,
@@ -411,11 +411,12 @@
   length.[133X
   
   [33X[0;0YEquality  test  of  elements  of L-presented groups is implemented using the
-  operation [2XNqEpimorphismNilpotentQuotient[102X ([14XNqEpimorphismNilpotentQuotient???[114X)
-  to  compare the images in a nilpotent quotient of the group. The implemented
-  method successively increases the class of the considered quotient until the
-  images  differ.  Hence,  this  method  may  not  terminate  and it will only
-  determine whether the elements are different.[133X
+  operation                 [2XNqEpimorphismNilpotentQuotient[102X                ([14Xnq:
+  NqEpimorphismNilpotentQuotient[114X)   to  compare  the  images  in  a  nilpotent
+  quotient  of  the  group.  The implemented method successively increases the
+  class of the considered quotient until the images differ. Hence, this method
+  may  not  terminate  and  it  will  only  determine whether the elements are
+  different.[133X
   
   [1X2.6-1 EpimorphismFromFpGroup[101X
   

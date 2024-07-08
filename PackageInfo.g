@@ -9,8 +9,8 @@ SetPackageInfo( rec(
 
 PackageName := "lpres",
 Subtitle := "Nilpotent Quotients of L-Presented Groups",
-Version := "1.0.3",
-Date    := "20/03/2022", # dd/mm/yyyy format
+Version := "1.1.0",
+Date    := "08/07/2024", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
@@ -38,7 +38,7 @@ Persons := [
 ],
 
 Status         := "accepted",
-CommunicatedBy := "Alexander Konovalov (St Andrews)",
+CommunicatedBy := "Olexandr Konovalov (St Andrews)",
 AcceptDate     := "09/2018",
 
 SourceRepository := rec(
@@ -65,7 +65,7 @@ for L-presented groups.",
 PackageDoc := rec(
   BookName  := ~.PackageName,
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := ~.Subtitle,

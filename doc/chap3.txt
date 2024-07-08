@@ -355,7 +355,7 @@
   
   [1X3.5-1 InfoLPRES[101X
   
-  [33X[1;0Y[29X[2XInfoLPRES[102X[32X info class[133X
+  [33X[1;0Y[29X[2XInfoLPRES[102X [32X info class[133X
   
   [33X[0;0Yis  the  info  class  of  the  [5Xlpres[105X-package.  If  the  info-level is [22X1[122X, the
   info-class  gives  further  information  on  the  progress  of the nilpotent
@@ -387,7 +387,7 @@
   
   [1X3.5-2 InfoLPRES_MAX_GENS[101X
   
-  [33X[1;0Y[29X[2XInfoLPRES_MAX_GENS[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XInfoLPRES_MAX_GENS[102X [32X global variable[133X
   
   [33X[0;0Ythis  global variable sets the limit of generators whose relative order will
   be shown on each step of the nilpotent quotient algorithm, if the info-level
