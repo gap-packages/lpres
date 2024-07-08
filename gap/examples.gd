@@ -14,7 +14,7 @@ DeclareGlobalFunction( "ExamplesOfLPresentations" );
 
 ############################################################################
 ##
-#O  FreeEngelGroup ( <n>, <num> )
+#O  FreeEngelGroup ( <num>, <n> )
 ##
 ## returns an L-presentation for the free <n>-Engel Group on <num>
 ## generators.
@@ -33,7 +33,7 @@ DeclareOperation( "FreeBurnsideGroup", [ IsPosInt, IsPosInt ]);
 
 ############################################################################
 ##
-#O  FreeNilpotentGroup( <c>, <num> )
+#O  FreeNilpotentGroup( <num>, <c> )
 ##
 ## returns an L-presentation for the free nilpotent group of class <c>
 ## on <num> generators.

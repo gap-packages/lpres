@@ -118,7 +118,7 @@ many identities is finitely L-presented. Some of these groups are
 available from the &lpres;-package using the following operations; for
 further details we refer to the diploma thesis <Cite Key="H08"/>.
 
-<ManSection><Oper Name="FreeEngelGroup" Arg="n num"/>
+<ManSection><Oper Name="FreeEngelGroup" Arg="num n"/>
 <Description>
   returns an L-presentation for the free <A>n</A>-Engel group on
   <A>num</A> generators; that is, the free group in the variety of
@@ -135,7 +135,7 @@ further details we refer to the diploma thesis <Cite Key="H08"/>.
 </Description>
 </ManSection>
 
-<ManSection><Oper Name="FreeNilpotentGroup" Arg="c num"/>
+<ManSection><Oper Name="FreeNilpotentGroup" Arg="num c"/>
 <Description>
   returns an L-presentation for the free nilpotent group of class
   <A>c</A> on <A>num</A> generators; that is, the free group in the

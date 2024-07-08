@@ -263,7 +263,7 @@ InstallGlobalFunction(ExamplesOfLPresentations,
 
 ############################################################################
 ##
-#O  FreeEngelGroup ( <n>, <num> )
+#O  FreeEngelGroup ( <num>, <n> )
 ##
 ## returns an L-presentation for the Free n-th Engel Group on <num> 
 ## generators; see Section~2.4 of [Har08].
@@ -272,7 +272,7 @@ InstallMethod( FreeEngelGroup,
   "for positive integers", 
   true,
   [IsPosInt,IsPosInt], 0,
-  function( c, n )
+  function( n, c )
   local L,	# L-presented Group
         F,	# free group
 	gens,	# generators of the free group
@@ -363,7 +363,7 @@ InstallMethod( FreeBurnsideGroup,
 
 ############################################################################
 ##
-#O  FreeNilpotentGroup( <c>, <num> )
+#O  FreeNilpotentGroup( <num>, <c> )
 ##
 ## returns an L-presentation for the free nilpotent group of class <c> 
 ## on <num> generators; see Section~2.4 of [Har08].
