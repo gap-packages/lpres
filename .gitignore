@@ -7,5 +7,6 @@ doc/manual.*
 doc/_AutoDocMainFile.xml
 doc/*.css
 doc/*.js
+doc/_*
 gh-pages
 tmp
