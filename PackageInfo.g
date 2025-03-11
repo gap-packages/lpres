@@ -85,7 +85,6 @@ Dependencies := rec(
   ExternalConditions     := [ ]
 ),
 
-Autoload := false,
 
 TestFile := "tst/testall.g",
 
