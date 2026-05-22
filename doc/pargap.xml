@@ -19,7 +19,7 @@ described in its manual <Cite Key="ParGap"/>. When using Version 1.1.2
 of the <Package>ParGAP</Package>-package, you will need to apply the
 following patch to `pargap/lib/masslave.g' as otherwise the
 <Package>ParGAP</Package>-session may crash. On a linux machine you
-can simply use `patch &lt; ../../nql/gap/pargap/patch' from within the
+can simply use `patch &lt; ../../lpres/gap/pargap/patch' from within the
 directory `pargap/lib/'.
 
 <Verb><![CDATA[
