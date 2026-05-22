@@ -1,106 +1,103 @@
 #############################################################################
 ##  
-##  PackageInfo.g                  LPRES                         René Hartung 
-##  
-##  Based on Frank Luebeck's template for PackageInfo.g.
-##  
+##  Demo PackageInfo.g for the GitHubPagesForGAP
+##
 
 SetPackageInfo( rec(
 
-PackageName := "lpres",
-Subtitle := "Nilpotent Quotients of L-Presented Groups",
-Version := "1.1.1",
-Date    := "12/07/2024", # dd/mm/yyyy format
-License := "GPL-2.0-or-later",
+PackageName := "GitHubPagesForGAP",
+
+Subtitle := "A GitHub Pages generator for GAP packages",
+Version := "0.4",
+Date := "10/04/2025", # dd/mm/yyyy format
+License := "0BSD",
 
 Persons := [
   rec(
-  LastName      := "Hartung",
-  FirstNames    := "René",
-  IsAuthor      := true,
-  IsMaintainer  := false,
+    LastName      := "Horn",
+    FirstNames    := "Max",
+    IsAuthor      := true,
+    IsMaintainer  := true,
+    Email         := "mhorn@rptu.de",
+    WWWHome       := "https://www.quendi.de/math",
+    GitHubUsername:= "fingolfin",
+    PostalAddress := Concatenation(
+                       "Fachbereich Mathematik\n",
+                       "RPTU Kaiserslautern-Landau\n",
+                       "Gottlieb-Daimler-Straße 48\n",
+                       "67663 Kaiserslautern\n",
+                       "Germany" ),
+    Place         := "Kaiserslautern, Germany",
+    Institution   := "RPTU Kaiserslautern-Landau"
   ),
+
   rec(
-  LastName      := "Bartholdi",
-  FirstNames    := "Laurent",
-  IsAuthor      := false,
-  IsMaintainer  := true,
-  Email         := "laurent.bartholdi@gmail.com",
-  WWWHome       := "https://www.math.uni-sb.de/ag/bartholdi",
-  PostalAddress := Concatenation( [
-                       "FR Mathematik+Informatik\n",
-                       "Universität des Saarlandes\n",
-                       "D-66041 Saarbrücken\n",
-                       "Germany" ] ),
-  Place         := "Saarbrücken",
-  Institution   := "Universität des Saarlandes"
-  )
+    LastName      := "Thor",
+    FirstNames    := "A. U.",
+    IsAuthor      := true,
+    IsMaintainer  := false,
+    #Email         := "author@example.com",
+  ),
+
+  rec(
+    LastName      := "Itor",
+    FirstNames    := "Jan",
+    IsAuthor      := false,
+    IsMaintainer  := true,
+    #Email         := "janitor@example.com",
+  ),
 ],
 
-Status         := "accepted",
-CommunicatedBy := "Olexandr Konovalov (St Andrews)",
-AcceptDate     := "09/2018",
+Status := "other",
 
-SourceRepository := rec(
-    Type := "git",
-    URL := Concatenation( "https://github.com/gap-packages/", ~.PackageName ),
-),
-IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
-PackageWWWHome  := Concatenation( "https://gap-packages.github.io/", ~.PackageName ),
-README_URL      := Concatenation( ~.PackageWWWHome, "/README.md" ),
-PackageInfoURL  := Concatenation( ~.PackageWWWHome, "/PackageInfo.g" ),
-ArchiveURL      := Concatenation( ~.SourceRepository.URL,
-                                 "/releases/download/v", ~.Version,
-                                 "/", ~.PackageName, "-", ~.Version ),
+# The following are not strictly necessary in your own PackageInfo.g
+# (in the sense that update.g only looks at the usual fields
+# like PackageWWWHome, ArchiveURL etc.). But they are convenient
+# if you use exactly the scheme for your package website that we propose.
+GithubUser := "gap-system",
+GithubRepository := ~.PackageName,
+GithubWWW := Concatenation("https://github.com/", ~.GithubUser, "/", ~.GithubRepository),
 
-ArchiveFormats := ".tar.gz",
+PackageWWWHome := Concatenation("https://", ~.GithubUser, ".github.io/", ~.GithubRepository, "/"),
+README_URL     := Concatenation( ~.PackageWWWHome, "README.md" ),
+PackageInfoURL := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
+# The following assumes you are using the Github releases system. If not, adjust
+# it accordingly.
+ArchiveURL     := Concatenation(~.GithubWWW,
+                    "/releases/download/v", ~.Version, "/",
+                    ~.GithubRepository, "-", ~.Version),
 
-AbstractHTML   := "The LPRES Package defines new GAP objects to work with \
-L-presented groups, namely groups given by a finite generating set and a \
-possibly-infinite set of relations given as iterates of finitely many \
-seed relations by a finite set of endomorphisms. The package implements \
-nilpotent quotient, Todd-Coxeter and Reidemeister-Schreier algorithms \
-for L-presented groups.",
+ArchiveFormats := ".tar.gz .tar.bz2",
+
+AbstractHTML := 
+  "This is a pseudo package that contains no actual\
+  <span class=\"pkgname\">GAP</span> code. Instead, it is a template for other\
+  GAP packages that allows to quickly setup GitHub Pages.",
 
 PackageDoc := rec(
-  BookName  := ~.PackageName,
+  BookName  := "GitHubPagesForGAP",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0_mj.html",
+  HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := ~.Subtitle,
+  LongTitle := "A GitHub Pages generator for GAP packages",
+),
+
+# The following dependencies are fake and for testing / demo purposes
+Dependencies := rec(
+  GAP := ">=4.8.1",
+  NeededOtherPackages := [
+    ["GAPDoc", ">= 1.2"],
+    ["IO", ">= 4.1"],
+  ],
+  SuggestedOtherPackages := [["orb", ">= 4.2"]],
+  ExternalConditions := []
 ),
 
 AvailabilityTest := ReturnTrue,
 
-BannerString := Concatenation("Loading ", ~.PackageName, " ", String( ~.Version ), " ...\n"),
+Keywords := ["GitHub Pages", "GAP"]
 
-Dependencies := rec(
-  GAP                    := ">= 4.9",
-  NeededOtherPackages    := [ ["polycyclic", ">= 2.5"], 
-                              ["FGA", ">= 1.1.0.1"] ], 
-  SuggestedOtherPackages := [ ["ParGAP", ">= 1.1.2" ],
-                              ["AutPGrp", ">= 1.4"],
-                              ["ACE", ">= 5.0" ] ],
-  ExternalConditions     := [ ]
-),
-
-Autoload := false,
-
-TestFile := "tst/testall.g",
-
-Keywords := [ "nilpotent quotient algorithm",
-              "nilpotent presentations",
-              "finitely generated groups",
-              "Grigorchuk group",
-              "Gupta-Sidki group",
-              "L-presented groups",
-              "finite index subgroup of L-presented groups", 
-              "coset enumeration",
-              "recursively presented groups",
-              "infinite presentations",
-              "commutators",
-              "lower central series",
-              "Free Engel groups", "Free Burnside groups",
-              "computational", "parallel computing" ]
 ));
+
+
