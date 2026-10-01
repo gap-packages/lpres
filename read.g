@@ -10,18 +10,7 @@ BindGlobal( "LPRES_TEST_ALL", false);
 
 # coset enumeration for (finite index) subgroups of LpGroups
 LPRES_TCSTART := 2;
-if IsPackageMarkedForLoading( "ACE", "5.0" ) then
-  LPRES_CosetEnumerator := function( h )
-    local f, rels, gens;
-
-    f    := FreeGeneratorsOfFpGroup( Parent( h ) );
-    rels := RelatorsOfFpGroup( Parent( h ) );
-    gens := List( GeneratorsOfGroup( h ), UnderlyingElement );
-    return ValueGlobal("ACECosetTable")( f, rels, gens : silent, hard, max := 10^8, Wo := 10^8 );
-    end;
-else
-  LPRES_CosetEnumerator := CosetTableInWholeGroup;
-fi;
+LPRES_CosetEnumerator := CosetTableInWholeGroup;
 
 
 ReadPackage( LPRESPkgName, "gap/misc.gi");

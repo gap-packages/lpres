@@ -150,7 +150,8 @@ which are applied to the iterated relations.
 defines the coset enumeration process used for finitely presented groups.
 It should be a function which take as input a subgroup <A>h</A> of a finitely
 presented group and it computes a coset table in the whole group.
-The default uses the following method of the <Package>ACE</Package>-package
+Once the <Package>ACE</Package>-package is loaded, the default is the
+following method
 <Example><![CDATA[
 function ( h )
     local  f, rels, gens;
@@ -162,8 +163,8 @@ function ( h )
         max := 10 ^ 8,
         Wo := 10 ^ 8 );
 ]]></Example>
-If the <Package>ACE</Package>-package is not available, the library
-coset enumeration process is used.
+Until then, the library coset enumeration process
+<Ref Attr="CosetTableInWholeGroup" BookName="ref"/> is used.
 </Description>
 </ManSection>
 
