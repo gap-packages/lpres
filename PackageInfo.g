@@ -76,7 +76,7 @@ AvailabilityTest := ReturnTrue,
 BannerString := Concatenation("Loading ", ~.PackageName, " ", String( ~.Version ), " ...\n"),
 
 Dependencies := rec(
-  GAP                    := ">= 4.9",
+  GAP                    := ">= 4.13",
   NeededOtherPackages    := [ ["polycyclic", ">= 2.5"], 
                               ["FGA", ">= 1.1.0.1"] ], 
   SuggestedOtherPackages := [ ["ParGAP", ">= 1.1.2" ],
@@ -85,6 +85,9 @@ Dependencies := rec(
   ExternalConditions     := [ ]
 ),
 
+Extensions := [
+  rec( needed := [ [ "ACE", ">= 5.0" ] ], filename := "gap/ace.g" ),
+],
 
 TestFile := "tst/testall.g",
 
